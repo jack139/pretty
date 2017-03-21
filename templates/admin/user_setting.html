@@ -1,0 +1,88 @@
+$def with (name, str1, settings, reg_time, level, base_shop)
+
+$var title: 用户设置
+$var css:
+$var js:
+$var name: $str1 $name
+
+<div class="caption"><h2>用户设置</h2></div>
+
+<form name="settings" method="post" action="/admin/user_setting">
+<input type="hidden" name="uid" value="$settings['_id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+                <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>用户名</td><td class="t_l">$settings['uname']</td></tr>
+<tr><td>全名</td><td class="t_l"><input type="text" name="full_name" value="$settings['full_name']"/>(名称|电话)</td></tr>
+<tr><td>密码</td><td class="t_l"><input type="password" name="passwd" value=""/></td></tr>
+<tr><td>注册时间</td><td class="t_l">$reg_time</td></tr>
+<tr><td rowspan="3">用户权限</td><td class="t_l">
+    <input type="checkbox" name="priv" value="PLAT_SKU_STORE"
+    $if 'PLAT_SKU_STORE' in level:
+        checked="checked"
+    /> SKU管理
+    <!--input type="checkbox" name="priv" value="OP_ACTION"
+    $if 'OP_ACTION' in level:
+        checked="checked"
+    /> 运营设置
+    <input type="checkbox" name="priv" value="COUPONS"
+    $if 'COUPONS' in level:
+        checked="checked"
+    /> 抵用券管理
+    <input type="checkbox" name="priv" value="COUPONS_ACTIVE"
+    $if 'COUPONS_ACTIVE' in level:
+        checked="checked"
+    /> 抵用券活动管理
+    <input type="checkbox" name="priv" value="SALE_PROMOTE"
+    $if 'SALE_PROMOTE' in level:
+        checked="checked"
+    /> 促销活动管理 -->
+    <input type="checkbox" name="priv" value="CITY_CODE"
+    $if 'CITY_CODE' in level:
+        checked="checked"
+    /> 地址管理
+</td></tr>
+<tr><td class="t_l">
+    <input type="checkbox" name="priv" value="BATCH_JOB"
+    $if 'BATCH_JOB' in level:
+        checked="checked"
+    /> 订单管理
+    <input type="checkbox" name="priv" value="CRM"
+    $if 'CRM' in level:
+        checked="checked"
+    /> 订单查询
+    <!--input type="checkbox" name="priv" value="REFUND"
+    $if 'REFUND' in level:
+        checked="checked"
+    /> 财务退款 -->
+</td></tr>
+<tr><td class="t_l">
+    <input type="checkbox" name="priv" value="REPORT_REPORT1"
+    $if 'REPORT_REPORT1' in level:
+        checked="checked"
+    /> 线上订单清单
+</td></tr>
+
+<tr><td>用户状态</td><td class="t_l"><input type="radio" name="login" value="1" 
+        $if settings['login']==1: 
+            checked="checked"
+    /> 正常 <input type="radio" name="login" value="0"
+        $if settings['login']==0: 
+            checked="checked"
+    /> 停用
+</td></tr>
+
+</tbody>
+</table>
+
+<p><input type="submit" name="button" id="button" value="保存" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+
+</form>

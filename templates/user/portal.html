@@ -1,0 +1,24 @@
+$def with (name, str1, result=['-'])
+
+$var title: 首页
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #home
+
+<div class="caption"><h2>herb管理平台</h2></div>
+
+<div class="mod_desc">
+<p>欢迎使用管理平台！</p>
+</div>
+    
+<dl class="feature">
+        <dt>最新消息</dt>
+        <dd>2016-09-12 开始</dd>
+</dl>
+
+<div class="article_box">
+<div>$result[0]</div> 
+</div>
+

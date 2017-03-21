@@ -1,0 +1,117 @@
+系统更新及第三方安装
+
+yum install iptables-services net-tools
+
+systemctl mask firewalld
+systemctl stop firewalld
+
+systemctl enable iptables
+systemctl enable ip6tables
+
+systemctl start iptables
+systemctl start ip6tables
+
+yum update
+yum groupinstall "Development Tools"
+
+yum install python-devel openssl-devel pcre-devel python-setuptools 
+yum install freetype freetype-devel libjpeg-devel libpng-devel libxml2-devel
+yum install nc iptraf nethogs sharutils
+
+
+yum install epel-release
+yum install nginx
+
+easy_install pip
+pip install uwsgi
+
+easy_install web.py
+easy_install flup
+easy_install pymongo
+easy_install urllib3
+easy_install rsa
+easy_install six
+easy_install python-hessian
+easy_install captcha
+easy_install redis
+easy_install hiredis
+easy_install stomp.py
+
+
+
+需要复制的配置文件（最好从同类服务器上复制）
+
+/etc/sysconfig/iptables
+/usr/local/nginx/conf/nginx.conf
+/usr/local/nginx/html/log_cut.sh
+/root/my_server
+
+crontab -e 添加任务
+0 5 * * * /usr/local/nginx/html/log_cut.sh > /tmp/log_cut.log
+
+程序文件
+/usr/local/nginx/html/static
+/usr/local/nginx/html/herb
+/region_id
+
+启动前需调整的配置文件
+/region_id
+/usr/local/nginx/conf/nginx.conf
+/root/my_server
+/usr/local/nginx/html/fair/config/setting.py
+
+
+
+
+生产mongodb 配置
+MongoClient('mongodb://10.168.11.151:27017,10.252.95.145:27017,10.252.171.8:27017/?replicaSet=rs0', readPreference='secondaryPreferred')
+
+fair_db 读写权限 db.authenticate('ipcam','zjjL_3026')
+fair_db 只读权限 db.authenticate('report','report')
+report_db 读写权限 db.authenticate('owner','owner')
+report_db 只读权限 db.authenticate('report','report')
+
+
+use admin
+
+db.createUser( {
+    user: "siteUserAdmin",
+    pwd: "Zjjl_3026",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  });
+
+db.createUser( {
+    user: "siteRootAdmin",
+    pwd: "Zjjl_3026",
+    roles: [ { role: "root", db: "admin" } ]
+  });
+
+
+db.createRole(
+   {
+     role: "mongostatRole",
+     privileges: [
+       { resource: { cluster: true }, actions: [ "serverStatus" ] }
+     ],
+     roles: []
+   }
+)
+
+db.createUser(
+  {
+    user: "stat",
+    pwd: "stat",
+    roles: [ { role: "mongostatRole", db: "admin" } ]
+  }
+)
+
+use admin
+db.auth("siteRootAdmin", "Zjjl_3026");
+
+use herb_db
+db.createUser({user:"ipcam",pwd:"ipcam",roles:["dbAdmin","readWrite"]})
+db.auth("ipcam","ipcam")
+db.user.insert({uname:"admin",login:1,privilege:8,passwd:'ecb918249fb79775ce1b332ddd2a5d624248ce2b',menu_level:''})
+
+
+db.changeUserPassword("ipcam", "zjjL_3026")

@@ -1,0 +1,35 @@
+$def with (name, str1, region_name)
+
+$var title: 微信消息推送
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: InitInit();
+$var menu: #plat8
+
+<script type="text/javascript">
+function InitInit(){
+}
+</script>
+
+<div class="caption"><h2>微信消息推送</h2></div>
+
+<form name="jpush" method="post" action="/plat/push_msg_wx">
+<div class="article_box">
+<p><select name="region_id">
+	<option value ="" selected="selected">--请选择--</option>
+$for i in region_name.keys():
+	<option value ="$i">$region_name[i]</option>
+</select></p>
+
+<p>推送openid： (注意：1. 不能为空；2.多个openid以英文逗号分隔；3.发送时间请避开订单集中时段，推送会占用后台资源，请谨慎！！！)</p>
+<p><textarea rows="5" name="phone" cols="80"></textarea></p>
+<p>推送内容：</p>
+<p><textarea rows="3" name="content" cols="100"></textarea></p>
+</div>
+
+<p><input type="submit" name="button" id="button" value="发送"
+	onclick="if (confirm('确定发送吗？')) return true; else return false;"/><p>
+</form>
+
+<br/>

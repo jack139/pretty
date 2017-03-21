@@ -1,0 +1,126 @@
+$def with (name, str1, cate)
+
+$var title: 平台管理
+$var css:
+$var name: $'|'.join(str1) $name
+$var js: /static/js/upload.js?v=1.010
+$var load: doFirst();
+$var menu: #plat1
+
+<div class="caption"><h2>新建商品</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/plat/sku_store_new">
+<input type="hidden" name="image" id="form_image" value=""/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="40%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+
+<tr><td>品名</td><td>
+    <input type="text" name="sku_name" id="sku_name" value=""/>
+    </td><td>内部使用</td></tr>
+
+<tr><td>前台商品类目</td><td>
+<select id="category" name="category">
+    <option value="">--请选择--</option>
+$for k in cate:
+    <option value="$k['key']">$k['title']</option>
+</select>
+</td><td></td></tr>
+
+<tr><td>图片</td><td>
+    <ul id="image-list"></ul>
+    </td><td>在页面下方上传图片:<br/>图1：首页列表商品图 250X188px <br/>图2之后：商品详情页图580X435px</td></tr>
+
+<tr><td>App销售</td><td>
+    <input type="radio" name="list_in_app" value="0" checked="checked" /> 不是
+    <input type="radio" name="list_in_app" value="1"/> APP销售
+    </td><td>决定是否在前端显示</td></tr>
+
+<tr><td>App显示的标题</td><td>
+    <input type="text" name="app_title" id="app_title" value="" />
+    </td><td>只会在app中显示</td></tr>
+
+<tr><td>App显示的副标题</td><td>
+    <input type="text" name="sub_title" id="sub_title" value="" />
+    </td><td>只会在app中显示</td></tr>
+
+<tr><td>App商品描述</td><td>
+    <textarea rows="3" name="description" id="description"></textarea>
+    </td><td></td></tr>
+
+
+<tr><td>app正常售价</td><td>
+    <input type="text" name="price" id="price" value="0.00"
+    pattern="[0-9]+[.]{0,1}[0-9]*" title="必须是数字"/> 元
+    </td><td>默认售价</td></tr>
+
+<tr><td>App促销品</td><td>
+    <input type="radio" name="is_onsale" value="1"  /> 是
+    <input type="radio" name="is_onsale" value="0" checked="checked"/> 不是
+    </td><td></td></tr>
+
+<tr><td>App促销价格</td><td>
+    <input type="text" name="special_price" id="special_price" value="0.00" 
+    pattern="[0-9]+[.]{0,1}[0-9]*" title="必须是数字"/> 元
+    </td><td>为促销品时，此价格才有意义</td></tr>
+
+<tr><td>App每客限售</td><td>
+    <input type="text" name="limit_by_id" value="0" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>0表示不限售</td></tr>
+
+<tr><td>App限售厦门地区</td><td>
+    <input type="radio" name="limit_xm" value="1" /> 是
+    <input type="radio" name="limit_xm" value="0" checked="checked" /> 否
+    </td><td>岛外6件起送</td></tr>
+
+<tr><td>App售完隐藏</td><td>
+    <input type="radio" name="hide_after_0" value="1" /> 是
+    <input type="radio" name="hide_after_0" value="0" checked="checked" /> 否
+    </td><td></td></tr>
+
+<tr><td>App可售库存</td><td>
+    <input type="text" name="stock" value="0" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>小于等于0表示售罄</td></tr>
+
+<tr><td>App当前销量</td><td>
+    <input type="text" name="volume" value="0" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>须大于0</td></tr>
+
+<tr><td>App显示排序权重</td><td>
+    <input type="text" name="sort_weight" value="999" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>0排最前，数值最大排最后</td></tr>
+
+<tr><td>状态</td><td>
+    <input type="radio" name="available" value="1" checked="checked" /> 在使用
+    <input type="radio" name="available" value="0" /> 停用
+    </td><td>停用时，所有库存将下架</td></tr>
+
+<tr><td>备注</td><td>
+    <textarea rows="3" name="note"></textarea>
+    </td><td>内部备注</td></tr>
+
+</tbody></table>
+
+<p><input type="submit" name="submit" id="submit" value="保存" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+<div class="article_box">
+  <div id="image-main">
+    <form method="post" enctype="multipart/form-data"  action="">
+      <input type="file" name="images" id="images" />
+      <button type="submit" id="btn">上传图片</button>
+    </form> 
+    <div id="response"></div>
+  </div>
+</div>
+
+<br/>
+

@@ -1,0 +1,60 @@
+$def with (name, str1, report, sku_count, online, count, date)
+
+$var title: 报表
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #rept2
+
+<script type="text/javascript">
+function goReport(){
+    window.location.href='/report/report2?start_date=$date&ret_type=';
+}
+</script>
+
+<div class="caption"><h2>门店销售汇总  <span>按商品汇总（$date）</span></h2></div>
+
+<div class="article_box">
+
+<div>商品个数：共 $sku_count 项</div>
+<div>&nbsp;</div>
+<h4>-------------- 线上 -----------------------------------------</h4>
+<div>线上销售：共 $online[3] 元 （$count 笔）</div>
+<div>线上折扣：共 $online[4] 元 </div>
+<div>线上实收：共 $online[5] 元 </div>
+<div>&nbsp;</div>
+
+<div><input type="button" name="btn_back" value="返回" onclick="history.go(-1);" /></div>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th>商品ID</th>
+    <th>名称</th>
+    <th>线上数量</th>
+    <th>线上销售</th>
+    <th>待拣货</th>
+    <th>待配送</th>
+    <th>配送中</th>
+    <th>配送完成</th>
+  </tr>
+</thead>
+<tbody>
+$for u in report.keys():
+    <tr>
+    <td>$u</td>
+    <td>$report[u]['name']</td>
+    <td>$('%.0f' % report[u]['online']['num'])</td>
+    <td>$('%.2f' % report[u]['online']['price'])</td>
+    <td>$('%.0f' % report[u]['online']['paid'])</td>
+    <td>$('%.0f' % report[u]['online']['dispatch'])</td>
+    <td>$('%.0f' % report[u]['online']['onroad'])</td>
+    <td>$('%.0f' % report[u]['online']['complete'])</td>
+    </tr>
+</tbody>
+</table>
+
+<p><input class="formbutton" type="button" name="button" id="button" value="导出csv" onclick="goReport();" /></p>
+
+</div>
