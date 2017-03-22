@@ -130,6 +130,7 @@ def generate_sign(c): # c时列表，c[0]一定是app_id
     else:
         #验证签名
         sign_str = '%s%s' % (db_dev['private_key'], ''.join(i for i in c))
+        print sign_str
         return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()
 
 

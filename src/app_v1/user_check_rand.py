@@ -5,12 +5,11 @@ import web
 import time, json
 from config import setting
 import app_helper
-from libs import settings_helper
-from libs import app_user_helper
+#from libs import app_user_helper
 
 db = setting.db_web
 
-url = ('/app/v1/get_settings')
+url = ('/app/v1/user_check_rand')
 
 
 # 检查随机码
@@ -18,16 +17,16 @@ class handler: # CheckRand:
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
         #print web.input()
-        param = web.input(app_id='', session='', rand='', invitation='', sign='')
+        param = web.input(app_id='', session='', rand='', dev_id='', ver_code='', sign='')
 
-        if '' in (param.app_id, param.session, param.rand, param.sign):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.session, param.rand, param.sign):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         #验证签名
-        md5_str = app_helper.generate_sign([param.app_id, param.session, param.rand, param.invitation])
+        md5_str = app_helper.generate_sign([param.app_id, param.dev_id, param.ver_code, param.session, param.rand])
         if md5_str!=param.sign:
             return json.dumps({'ret' : -1, 'msg' : '签名验证错误'})
-        return CheckRand.check_rand(param, version)
+        return self.check_rand(param, version)
 
     @staticmethod
     def check_rand(param, version='v1'):
@@ -39,13 +38,11 @@ class handler: # CheckRand:
             print '========> 请重新获取验证码', session.get('pwd_fail',0)
             return json.dumps({'ret' : -5, 'msg' : '请重新获取验证码'})
 
-        if param.rand.strip()!=session['rand']:
+        #if param.rand.strip()!=session['rand']: # 测试，不检查校验码
+        if param.rand.strip()!='9998':
             #2015-12-22,gt
             if session['uname'] in app_helper.INNER_NUM.keys() and param.rand.strip()==app_helper.INNER_NUM[session['uname']]:
                 pass
-            #elif session['uname'] in setting.inner_number.keys() and \
-            #    param.rand.strip()==setting.inner_number[session['uname']]:
-            #    None
             else:
                 db.app_sessions.update_one({'session_id':session['session_id']},{'$inc':{'pwd_fail':1}})
                 return json.dumps({'ret' : -5, 'msg' : '短信验证码错误'})
@@ -57,69 +54,18 @@ class handler: # CheckRand:
 
 
         # 更新登录时间 2016-12-28， gt
-        app_user_helper.update_user_info(session['uname'], 'uname', {'last_time' : app_helper.time_str()})
+        db.app_user.update_one({'uname' : session['uname']}, {'$set' : {'last_time' : app_helper.time_str()}})
 
-        r = db.app_user.find_one({'uname' : session['uname']}, {'new_coupon':1})
 
-        addr = {}
-
-        # 返回
-
-        # 是否为新用户
-        user_new = False
-        # 是否有新收到的抵用券，进行提示
-        if r is not None and r.has_key('new_coupon') and r['new_coupon']>0:
-            alert = True
-            #message = '掌柜送您%d张抵用券，请在个人中心查看哦' % (r['new_coupon']+invitation_coupon)
-            message = '恭喜您获得新用户专享抵用券大礼包，可在个人中心查看哦'
-            pop_message = '恭喜您，领取成功!'
-            user_new = True
-            db.app_user.update_one({'uname':session['uname']},{'$set':{'new_coupon':0}})
-        else:
-            alert = False
-            message = ''
-            pop_message = '现在下单还有很多优惠哦~'
-
-        if session['unionid'] != '':
-            if_bind = True
-            wx_nickname = ''
-            wx_img = ''
-            openid = ''
-            #uid_list = db.unionid_index .find({'unionid': session['unionid']})
-            uid_list = app_user_helper.get_user_list_by_unionid(session['unionid'])
-            for u in uid_list:
-                if u.get('openid'):
-                    #user = db.app_user .find_one({'openid':u['openid']})
-                    user = app_user_helper.get_user_info(u['openid'], q_type='openid')
-                    if user:
-                        openid = user.get('openid','')
-                        wx_nickname = user.get('wx_nickname', '')
-                        wx_img = user.get('wx_headimgurl', '')
-                        if wx_img!='':
-                            break
-        else:
-            if_bind = False
-            openid = ''
-            wx_nickname = ''
-            wx_img = ''
-
-        print '====> BIND: ', if_bind, wx_nickname.encode('utf-8'), wx_img.encode('utf-8')
+        ## 返回
 
         return json.dumps({
             'ret'  : 0,
             'data' : {
                 'session' : session['session_id'],
                 'login'   : True,
-                'addr'    : addr,
                 'uname'   : session['uname'],
-                # 'alert'   : alert,
-                'alert'   : False,  # 20170208产品要求关闭新用户注册送券弹框
-                'message' : message,
-                'openid'  : openid,
-                'wx_img'  : wx_img,
-                'wx_nickname': wx_nickname,
-                'if_bind': if_bind,
-                'pop_message' : pop_message,
-                'user_new' : user_new,
+                'alert'   : True,  # 
+                'message' : '测试弹窗',
             }
         })

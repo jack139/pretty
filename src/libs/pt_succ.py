@@ -5,11 +5,11 @@ import time, random
 import traceback, json
 from bson.objectid import ObjectId
 import app_helper,helper
-from weixin.wx_lib import wx_event_push
-from libs import coupon_helper
+#from weixin.wx_lib import wx_event_push
+#from libs import coupon_helper
 from libs import log4u
 #from libs import sync_sku
-from libs import sku_helper
+#from libs import sku_helper
 from config import setting
 
 db = setting.db_primary
@@ -95,27 +95,6 @@ def last_member_to_succ(pt_order_id, product_id, who):
             app_helper.event_push_order(x['order_id'])
             log4u.log('pt_succ', log4u.PT_SUCC , '拼团成功', x['order_id'])
 
-
-    '''
-    # 发消息
-    print '发微信通知'
-
-    try:
-        wx_event_push.pt_success_notify(r3)
-    except Exception, e:
-        print 'Error', e
-        traceback.print_exc()
-        #pass
-
-    #发"团长券"
-    try:
-        from weixin.coupon_logic.leader_coupon import handle_leader_coupon
-        handle_leader_coupon(r3)
-    except Exception, e:
-        print "Error handle_leader_coupon ------------>", e
-        traceback.print_exc()
-        #pass
-    '''
 
     # 发消息和发券让 backrun 去做， 2016-12-09，gt
     db.event_queue.insert_one({
@@ -355,34 +334,34 @@ def process_tuan_after_paid(r, who, creditpay=False):  # r 是订单数据，来
                     )
 
                 # 发支付成功后图文消息
-                print '推图文消息'
-                try:
-                    wx_event_push.after_pay_notify(r['region_id'], r['uname'], r['cart'][0].get('tuan_id'), r)
-                except Exception, e:
-                    print 'Error', e
-                    traceback.print_exc()
+                #print '推图文消息'
+                #try:
+                #    wx_event_push.after_pay_notify(r['region_id'], r['uname'], r['cart'][0].get('tuan_id'), r)
+                #except Exception, e:
+                #    print 'Error', e
+                #    traceback.print_exc()
 
                 status = 'PAID_AND_WAIT' # 已付款，待成团
                 comment = ',待成团'
 
-            try:
-                wx_event_push.after_46h_notify(r['region_id'], r['uname'], r['cart'][0].get('tuan_id'), int(time.time()), r2)
-            except Exception, e:
-                print 'Error', e
-                traceback.print_exc()
+            #try:
+            #    wx_event_push.after_46h_notify(r['region_id'], r['uname'], r['cart'][0].get('tuan_id'), int(time.time()), r2)
+            #except Exception, e:
+            #    print 'Error', e
+            #    traceback.print_exc()
                 
             # 使用的优惠券失效
             # 使用新抵用券 2016-02-29, gt
-            if r['coupon']!=None:
-                t_coupon = coupon_helper.coupon(uname=r['uname'],openid=r['uname'],unionid=r.get('unionid',''))
-                if isinstance(r['coupon'], dict):
-                    t_coupon.status_to_used(r['coupon']['coupon_id'], order_id)
-                else: # 为兼容旧的coupon
-                    t_coupon.status_to_used(r['coupon'][0], order_id) 
+            #if r['coupon']!=None:
+            #    t_coupon = coupon_helper.coupon(uname=r['uname'],openid=r['uname'],unionid=r.get('unionid',''))
+            #    if isinstance(r['coupon'], dict):
+            #        t_coupon.status_to_used(r['coupon']['coupon_id'], order_id)
+            #    else: # 为兼容旧的coupon
+            #        t_coupon.status_to_used(r['coupon'][0], order_id) 
 
             # 添加分销订单记录 2016-04-08
-            from libs import user_tree
-            user_tree.add_order(r['uname'], order_id)
+            #from libs import user_tree
+            #user_tree.add_order(r['uname'], order_id)
 
     return status, comment
 
@@ -433,7 +412,7 @@ def process_1hour_after_paid(r, who, status):  # r 是订单数据，来自 orde
         #db.sku_store .update_one({'product_id' : item['product_id']},
         #    {'$inc' : {'volume' : float(item['num2'])}}
         #)
-        sku_helper.inc_volume(item['product_id'], float(item['num2']))
+        #sku_helper.inc_volume(item['product_id'], float(item['num2']))
 
         # 同步到运营中心
         #sync_sku.event_push_sku(item['product_id'])
@@ -441,8 +420,8 @@ def process_1hour_after_paid(r, who, status):  # r 是订单数据，来自 orde
         # 买X送Y
         try:
             # 活动数据从商品接口来 2017-01-09
-            r9 = sku_helper.get_inventory_by_product_id(item['product_id'], r['shop']) 
-            sale_promotes = r9['sale_promotes'] if r9 else None
+            #r9 = sku_helper.get_inventory_by_product_id(item['product_id'], r['shop']) 
+            #sale_promotes = r9['sale_promotes'] if r9 else None
 
             from libs import settings_helper
             sale_promote = settings_helper.is_buy_x_give_y(item['product_id'], sale_promotes)
@@ -630,7 +609,7 @@ def process_mall_after_paid(rr, who):  # rr 是订单数据，来自 order_app
             #db.sku_store .update_one({'product_id' : item['product_id']},
             #    {'$inc' : {'volume' : float(item['num2'])}}
             #)
-            sku_helper.inc_volume(item['product_id'], float(item['num2']))
+            #sku_helper.inc_volume(item['product_id'], float(item['num2']))
 
             # 同步到运营中心
             #sync_sku.event_push_sku(item['product_id'])

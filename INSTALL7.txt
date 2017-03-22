@@ -51,7 +51,7 @@ crontab -e 添加任务
 
 程序文件
 /usr/local/nginx/html/static
-/usr/local/nginx/html/herb
+/usr/local/nginx/html/pretty
 /region_id
 
 启动前需调整的配置文件
@@ -74,6 +74,8 @@ report_db 只读权限 db.authenticate('report','report')
 
 use admin
 
+db.createUser({user:"root",pwd:"andDR$-93H",roles:["userAdmin","userAdminAnyDatabase","readWrite"]})
+
 db.createUser( {
     user: "siteUserAdmin",
     pwd: "Zjjl_3026",
@@ -85,7 +87,6 @@ db.createUser( {
     pwd: "Zjjl_3026",
     roles: [ { role: "root", db: "admin" } ]
   });
-
 
 db.createRole(
    {
@@ -108,7 +109,7 @@ db.createUser(
 use admin
 db.auth("siteRootAdmin", "Zjjl_3026");
 
-use herb_db
+use pretty_db
 db.createUser({user:"ipcam",pwd:"ipcam",roles:["dbAdmin","readWrite"]})
 db.auth("ipcam","ipcam")
 db.user.insert({uname:"admin",login:1,privilege:8,passwd:'ecb918249fb79775ce1b332ddd2a5d624248ce2b',menu_level:''})

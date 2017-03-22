@@ -8,19 +8,19 @@ import app_helper
 
 db = setting.db_web
 
-url = ('/app/v1/get_settings')
+url = ('/app/v1/user_logout')
 
 # 退出
 class handler: # Logout:
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param = web.input(app_id='', session='', secret='')
+        param = web.input(app_id='', session='', dev_id='', ver_code='', sign='')
 
-        if '' in (param.app_id, param.session, param.secret, param.sign):
+        if '' in (param.app_id, param.session, param.dev_id, param.ver_code, param.sign):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         #验证签名
-        md5_str = app_helper.generate_sign([param.app_id, param.session, param.secret])
+        md5_str = app_helper.generate_sign([param.app_id, param.dev_id, param.ver_code, param.session])
         if md5_str!=param.sign:
             return json.dumps({'ret' : -1, 'msg' : '签名验证错误'})
 

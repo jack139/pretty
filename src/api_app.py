@@ -3,7 +3,7 @@
 
 import web
 import gc
-from config import url_api
+from config.url_api import urls2
 
 app = web.application(urls2, globals())
 application = app.wsgifunc()
