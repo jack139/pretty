@@ -270,33 +270,6 @@ class WxpayNotify:
 
 ##-----------------------------------------------------------------
 
-# 取得主机端口
-class WxGetHost:
-    def POST(self):
-        web.header('Content-Type', 'application/json')
-        param = web.input(openid='',session_id='')
-
-        if param.openid=='' and param.session_id=='':
-            return json.dumps({'ret' : -2, 'msg' : '参数错误1'})
-
-        # 同时支持openid和session_id
-        if param.openid!='':
-            uname = app_helper.check_openid(param.openid)
-        else:
-            uname = app_helper.wx_logged(param.session_id)
-        if uname:
-            # 返回host地址、端口
-            host = setting.app_pool[random.randint(0,len(setting.app_pool)-1)]
-            print 'host = ', host
-            return json.dumps({'ret' : 0, 'data' : {
-                'protocol' : 'http',
-                #'host'     : setting.app_host, #'app.urfresh.cn',
-                'host'     : host,
-                'port'     : '12050',
-            }})
-        else:
-            return json.dumps({'ret' : -4, 'msg' : '无效的openid'})
-
 
 
 #if __name__ == "__main__":
