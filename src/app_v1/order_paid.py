@@ -13,18 +13,13 @@ url = ('/app/v1/order_paid')
 
 # 退出
 class handler: 
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','order_id','data'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param = web.input(app_id='', dev_id='', ver_code='', session='', order_id='', data='', sign='')
+        param = web.input(app_id='', dev_id='', ver_code='', session='', order_id='', data='', tick='')
 
-        if '' in (param.app_id, param.dev_id, param.ver_code, param.order_id, param.session, param.sign):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.order_id, param.session, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
-
-        #验证签名
-        md5_str = app_helper.generate_sign([param.app_id, param.dev_id, param.ver_code, param.session, 
-            param.order_id, param.data])
-        if md5_str!=param.sign:
-            return json.dumps({'ret' : -1, 'msg' : '签名验证错误'})
 
         # 检查session登录
         uname = app_helper.app_logged(param.session) 

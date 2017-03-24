@@ -8,17 +8,17 @@ import app_helper
 
 db = setting.db_web
 
-# 收藏
-url = ('/app/v1/heart_object')
+# 提交测试答卷
+url = ('/app/v1/exam_submit')
 
-# 退出
 class handler: 
-    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','object_id'])
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','object_id','answer'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param = web.input(app_id='', dev_id='', ver_code='', session='', object_id='', tick='')
+        param = web.input(app_id='', dev_id='', ver_code='', session='', object_id='', answer='', tick='')
 
-        if '' in (param.app_id, param.dev_id, param.ver_code, param.object_id, param.session, param.tick):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.object_id, param.session, 
+            param.answer, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         # 检查session登录
@@ -29,10 +29,7 @@ class handler:
         #--------------------------------------------------
 
         ret_data = {
-            "object_id" : param.object_id,     # 唯一代码 
-            "type"  : 1,  # 类型： 1 课程, 2 专辑 
-            "title" : "课程标题",
-            "msg" : "收藏成功",
+            "exam_score" : 60, # 测试成绩
         }
 
         # 返回

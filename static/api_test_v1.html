@@ -10,13 +10,20 @@
 
 <body>
 <script type="text/javascript">
-function generate_sign(target, list){
+function generate_sign(num, list){
     var raw = "";
+    var target = "#sign_"+num;
+    var tick = "#tick_"+num;
+    var timestamp=new Date().getTime();
+
+    $(tick).val(timestamp);
+
     $.each(list, function(i, item){
         raw += $(item).val();
     });
     console.log(raw);
     $(target).val(md5(raw).toUpperCase());
+
 }
 </script>
 
@@ -31,8 +38,9 @@ function generate_sign(target, list){
 <div>type: <input id="type_1" name="type" value="IOS"/></div>
 <div>dev_id: <input id="dev_id_1" name="dev_id" value="12345"/></div>
 <div>ver_code: <input id="ver_code_1" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_1" name="tick" value="" readonly="readonly"/></div>
 <div>sign: <input id="sign_1" name="sign" size="50" value=""/><input type="button" value="生成签名"
-    onclick="generate_sign('#sign_1', ['#public_key','#type_1','#dev_id_1','#ver_code_1'])"></div>
+    onclick="generate_sign('1', ['#public_key','#type_1','#dev_id_1','#ver_code_1','#tick_1'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -42,13 +50,336 @@ function generate_sign(target, list){
 <div>app_id: <input id="app_id_2" name="app_id" value=""/></div>
 <div>dev_id: <input id="dev_id_2" name="dev_id" value="12345"/></div>
 <div>ver_code: <input id="ver_code_2" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_2" name="tick" value="" readonly="readonly"/></div>
 <div>sign: <input id="sign_2" name="sign" size="50" value=""/><input type="button" value="生成签名"
-    onclick="generate_sign('#sign_2', ['#private_key','#app_id_2','#dev_id_2','#ver_code_2'])"></div>
+    onclick="generate_sign('2', ['#private_key','#app_id_2','#dev_id_2','#ver_code_2','#tick_2'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
 
 <h1>以下接口使用端口：17213</h1>
+
+<h2>3.获取轮播图列表 list_banner</h2>
+<form name="3" method="post" action="/app/v1/list_banner">
+<div>app_id: <input id="app_id_3" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_3" name="dev_id" value="12345"/></div>
+<div>ver_code: <input id="ver_code_3" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_3" name="tick" value="" readonly="readonly"/></div>
+<div>sign: <input id="sign_3" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('3', ['#private_key','#app_id_3','#dev_id_3','#ver_code_3','#tick_3'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>4.获取试听课程列表 list_try</h2>
+<form name="4" method="post" action="/app/v1/list_try">
+<div>app_id: <input id="app_id_4" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_4" name="dev_id" value="12345"/></div>
+<div>ver_code: <input id="ver_code_4" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_4" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_4" name="session" size="50" value=""/></div>
+<div>category: <input id="category_4" name="category" value=""/></div>
+<div>page_size: <input id="page_size_4" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_4" name="page_index" value="0"/></div>
+<div>sign: <input id="sign_4" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('4', ['#private_key','#app_id_4','#dev_id_4','#ver_code_4','#tick_4',
+        '#session_4','#category_4','#page_size_4','#page_index_4'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>5.获取精品课程列表 list_course</h2>
+<form name="5" method="post" action="/app/v1/list_course">
+<div>app_id: <input id="app_id_5" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_5" name="dev_id" value="12345"/></div>
+<div>ver_code: <input id="ver_code_5" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_5" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_5" name="session" size="50" value=""/></div>
+<div>category: <input id="category_5" name="category" value=""/></div>
+<div>page_size: <input id="page_size_5" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_5" name="page_index" value="0"/></div>
+<div>sort_by: <input id="sort_by_5" name="sort_by" value="1"/></div>
+<div>sign: <input id="sign_5" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('5', ['#private_key','#app_id_5','#dev_id_5','#ver_code_5','#tick_5',
+        '#session_5','#category_5','#page_size_5','#page_index_5','#sort_by_5'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>6.获取精品专辑列表 list_topic</h2>
+<form name="6" method="post" action="/app/v1/list_topic">
+<div>app_id: <input id="app_id_6" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_6" name="dev_id" value="12365"/></div>
+<div>ver_code: <input id="ver_code_6" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_6" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_6" name="session" size="50" value=""/></div>
+<div>page_size: <input id="page_size_6" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_6" name="page_index" value="0"/></div>
+<div>sign: <input id="sign_6" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('6', ['#private_key','#app_id_6','#dev_id_6','#ver_code_6','#tick_6',
+        '#session_6','#page_size_6','#page_index_6'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>7.获取课程详情 detail_course</h2>
+<form name="7" method="post" action="/app/v1/detail_course">
+<div>app_id: <input id="app_id_7" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_7" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_7" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_7" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_7" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_7" name="object_id" value=""/></div>
+<div>sign: <input id="sign_7" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('7', ['#private_key','#app_id_7','#dev_id_7','#ver_code_7','#tick_7',
+        '#session_7','#object_id_7'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>8.获取专辑详情 detail_topic</h2>
+<form name="8" method="post" action="/app/v1/detail_topic">
+<div>app_id: <input id="app_id_8" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_8" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_8" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_8" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_8" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_8" name="object_id" value=""/></div>
+<div>sign: <input id="sign_8" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('8', ['#private_key','#app_id_8','#dev_id_8','#ver_code_8','#tick_8',
+        '#session_8','#object_id_8'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>9.订阅课程/专辑 book_object</h2>
+<form name="9" method="post" action="/app/v1/book_object">
+<div>app_id: <input id="app_id_9" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_9" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_9" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_9" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_9" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_9" name="object_id" value=""/></div>
+<div>sign: <input id="sign_9" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('9', ['#private_key','#app_id_9','#dev_id_9','#ver_code_9','#tick_9',
+        '#session_9','#object_id_9'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>10.获取课程/专辑分享页面链接 share_object</h2>
+<form name="10" method="post" action="/app/v1/share_object">
+<div>app_id: <input id="app_id_10" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_10" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_10" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_10" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_10" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_10" name="object_id" value=""/></div>
+<div>sign: <input id="sign_10" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('10', ['#private_key','#app_id_10','#dev_id_10','#ver_code_10','#tick_10',
+        '#session_10','#object_id_10'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>11.收藏课程/专辑 heart_object</h2>
+<form name="11" method="post" action="/app/v1/heart_object">
+<div>app_id: <input id="app_id_11" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_11" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_11" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_11" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_11" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_11" name="object_id" value=""/></div>
+<div>sign: <input id="sign_11" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('11', ['#private_key','#app_id_11','#dev_id_11','#ver_code_11','#tick_11',
+        '#session_11','#object_id_11'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>12.支付课程/专辑订单 pay_object</h2>
+<form name="12" method="post" action="/app/v1/pay_object">
+<div>app_id: <input id="app_id_12" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_12" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_12" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_12" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_12" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_12" name="object_id" value=""/></div>
+<div>pay_type: <input id="pay_type_12" name="pay_type" value="0"/></div>
+<div>order_id: <input id="order_id_12" name="order_id" value=""/></div>
+<div>total: <input id="total_12" name="total" value=""/></div>
+<div>sign: <input id="sign_12" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('12', ['#private_key','#app_id_12','#dev_id_12','#ver_code_12','#tick_12',
+        '#session_12','#object_id_12','#pay_type_12','#order_id_12','#total_12'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>13.订单支付完成 order_paid</h2>
+<form name="13" method="post" action="/app/v1/order_paid">
+<div>app_id: <input id="app_id_13" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_13" name="dev_id" value="13375"/></div>
+<div>ver_code: <input id="ver_code_13" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_13" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_13" name="session" size="50" value=""/></div>
+<div>order_id: <input id="order_id_13" name="order_id" value=""/></div>
+<div>data: <input id="data_13" name="data" value=""/></div>
+<div>sign: <input id="sign_13" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('13', ['#private_key','#app_id_13','#dev_id_13','#ver_code_13','#tick_13',
+        '#session_13','#order_id_13','#data_13'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>14.获取我的课程列表 list_my_course</h2>
+<form name="14" method="post" action="/app/v1/list_my_course">
+<div>app_id: <input id="app_id_14" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_14" name="dev_id" value="123414"/></div>
+<div>ver_code: <input id="ver_code_14" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_14" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_14" name="session" size="50" value=""/></div>
+<div>page_size: <input id="page_size_14" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_14" name="page_index" value="0"/></div>
+<div>sign: <input id="sign_14" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('14', ['#private_key','#app_id_14','#dev_id_14','#ver_code_14','#tick_14',
+        '#session_14','#page_size_14','#page_index_14'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>15.获取学习进度 progress_info</h2>
+<form name="15" method="post" action="/app/v1/progress_info">
+<div>app_id: <input id="app_id_15" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_15" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_15" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_15" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_15" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_15" name="object_id" value=""/></div>
+<div>sign: <input id="sign_15" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('15', ['#private_key','#app_id_15','#dev_id_15','#ver_code_15','#tick_15',
+        '#session_15','#object_id_15'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>16.保存学习进度 progress_save</h2>
+<form name="16" method="post" action="/app/v1/progress_save">
+<div>app_id: <input id="app_id_16" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_16" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_16" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_16" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_16" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_16" name="object_id" value=""/></div>
+<div>progress: <input id="progress_16" name="progress" value=""/></div>
+<div>sign: <input id="sign_16" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('16', ['#private_key','#app_id_16','#dev_id_16','#ver_code_16','#tick_16',
+        '#session_16','#object_id_16','#progress_16'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>17.获取课程测试 exam_course</h2>
+<form name="17" method="post" action="/app/v1/exam_course">
+<div>app_id: <input id="app_id_17" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_17" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_17" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_17" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_17" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_17" name="object_id" value=""/></div>
+<div>sign: <input id="sign_17" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('17', ['#private_key','#app_id_17','#dev_id_17','#ver_code_17','#tick_17',
+        '#session_17','#object_id_17'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>18.提交测试答卷 exam_submit</h2>
+<form name="18" method="post" action="/app/v1/exam_submit">
+<div>app_id: <input id="app_id_18" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_18" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_18" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_18" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_18" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_18" name="object_id" value=""/></div>
+<div>answer: <input id="answer_18" name="answer" value=""/></div>
+<div>sign: <input id="sign_18" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('18', ['#private_key','#app_id_18','#dev_id_18','#ver_code_18','#tick_18',
+        '#session_18','#object_id_18','#answer_18'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>19.获取学员评价 comment_info</h2>
+<form name="19" method="post" action="/app/v1/comment_info">
+<div>app_id: <input id="app_id_19" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_19" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_19" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_19" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_19" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_19" name="object_id" value=""/></div>
+<div>page_size: <input id="page_size_19" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_19" name="page_index" value="0"/></div>
+<div>sign: <input id="sign_19" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('19', ['#private_key','#app_id_19','#dev_id_19','#ver_code_19','#tick_19',
+        '#session_19','#object_id_19','#page_size_19','#page_index_19'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>20.提交课程评价 comment_save</h2>
+<form name="20" method="post" action="/app/v1/comment_save">
+<div>app_id: <input id="app_id_20" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_20" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_20" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_20" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_20" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_20" name="object_id" value=""/></div>
+<div>comment: <input id="comment_20" name="comment" value=""/></div>
+<div>star: <input id="star_20" name="star" value=""/></div>
+<div>sign: <input id="sign_20" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('20', ['#private_key','#app_id_20','#dev_id_20','#ver_code_20','#tick_20',
+        '#session_20','#object_id_20','#comment_20','#star_20'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>21.获取客服信息 cs_info</h2>
+<form name="21" method="post" action="/app/v1/cs_info">
+<div>app_id: <input id="app_id_21" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_21" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_21" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_21" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_21" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_21" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('21', ['#private_key','#app_id_21','#dev_id_21','#ver_code_21','#tick_21',
+        '#session_21'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>22.下载课件 download_course</h2>
+<form name="22" method="post" action="/app/v1/download_course">
+<div>app_id: <input id="app_id_22" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_22" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_22" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_22" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_22" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_22" name="object_id" value=""/></div>
+<div>sign: <input id="sign_22" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('22', ['#private_key','#app_id_22','#dev_id_22','#ver_code_22','#tick_22',
+        '#session_22','#object_id_22'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
 
 <h2>23.用户登录注册 user_login</h2>
 <form name="23" method="post" action="/app/v1/user_login">
@@ -56,8 +387,9 @@ function generate_sign(target, list){
 <div>number: <input id="number_23" name="number" value=""/></div>
 <div>dev_id: <input id="dev_id_23" name="dev_id" value="12345"/></div>
 <div>ver_code: <input id="ver_code_23" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_23" name="tick" value="" readonly="readonly"/></div>
 <div>sign: <input id="sign_23" name="sign" size="50" value=""/><input type="button" value="生成签名"
-    onclick="generate_sign('#sign_23', ['#private_key','#app_id_23','#number_23','#dev_id_23','#ver_code_23'])"></div>
+    onclick="generate_sign('23', ['#private_key','#app_id_23','#number_23','#dev_id_23','#ver_code_23','#tick_23'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -67,10 +399,12 @@ function generate_sign(target, list){
 <div>app_id: <input id="app_id_24" name="app_id" value=""/></div>
 <div>dev_id: <input id="dev_id_24" name="dev_id" value="12345"/></div>
 <div>ver_code: <input id="ver_code_24" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_24" name="tick" value="" readonly="readonly"/></div>
 <div>session: <input id="session_24" name="session" size="50" value=""/></div>
 <div>rand: <input id="rand_24" name="rand" value=""/></div>
 <div>sign: <input id="sign_24" name="sign" size="50" value=""/><input type="button" value="生成签名"
-    onclick="generate_sign('#sign_24', ['#private_key','#app_id_24','#dev_id_24','#ver_code_24','#session_24','#rand_24'])"></div>
+    onclick="generate_sign('24', ['#private_key','#app_id_24','#dev_id_24','#ver_code_24','#tick_24',
+        '#session_24','#rand_24'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -80,11 +414,81 @@ function generate_sign(target, list){
 <div>app_id: <input id="app_id_25" name="app_id" value=""/></div>
 <div>dev_id: <input id="dev_id_25" name="dev_id" value="12345"/></div>
 <div>ver_code: <input id="ver_code_25" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_25" name="tick" value="" readonly="readonly"/></div>
 <div>session: <input id="session_25" name="session" size="50" value=""/></div>
 <div>sign: <input id="sign_25" name="sign" size="50" value=""/><input type="button" value="生成签名"
-    onclick="generate_sign('#sign_25', ['#private_key','#app_id_25','#dev_id_25','#ver_code_25','#session_25'])"></div>
+    onclick="generate_sign('25', ['#private_key','#app_id_25','#dev_id_25','#ver_code_25','#tick_25',
+        '#session_25'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
+<br/>
+
+<h2>26.修改个人信息 personal_save</h2>
+<br/>
+
+<h2>27.获取个人信息 personal_info</h2>
+<form name="27" method="post" action="/app/v1/personal_info">
+<div>app_id: <input id="app_id_27" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_27" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_27" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_27" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_27" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_27" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('27', ['#private_key','#app_id_27','#dev_id_27','#ver_code_27','#tick_27',
+        '#session_27'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>28.获取我的收藏列表 heart_list</h2>
+<form name="28" method="post" action="/app/v1/heart_list">
+<div>app_id: <input id="app_id_28" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_28" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_28" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_28" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_28" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_28" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('28', ['#private_key','#app_id_28','#dev_id_28','#ver_code_28','#tick_28',
+        '#session_28'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>29.获取购买记录 order_list</h2>
+<form name="29" method="post" action="/app/v1/order_list">
+<div>app_id: <input id="app_id_29" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_29" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_29" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_29" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_29" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_29" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('29', ['#private_key','#app_id_29','#dev_id_29','#ver_code_29','#tick_29',
+        '#session_29'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>30.获取余额信息 cash_info</h2>
+<form name="30" method="post" action="/app/v1/cash_info">
+<div>app_id: <input id="app_id_30" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_30" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_30" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_30" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_30" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_30" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('30', ['#private_key','#app_id_30','#dev_id_30','#ver_code_30','#tick_30',
+        '#session_30'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>31.获取系统消息 system_info</h2>
+<br/>
+
+<h2>32.授权课程给店员 auth_to_user</h2>
 <br/>
 
 </html>

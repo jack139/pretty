@@ -6,7 +6,9 @@
 
 import time, os, hashlib
 import urllib, urllib3, json
+import functools
 import re
+import web
 from config import setting
 
 #---------------------------- 标记是否在测试／staging环境，用于区别生成环境的一些设置
@@ -247,3 +249,45 @@ def event_push_order(order_id):
     })
 
 
+"""
+    用于请求签名验证的修饰器
+
+    @param sign_names 需要参与签名的参数名列表
+        需要按顺序, sign_names[0]为app_id
+    @param param_defaults 非必须的参数
+"""
+def check_sign(param_names):
+    def _wrap(func):
+        @functools.wraps(func)
+        def __wrap(*args, **kw):
+            # 获取参数, 缺少必须参数返回错误
+            defaults = dict((el,'') for el in param_names)
+            try:
+                param = web.input('app_id', 'dev_id', 'ver_code', 'tick', 'sign', **defaults)
+            except:
+                print web.input()
+                return api_error(-2, '缺少参数')
+
+            print param
+
+            # 验证签名,验证失败返回错误
+            sign_data = [param[name] for name in param_names]
+            #print sign_data
+            md5_str = generate_sign(sign_data)
+            if md5_str != param.sign:
+                print '------> 签名验证错误 in check_sign'
+                print md5_str, param.sign
+                return api_error(-1, '签名验证错误')
+
+            return func(*args, **kw)
+        return __wrap
+    return _wrap
+
+
+# 用于返回api 错误信息 
+def api_error(ret, msg=''):
+    # 防止web.py的影响
+    web.ctx.status = '200 OK'
+    web.ctx.headers = [('Content-Type', 'application/json')]
+
+    return json.dumps({'ret': ret, 'msg': msg})

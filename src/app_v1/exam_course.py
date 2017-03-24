@@ -8,8 +8,8 @@ import app_helper
 
 db = setting.db_web
 
-# 收藏
-url = ('/app/v1/heart_object')
+# 获取课程测试
+url = ('/app/v1/exam_course')
 
 # 退出
 class handler: 
@@ -29,10 +29,18 @@ class handler:
         #--------------------------------------------------
 
         ret_data = {
-            "object_id" : param.object_id,     # 唯一代码 
-            "type"  : 1,  # 类型： 1 课程, 2 专辑 
-            "title" : "课程标题",
-            "msg" : "收藏成功",
+           "title" : "课程标题",
+           "note" : "测试说明测试说明测试说明测试说明",
+           "question" : [
+                  {
+                       "problem" : "问题问题问题1",
+                       "option" : ["答案1", "答案2", "答案3", "答案4"]
+                  },
+                  {
+                       "problem" : "问题问题问题2",
+                       "option" : ["答案1", "答案2", "答案3"]
+                  },
+           ]
         }
 
         # 返回

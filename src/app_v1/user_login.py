@@ -17,18 +17,14 @@ url = ('/app/v1/user_login')
 
 # 用户注册／登录
 class handler: # Login2:
+    @app_helper.check_sign(['app_id','number','dev_id','ver_code','tick'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
         #print web.input()
-        param = web.input(app_id='', number='', dev_id='', ver_code='', sign='')
+        param = web.input(app_id='', number='', dev_id='', ver_code='', tick='')
 
-        if '' in (param.app_id, param.number, param.dev_id, param.ver_code, param.sign):
+        if '' in (param.app_id, param.number, param.dev_id, param.ver_code, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
-
-        #验证签名
-        md5_str = app_helper.generate_sign([param.app_id, param.number, param.dev_id, param.ver_code])
-        if md5_str!=param.sign:
-            return json.dumps({'ret' : -1, 'msg' : '签名验证错误'})
 
         # 防止flood攻击，通过app_id 访问时间判断 ---------------------------
         app_id = param.app_id

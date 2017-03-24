@@ -3,19 +3,12 @@
 
 import web
 import os, gc
-#from pymongo import MongoClient
 import time, json, hashlib, random
 import rsa, base64
 import traceback 
-#from bson.objectid import ObjectId
 from config import setting
 import app_helper 
-#from libs import pt_succ
-#from libs import settings_helper
-#from libs import credit_helper
-#from libs import app_user_helper
 from libs import log4u
-#from libs.cancel_dsv import cancel_dsv_order
 
 try:
     import xml.etree.cElementTree as ET
@@ -163,17 +156,13 @@ GREY_TEST = [
 ]
 # 取得主机端口
 class GetHost:
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param = web.input(app_id='', dev_id='', ver_code='', sign='')
+        param = web.input(app_id='', dev_id='', ver_code='', tick='')
 
-        if '' in (param.app_id, param.dev_id, param.ver_code, param.sign):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
-
-        #验证签名
-        md5_str = app_helper.generate_sign([param.app_id, param.dev_id, param.ver_code])
-        if md5_str!=param.sign:
-            return json.dumps({'ret' : -1, 'msg' : '签名验证错误'})
 
         # 返回host地址、端口
         if param.app_id in GREY_TEST:
