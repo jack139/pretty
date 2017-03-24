@@ -11,7 +11,6 @@ db = setting.db_web
 
 url = ('/app/v1/user_check_rand')
 
-
 # 检查随机码
 class handler: # CheckRand:
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','rand'])

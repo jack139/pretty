@@ -14,7 +14,6 @@ db = setting.db_web
 
 url = ('/app/v1/user_login')
 
-
 # 用户注册／登录
 class handler: # Login2:
     @app_helper.check_sign(['app_id','number','dev_id','ver_code','tick'])

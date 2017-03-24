@@ -11,7 +11,6 @@ db = setting.db_web
 # 我的收藏列表
 url = ('/app/v1/heart_list')
 
-# 退出
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session'])
     def POST(self, version='v1'):

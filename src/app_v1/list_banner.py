@@ -11,7 +11,6 @@ db = setting.db_web
 
 url = ('/app/v1/list_banner')
 
-
 # 获取轮播图（不需要session）
 class handler: 
     @app_helper.check_sign(['app_id', 'dev_id', 'ver_code', 'tick'])

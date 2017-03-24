@@ -11,7 +11,6 @@ db = setting.db_web
 # 获取学员评价
 url = ('/app/v1/comment_info')
 
-# 退出
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','object_id','page_size','page_index'])
     def POST(self, version='v1'):

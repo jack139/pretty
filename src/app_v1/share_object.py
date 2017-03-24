@@ -11,7 +11,6 @@ db = setting.db_web
 # 分享页面链接
 url = ('/app/v1/share_object')
 
-# 退出
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','object_id'])
     def POST(self, version='v1'):

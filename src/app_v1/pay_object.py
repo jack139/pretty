@@ -11,7 +11,6 @@ db = setting.db_web
 # 支付
 url = ('/app/v1/pay_object')
 
-# 退出
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','object_id',
             'pay_type','order_id','total'])

@@ -11,7 +11,6 @@ db = setting.db_web
 # 我的课程列表
 url = ('/app/v1/list_my_course')
 
-# 退出
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','page_size','page_index'])
     def POST(self, version='v1'):
