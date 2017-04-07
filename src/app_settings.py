@@ -11,18 +11,9 @@
 
 # app使用的新分类
 CATEGORY = [
-    {
-        'key': 'c001', 'title': '分类',
-        'banner': (
-            'http://wx.acmecareonline.com/static/image/banner/20170207_1.png',
-            'http://wx.acmecareonline.com/static/image/banner/20170110_1.png',
-            'http://wx.acmecareonline.com/static/image/banner/20170110_2.png',
-            'http://wx.acmecareonline.com/static/image/banner/20170110_3.png',
-            'http://wx.acmecareonline.com/static/image/banner/20161224_1.png',
-            'http://wx.acmecareonline.com/static/image/banner/20161224_2.png',
-        ),
-        'banner_url': ('10000010','10000009','10000007','10000008','10000004','10000005')
-    },
+    { 'key': 'c001', 'title': '分类1' },
+    { 'key': 'c002', 'title': '分类2' },
+    { 'key': 'c003', 'title': '分类3' },
 ]
 
 

@@ -110,18 +110,18 @@ def check_sign_alipay(ret):
 class FisrtHand_v2:
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param=web.input(type='', dev_id='', ver_code='', sign='')
+        param=web.input(type='', dev_id='', ver_code='', tick='', sign='')
 
         print web.data()
 
-        if '' in (param.type, param.dev_id, param.ver_code, param.sign):
+        if '' in (param.type, param.dev_id, param.ver_code, param.tick, param.sign):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         if param.type not in ['IOS', 'ANDROID']:
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         #验证签名
-        sign_str = '%s%s%s%s' % (public_key, param.type, param.dev_id, param.ver_code)
+        sign_str = '%s%s%s%s%s' % (public_key, param.type, param.dev_id, param.ver_code, param.tick)
         md5_str = hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()
 
         if md5_str!=param.sign:

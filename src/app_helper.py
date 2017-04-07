@@ -66,7 +66,10 @@ BLOCK_LIST = [
 
 # 查询session
 def get_session(session_id):
-    return db.app_sessions.find_one_and_update({'session_id':session_id},{'$set':{'attime':time.time()}})
+    r = db.app_sessions.find_one({'session_id':session_id})
+    if r and r['attime']-time.time()>1800: # 半小时更新一次
+        db.app_sessions.update_one({'session_id':session_id},{'$set':{'attime':time.time()}})
+    return r
 
 # 检查session登录状态
 def logged(session_id):
@@ -74,9 +77,6 @@ def logged(session_id):
     if session==None:
         return None
     else:
-        #db.app_user.update_one({'uname' : session['uname']},{
-        #   '$set'  : {'last_time' : time_str()}
-        #})
         if session['login']==1: # 登录后返回uname
             return session['uname']
         else:
@@ -88,12 +88,13 @@ def app_logged(session_id):
     if session==None:
         return None
     else:
-        #db.app_user.update_one({'uname' : session['uname']},{
-        #   '$set'  : {'last_time' : time_str()}
-        #})
-        if session['login']==1: # 登录后返回uname,openid
-            return {'uname' : session['uname'], 'openid': session.get('openid',''),  'unionid': session.get('unionid',''),
-                    'type': session.get('type','app')}
+        if session['login']==1 and session['bind']==1: # 要求 登录 且 绑定
+            return {
+                'uname'  : session['uname'], 
+                'userid' : session['userid'],  
+                'type'   : session.get('type',1),
+                'mice'   : session.get('mice',0),
+            }
         else:
             return None
 
@@ -152,6 +153,19 @@ def get_new_order_id(version='v1', prefix='acme'):
         cc = db.order_app.find_one({'order_id' : order_id},{'_id':1})
     db.order_app.insert_one({'order_id':order_id}) # 先占位 2016-03-17,gt
     return order_id
+
+
+# 生成userid
+def gen_new_userid():
+    cc=1
+    while cc is not None:
+        # userid 日期时间(6+4位)+随机数(5位)
+        userid_0 = '%s%s' % (time_str(format=2)[2:],my_rand(6,1))
+        userid = hashlib.md5(userid_0)
+        cc = db.app_user.find_one({'userid' : userid},{'_id':1})
+    db.order_app.app_user({'userid':userid}) # 先占位 2016-03-17,gt
+    return userid
+
 
 # 取得设备类型
 def get_devive_type(app_id):

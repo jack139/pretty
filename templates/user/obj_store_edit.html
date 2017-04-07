@@ -1,0 +1,153 @@
+$def with (name, str1, sku, cate)
+
+$var title: 商品管理
+$var css:
+$var name: $'|'.join(str1) $name
+$var js: /static/js/upload.js?v=1.010
+$var load: doFirst();
+$var menu: #plat1
+
+$if sku['obj_id']=='n/a':
+    <div class="caption"><h2>新增商品信息</h2></div>
+$else:
+    <div class="caption"><h2>修改商品信息</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/mch/obj_store_edit">
+<input type="hidden" name="image" id="form_image" value=""/>
+<input type="hidden" name="obj_id" value="$sku['obj_id']"/>
+<input type="hidden" name="list_in_app" value="$sku.get('list_in_app',0)"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="40%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+<tr><td>品号</td><td>$sku['obj_id']</td><td></td></tr>
+
+
+<tr><td>品名</td><td>
+    <input type="text" name="obj_name" id="sku_name" value="$sku.get('obj_name', '')"/>
+    </td><td>内部使用</td></tr>
+
+<tr><td>商品类目</td><td>
+    <select id="cate_id" name="cate_id">
+        <option value="">--请选择--</option>
+    $for k in cate:
+        <option value="$k['key']"
+        $if sku.get('cate_id')==k['key']:
+            selected="selected"
+        >$k['title']</option>
+    </select>
+    </td><td></td></tr>
+
+<tr><td>标题图片</td><td>
+    <ul id="image-list">
+        <li style="width: 450px;">
+            $if sku.has_key('image') and len(sku['image'])>0:
+                $for i in sku['image']:
+                    $if len(i)>0:
+                      <li><img src="/static/image/product/$(i[:2])/$i"/></li>
+        </li>
+    </ul>
+    </td><td>在页面下方上传图片;</br>可以上传多图</td></tr>
+
+<tr><td>App销售</td><td>
+    $('否' if sku.get('list_in_app',0)==0 else '在售')
+    </td><td>决定是否在前端显示</td></tr>
+
+<tr><td>标题</td><td>
+    <input type="text" name="title" id="title" value="$sku.get('title','')" />
+    </td><td>只会在app中显示</td></tr>
+    
+<tr><td>副标题</td><td>
+    <input type="text" name="title2" id="title2" value="$sku.get('title2','')" />
+    </td><td>只会在app中显示</td></tr>
+
+<tr><td>讲师</td><td>
+    <input type="text" name="speaker" id="speaker" value="$sku.get('speaker','')" />
+    </td><td></td></tr>
+
+
+<tr><td>描述说明</td><td>
+    <textarea rows="3" name="description" id="description">$sku.get('description', '')</textarea>
+    </td><td></td></tr>
+
+
+<tr><td>售价</td><td>
+    <input type="text" name="price" id="price" value="$('%.2f'%(sku.get('price',0)/100.0))" size="15"
+    pattern="[0-9]+[.]{0,1}[0-9]*" title="必须是数字"/> 元
+    </td><td>默认售价</td></tr>
+
+<tr><td>当前销量</td><td>
+    <input type="text" name="volume" value="$sku.get('volume',0)" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>须大于0</td></tr>
+
+<tr><td>媒体类型</td><td>
+    <input type="radio" name="media" value="audio"
+    $if sku.get('media')=='audio':
+        checked="checked"
+    /> 音频
+    <input type="radio" name="media" value="video"
+    $if sku.get('media')=='video':
+        checked="checked"
+    /> 视频
+    </td><td></td></tr>
+
+<tr><td>长度</td><td>
+    <input type="text" name="length" value="$sku.get('length',1)" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>单位：秒，须大于0</td></tr>
+
+<tr><td>试听时长</td><td>
+    <input type="text" name="try_time" value="$sku.get('try_time',0)" pattern="[0-9]+" title="必须是数字"/>
+    </td><td>单位：秒，0表示不能试听</td></tr>
+
+<tr><td>App显示排序权重</td><td>
+    <input type="text" name="sort_weight" value="$sku.get('sort_weight',999)" pattern="[0-9]+" title="必须是数字" size="15"/>
+    </td><td>0排最前，999排最后</td></tr>
+
+<tr><td>状态</td><td>
+    <input type="radio" name="available" value="1"
+    $if int(sku.get('available','0'))==1:
+        checked="checked"
+    /> 在使用
+    <input type="radio" name="available" value="0"
+    $if int(sku.get('available','0'))==0:
+        checked="checked"
+    /> 停用
+
+    </td><td>停用时，将自动下架</td></tr>
+
+<tr><td>备注</td><td>
+    <textarea rows="3" name="note">$sku.get('note','')</textarea>
+    </td><td>内部备注</td></tr>
+
+</tbody></table>
+
+<p><input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+<div class="article_box">
+  <div id="image-main">
+    <form method="post" enctype="multipart/form-data"  action="">
+      <input type="file" name="images" id="images" />
+      <button type="submit" id="btn">上传图片</button>
+    </form>
+    <div id="response"></div>
+  </div>
+</div>
+</br></br>
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>

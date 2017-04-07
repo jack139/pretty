@@ -42,78 +42,30 @@ def validateEmail(email):
 
 # 用户等级
 PRIV_USER     = 0b01000000  # 64
-PRIV_DELIVERY = 0b00010000  # 16 # 要保留，区别后台用户与配送员
+PRIV_MCH      = 0b00010000  # 16 
 PRIV_ADMIN    = 0b00001000  # 8
 PRIV_WX       = 0b00000100  # 4
 PRIV_VISITOR  = 0b00000000  # 0
 
 # 菜单权限
 MENU_LEVEL = {
-    'PLAT_SKU_STORE' : 0,   # SKU管理
-    'PLAT_BASE_SKU'  : 1,   # SKU基础资料
-    'PLAT_BASE_SHOP' : 2,   # 站点基础资料
-    'STOCK_INVENTORY': 3,   # 库存管理
-    'STOCK_ORDER'    : 4,   # 工单管理
-    'POS_POS'        : 5,   # 销货
-    'POS_INVENTORY'  : 6,   # 店内库存
-    'ONLINE_MAN'     : 7,   # 线上订单
-    'POS_AUDIT'      : 8,   # 盘点
-    'POS_REPORT'     : 9,   # 销货统计
-    'POS_PRINT_LABEL': 10,  # 打印标签
-    'POS_REPORT_USER': 11,  # 打印班组统计
-    'CRM'            : 12,  # 订单查询
-    'DELVERY_ORDER'  : 13,  # 快递员UI
-    'REPORT_REPORT1' : 14,  # 报表
-    'REPORT_REPORT2' : 15,  # 报表
-    'REPORT_QUERY'   : 16,  # 手工查询
-    'APP_PUSH'       : 17,  # 推送app消息
-    'REPORT_VOICE'   : 18,  # 客户反馈
-    'BI_REPORT'      : 19,  # BI报表
-    'PLAT_PT_STORE'  : 20,  # 拼团活动管理
-    'BATCH_JOB'      : 21,  # 批量处理订单
-    'OP_ACTION'      : 22,  # 运营操作
-    'REFUND'         : 23,  # 财务退款操作
-    'BRAND'          : 24,  #　品牌活动
-    'DISTRIBUTOR'    : 25,  # 分销商管理
-    'MALL_CATE'      : 26,  # 商城类目管理
-    'SUPPLIER'       : 27,  # 商家管理
-    'COUPONS'        : 28, # 抵用券管理
-    'SALE_PROMOTE'   : 29, #促销活动管理
-    'COUPONS_ACTIVE' : 30, # 抵用券活动管理
-    'GRANT_COUPONS'  : 31, # 抵用券发放
-    'CITY_CODE'      : 32, # 地址编码管理
-    'COLUMN'         : 33, # 推荐栏目管理
-    'WX_IMG_MSG'     : 34, # 微信图文消息
-    'IF_WX_PUSH'     : 35, # 微信推送开关
+    'OBJ_STORE' : 0,   # 对象管理
+    'MERCHANT'  : 1,   # 商家管理
+    'TOPIC_STORE' : 2,   # 专辑管理
+    'CRM'            : 3,  # 订单查询
+    'REPORT' : 4,  # 报表
+    'CATEGORY'      : 26,  # 类目管理
 }
 
 user_level = {
     PRIV_VISITOR  : '访客',
     PRIV_ADMIN    : '管理员',
     PRIV_USER     : '平台管理', 
-    #PRIV_ORDER    : '订单管理', 
-    #PRIV_WHOUSE   : '仓储管理', 
-    #PRIV_SHOP     : '门店POS',
-    PRIV_DELIVERY : '快递员',
-    #PRIV_SERVICE  : '客服',
+    PRIV_MCH     : '商家用户', 
 }
 
 #################
 
-
-CLASSIFICATION = {
-    1 : "生鲜",
-    2 : "食品",
-    9 : "组合",
-    0 : "物料"
-}
-
-
-STOCK_TYPE = {
-    1 : "整进整出",
-    2 : "散进散出",
-    3 : "散进整出",
-}
 
 
 MERCHANT_TYPE = {
@@ -148,17 +100,9 @@ ORDER_STATUS = {
         'FINISH'   : '已完成',
         'CANCEL'   : '已取消',
         'TIMEOUT'  : '已过付款期限',
-        'GAP'      : '缺货处理',
-        'REFUND'   : '已操作退款',
         'FAIL'     : '配送失败',
-        'CANCEL1'  : '第3方取消订单1',
-        'CANCEL2'  : '第3方取消订单2',
-        'CANCEL3'  : '第3方取消订单3',
-        'CANCEL4'  : '第3方取消订单4',
-        # 拼团使用
-        'PAID_AND_WAIT'    : '已付款，待成团',
-        'FAIL_TO_REFUND'   : '拼团失败，待退款',
-        'CANCEL_TO_REFUND' : '已取消，待退款'
+        'CANCEL_TO_REFUND' : '等待退款',
+        'REFUND'   : '已操作退款',
     }
 }
 
@@ -203,7 +147,7 @@ def get_privilege_name(privilege=None, menu_level=None):
     p = int(privilege)
     if p==PRIV_ADMIN:
         return user_level[PRIV_ADMIN]
-    if p&(PRIV_USER|PRIV_DELIVERY):
+    if p&(PRIV_USER|PRIV_MCH):
         if menu_level==None:
             menu_level = web_session.menu_level  # '----X--X----XXX---'
         for k in MENU_LEVEL.keys():
@@ -254,10 +198,7 @@ def create_render(plain=False, globals={}):
             render = web.template.render('templates/wx', base=layout, globals=globals)
         elif privilege == PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
-        elif privilege&PRIV_DELIVERY:
-            print 'delivery'
-            render = web.template.render('templates/user%s' % is_mobi, base=layout, globals=globals)
-        elif privilege&PRIV_USER:
+        elif privilege&(PRIV_USER|PRIV_MCH):
             print 'user'
             render = web.template.render('templates/user', base=layout, globals=globals)
         else:

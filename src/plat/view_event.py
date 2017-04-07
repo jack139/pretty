@@ -4,7 +4,7 @@
 import web, time
 from config import setting
 import helper
-from libs import city_code
+#from libs import city_code
 
 db = setting.db_web
 

@@ -60,23 +60,29 @@ class handler: # Login2:
         db_user = db.app_user.find_one({'uname':number})
         if db_user==None:
             # 未注册，新建用户记录
+            userid = app_helper.gen_new_userid()
             new_set = {
+                'userid'   : userid, # 用户id，用于唯一标识
                 'uname'    : number,
+                'type'     : 1, # 1 电话号码用户, 2 微信app登录用户, 3 微信公众号用户
+                'bind'     : 1, # 1 已绑定,  0 未绑定, 电话用户本身就认为是绑定的
+                'mice'     : 0, # 1 正常用户, 0 黑名单用户
                 'app_id'   : param.app_id,
                 'reg_time' : app_helper.time_str(),
                 'last_status' : int(time.time()),
-                'app_order_num': 0  # 未下单
             }
 
             # 用户中心注册用户接口
-            db.app_user.update_one({'uname':number},{'$set':new_set},upsert=True)
+            db.app_user.update_one({'userid':userid},{'$set':new_set},upsert=True)
 
             register = True
 
         else:
-
             # 更新app_id
-            db.app_user.update_one({'uname':number},{'$set':{'app_id':param.app_id}})
+            db.app_user.update_one({'userid':db_user['userid']},{'$set':{
+                'app_id'      : param.app_id,
+                'last_status' : int(time.time()),
+            }})
 
 
         # 生成 session ------------------
@@ -88,12 +94,13 @@ class handler: # Login2:
 
         db.app_sessions.insert_one({
             'session_id' : session_id,
+            'userid'     : userid,
             'uname'      : number,
             'login'      : 0,
             'rand'       : rand,
             'ip'         : web.ctx.ip,
             'attime'     : now,
-            'type'       : 'app',
+            'type'       : 1,
             'pwd_fail'   : 0,
         })
 
