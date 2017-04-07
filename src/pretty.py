@@ -32,12 +32,12 @@ web.config.session_parameters['ignore_expiry'] = True
 if setting.debug_mode==False:
     ### for production
     session = web.session.Session(app, MongoStore(db_primary, 'sessions'), 
-        initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':''})
+        initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':'', 'mch_id':''})
 else:
     ### for staging,
     if web.config.get('_session') is None:
         session = web.session.Session(app, MongoStore(db_primary, 'sessions'), 
-            initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':''})
+            initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':'', 'mch_id':''})
         web.config._session = session
     else:
         session = web.config._session
@@ -70,15 +70,9 @@ class Login:
         if logged():
             render = create_render()
 
-            # 显示抽奖结果数量 2016-02-11， gt
-            #result=os.popen('grep -c "=> 中奖" /usr/local/nginx/logs/backrun.log').readlines()
-            #result = db.order_app.find({
-            #   'status':{'$in':["PAID","DISPATCH","ONROAD","COMPLETE"]},
-            #   "cart.0.product_id":{'$in':["1930001552","1930001551"]},
-            #},{'order_id':1}).count()
             result = 0
 
-            if logged(helper.PRIV_USER):
+            if logged(helper.PRIV_USER|helper.PRIV_MCH):
                 # 提醒改密码
                 db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
                 if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
@@ -115,7 +109,7 @@ class Login:
         session.privilege = 0
         session.uname=''
 
-        db_user=db.user.find_one({'uname':name},{'login':1,'passwd':1,'privilege':1,'menu_level':1,'pwd_update':1,'rand_fail':1})
+        db_user=db.user.find_one({'uname':name})
         if db_user!=None and db_user['login']!=0:
             if session.menu_level>=5:
                 print '-----> 刷验证码！'
@@ -130,6 +124,8 @@ class Login:
             session.uname = name
             session.uid = db_user['_id']
             session.privilege = int(db_user['privilege'])
+            session.mch_id = db_user.get('mch_id','')
+
             # 若是老用户则将session的权限位数增加至60
             session.menu_level = db_user['menu_level'] if len(db_user['menu_level']) == 60 else db_user['menu_level']+30*'-'
             raise web.seeother('/')
@@ -149,7 +145,7 @@ class SettingsUser:
         return db_user
     
     def GET(self):
-        if not logged(helper.PRIV_USER):
+        if not logged(helper.PRIV_USER|helper.PRIV_MCH):
             raise web.seeother('/')
 
         render = create_render()
@@ -160,7 +156,7 @@ class SettingsUser:
             
 
     def POST(self):
-        if not logged(helper.PRIV_USER):
+        if not logged(helper.PRIV_USER|helper.PRIV_MCH):
             raise web.seeother('/')
 
         render = create_render()

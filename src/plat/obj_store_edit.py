@@ -15,16 +15,17 @@ url = ('/mch/obj_store_edit')
 class handler:
 
     def GET(self):
-        if not helper.logged(helper.PRIV_USER|helper.PRIV_MCH, 'OBJ_STORE'):
+        if not helper.logged(helper.PRIV_MCH, 'OBJ_STORE'):
             raise web.seeother('/')
 
+        mch_id = helper.get_session_mch_id()
         render = helper.create_render()
         user_data = web.input(obj_id='')
 
         obj_data = { 'obj_id' : 'n/a'}
 
         if user_data.obj_id != '': 
-            db_obj=db.obj_store.find_one({'obj_id':user_data.obj_id})
+            db_obj=db.obj_store.find_one({'obj_id':user_data.obj_id, 'mch_id':mch_id})
             if db_obj!=None:
                 # 已存在的obj
                 obj_data = db_obj
@@ -34,9 +35,9 @@ class handler:
 
 
     def POST(self):
-        if not helper.logged(helper.PRIV_USER|helper.PRIV_MCH, 'OBJ_STORE'):
+        if not helper.logged(helper.PRIV_MCH, 'OBJ_STORE'):
             raise web.seeother('/')
-
+        mch_id = helper.get_session_mch_id()
         render = helper.create_render()
         user_data=web.input(obj_id='')
 
@@ -90,7 +91,7 @@ class handler:
         if len(user_data['image'])>0 and len(image_list) > 0:
             update_set['image'] = user_data['image'].split(',')
 
-        db.obj_store.update_one({'obj_id':obj_id}, {
+        db.obj_store.update_one({'obj_id':obj_id, 'mch_id':mch_id}, {
             '$set'  : update_set,
             '$push' : {
                 'history' : (helper.time_str(), helper.get_session_uname(), message), 

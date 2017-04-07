@@ -1,4 +1,4 @@
-$def with (name, str1, skus)
+$def with (name, str1, skus, pages)
 
 $var title: 商品管理
 $var css:
@@ -36,6 +36,13 @@ $for u in skus:
   </td>
   <td>$('可使用' if u['available']==1 else '停用')</td>
   <td>$u['note']</td></tr>
+
 </tbody>
 </table>
 
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/mch/obj_store?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

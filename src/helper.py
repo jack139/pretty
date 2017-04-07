@@ -135,6 +135,9 @@ def set_session(s):
 def get_session_uname():
     return web_session.uname
 
+def get_session_mch_id():
+    return web_session.mch_id
+
 #----------------------------------------
 
 is_mobi=''  # '' - 普通请求，'M' - html5请求
@@ -199,7 +202,6 @@ def create_render(plain=False, globals={}):
         elif privilege == PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
         elif privilege&(PRIV_USER|PRIV_MCH):
-            print 'user'
             render = web.template.render('templates/user', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor%s' % is_mobi, base=layout, globals=globals)
