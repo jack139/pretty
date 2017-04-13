@@ -4,7 +4,7 @@
 import web, json, time
 from config import setting
 import app_helper
-import sms
+from libs import sms
 
 db = setting.db_web
 

@@ -54,9 +54,21 @@ $else:
     <input type="checkbox" name="priv" value="OBJ_STORE"
     $if 'OBJ_STORE' in level:
         checked="checked"
-    /> 对象管理
+    /> 课程管理
+    <input type="checkbox" name="priv" value="TOPIC_STORE"
+    $if 'TOPIC_STORE' in level:
+        checked="checked"
+    /> 专辑管理
 </td></tr>
 <tr><td class="t_l">
+    <input type="checkbox" name="priv" value="MERCHANT"
+    $if 'MERCHANT' in level:
+        checked="checked"
+    /> 商家管理
+    <input type="checkbox" name="priv" value="CATEGORY"
+    $if 'CATEGORY' in level:
+        checked="checked"
+    /> 类目管理
     <input type="checkbox" name="priv" value="CRM"
     $if 'CRM' in level:
         checked="checked"

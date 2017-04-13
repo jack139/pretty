@@ -52,9 +52,9 @@ MENU_LEVEL = {
     'OBJ_STORE' : 0,   # 对象管理
     'MERCHANT'  : 1,   # 商家管理
     'TOPIC_STORE' : 2,   # 专辑管理
-    'CRM'            : 3,  # 订单查询
-    'REPORT' : 4,  # 报表
-    'CATEGORY'      : 26,  # 类目管理
+    'CRM'       : 3,  # 订单查询
+    'REPORT'    : 4,  # 报表
+    'CATEGORY'  : 5,  # 类目管理
 }
 
 user_level = {

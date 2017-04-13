@@ -79,6 +79,7 @@ class handler: # Login2:
 
         else:
             # 更新app_id
+            userid = db_user['userid']
             db.app_user.update_one({'userid':db_user['userid']},{'$set':{
                 'app_id'      : param.app_id,
                 'last_status' : int(time.time()),
@@ -102,6 +103,7 @@ class handler: # Login2:
             'attime'     : now,
             'type'       : 1,
             'pwd_fail'   : 0,
+            'bind'       : 1, # 电话用户本身就认为是绑定的
         })
 
         # -------------------------------

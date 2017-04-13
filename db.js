@@ -25,14 +25,24 @@ obj_store      商品：试听课程、精品课程
     start_time  上架开始时间
     stop_time   上架结束时间
 
+    obj_type    类型： course 精品课程  topic 专辑课程
+    tpc_id  所属专辑id
+
+    status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
+
 topic_store      专辑
     tpc_id  专辑id
     type    类型： audio 音频 video 视频
     title   标题
     title2  副标题
     image   标题图片
-    length  长度，几堂课
+    obj_list 课程列表
     available   是否有效
+    list_in_app 是否上架
+    start_time  上架开始时间
+    stop_time   上架结束时间
+
+    status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
 
 order_trade   支付交易订单
     order_trade_id   交易流水号

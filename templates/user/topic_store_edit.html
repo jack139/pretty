@@ -1,20 +1,20 @@
-$def with (name, str1, sku, cate)
+$def with (name, str1, sku)
 
-$var title: 商品管理
+$var title: 专辑管理
 $var css:
 $var name: $'|'.join(str1) $name
 $var js: /static/js/upload.js?v=1.010
 $var load: doFirst();
-$var menu: #mcht1
+$var menu: #mcht2
 
-$if sku['obj_id']=='n/a':
-    <div class="caption"><h2>新增商品信息</h2></div>
+$if sku['tpc_id']=='n/a':
+    <div class="caption"><h2>新增专辑信息</h2></div>
 $else:
-    <div class="caption"><h2>修改商品信息</h2></div>
+    <div class="caption"><h2>修改专辑信息</h2></div>
 
-<form name="new_sku" id="new_sku" method="post" action="/mch/obj_store_edit">
+<form name="new_sku" id="new_sku" method="post" action="/mch/topic_store_edit">
 <input type="hidden" name="image" id="form_image" value=""/>
-<input type="hidden" name="obj_id" value="$sku['obj_id']"/>
+<input type="hidden" name="tpc_id" value="$sku['tpc_id']"/>
 <input type="hidden" name="list_in_app" value="$sku.get('list_in_app',0)"/>
 
 <table class="props_tb">
@@ -26,23 +26,12 @@ $else:
     </tr>
 </thead>
 <tbody>
-<tr><td>课程编号</td><td>$sku['obj_id']</td><td></td></tr>
+<tr><td>专辑编号</td><td>$sku['tpc_id']</td><td></td></tr>
 
 
-<tr><td>课程名</td><td>
-    <input type="text" name="obj_name" id="sku_name" value="$sku.get('obj_name', '')"/>
+<tr><td>专辑名</td><td>
+    <input type="text" name="tpc_name" id="tpc_name" value="$sku.get('tpc_name', '')"/>
     </td><td>内部使用</td></tr>
-
-<tr><td>商品类目</td><td>
-    <select id="cate_id" name="cate_id">
-        <option value="">--请选择--</option>
-    $for k in cate:
-        <option value="$k['key']"
-        $if sku.get('cate_id')==k['key']:
-            selected="selected"
-        >$k['title']</option>
-    </select>
-    </td><td></td></tr>
 
 <tr><td>标题图片</td><td>
     <ul id="image-list">
@@ -59,7 +48,7 @@ $else:
     $('否' if sku.get('list_in_app',0)==0 else '在售')
     </td><td>决定是否在前端显示</td></tr>
 
-<tr><td>课程标题</td><td>
+<tr><td>标题</td><td>
     <input type="text" name="title" id="title" value="$sku.get('title','')" />
     </td><td>在app中显示</td></tr>
     
@@ -67,43 +56,9 @@ $else:
     <input type="text" name="title2" id="title2" value="$sku.get('title2','')" />
     </td><td>在app中显示</td></tr>
 
-<tr><td>讲师</td><td>
-    <input type="text" name="speaker" id="speaker" value="$sku.get('speaker','')" />
-    </td><td></td></tr>
-
-
 <tr><td>描述说明</td><td>
     <textarea rows="3" name="description" id="description">$sku.get('description', '')</textarea>
     </td><td></td></tr>
-
-
-<tr><td>售价</td><td>
-    <input type="text" name="price" id="price" value="$('%.2f'%(sku.get('price',0)/100.0))" size="15"
-    pattern="[0-9]+[.]{0,1}[0-9]*" title="必须是数字"/> 元
-    </td><td>默认售价</td></tr>
-
-<tr><td>当前销量</td><td>
-    <input type="text" name="volume" value="$sku.get('volume',0)" pattern="[0-9]+" title="必须是数字"/>
-    </td><td>须大于0</td></tr>
-
-<tr><td>媒体类型</td><td>
-    <input type="radio" name="media" value="audio"
-    $if sku.get('media')=='audio':
-        checked="checked"
-    /> 音频
-    <input type="radio" name="media" value="video"
-    $if sku.get('media')=='video':
-        checked="checked"
-    /> 视频
-    </td><td></td></tr>
-
-<tr><td>长度</td><td>
-    <input type="text" name="length" value="$sku.get('length',1)" pattern="[0-9]+" title="必须是数字"/>
-    </td><td>单位：秒，须大于0</td></tr>
-
-<tr><td>试听时长</td><td>
-    <input type="text" name="try_time" value="$sku.get('try_time',0)" pattern="[0-9]+" title="必须是数字"/>
-    </td><td>单位：秒，0表示不能试听</td></tr>
 
 <tr><td>App显示排序权重</td><td>
     <input type="text" name="sort_weight" value="$sku.get('sort_weight',999)" pattern="[0-9]+" title="必须是数字" size="15"/>

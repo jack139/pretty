@@ -1,0 +1,39 @@
+$def with (name, str1, skus, pages)
+
+$var title: 类目管理
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #plat2
+
+<div class="caption"><h2>类目管理</h2></div>
+
+<p><a class="abtn" href="/plat/category_edit">新建类目</a></p>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th>编号</th>
+    <th width="15%">类目名</th>
+    <th>状态</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr>
+  <td><a href="/plat/category_edit?cate_id=$u['cate_id']">$u['cate_id']</a></td>
+  <td>$u.get('title','')</td>
+  <td>$('可使用' if u['available']==1 else '停用')</td>
+  </tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/plat/category?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

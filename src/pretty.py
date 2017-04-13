@@ -211,13 +211,12 @@ class AdminUser:
         render = create_render()
 
         users=[]            
-        db_user=db.user.find({'privilege': {'$nin': [helper.PRIV_ADMIN]}},
-                {'uname':1,'privilege':1,'full_name':1,'login':1}).sort([('_id',1)])
+        db_user=db.user.find({'privilege': {'$nin': [helper.PRIV_ADMIN]}}).sort([('_id',1)])
         if db_user.count()>0:
             for u in db_user:
                 if u['uname']=='settings':
                     continue
-                users.append([u['uname'],u['_id'],int(u['privilege']),u['full_name'],u['login']])
+                users.append([u['uname'],u['_id'],int(u['privilege']),u['full_name'],u['login'],u['user_type']])
         return render.user(session.uname, user_level[session.privilege], users)
             
 

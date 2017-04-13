@@ -1,0 +1,41 @@
+$def with (name, str1, skus, pages)
+
+$var title: 商家管理
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #plat1
+
+<div class="caption"><h2>商家管理</h2></div>
+
+<p><a class="abtn" href="/plat/merchant_edit">新建商家</a></p>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th>编号</th>
+    <th width="15%">商家名</th>
+    <th width="25%">类型</th>
+    <th>状态</th>
+    <th width="15%">备注</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/plat/merchant_edit?mch_id=$u['mch_id']">$u['mch_id']</a></td>
+  <td>$u.get('mch_name','')</td>
+  <td>$('自营' if u['mch_type']=='self' else '商家')</td>
+  <td>$('可使用' if u['available']==1 else '停用')</td>
+  <td>$u.get('note','')</td></tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/plat/merchant?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

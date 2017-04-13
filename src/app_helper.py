@@ -161,9 +161,9 @@ def gen_new_userid():
     while cc is not None:
         # userid 日期时间(6+4位)+随机数(5位)
         userid_0 = '%s%s' % (time_str(format=2)[2:],my_rand(6,1))
-        userid = hashlib.md5(userid_0)
+        userid = hashlib.md5(userid_0).hexdigest().upper()
         cc = db.app_user.find_one({'userid' : userid},{'_id':1})
-    db.order_app.app_user({'userid':userid}) # 先占位 2016-03-17,gt
+    db.app_user.insert_one({'userid':userid}) # 先占位 2016-03-17,gt
     return userid
 
 
