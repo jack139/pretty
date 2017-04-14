@@ -41,7 +41,7 @@ class handler:
         render = helper.create_render()
         user_data=web.input(obj_id='')
 
-        if user_data.obj_name=='':
+        if user_data.obj_name.strip()=='':
             return render.info('品名不能为空！')  
 
         if user_data.cate_id=='':

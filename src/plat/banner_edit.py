@@ -41,11 +41,14 @@ class handler:
         render = helper.create_render()
         user_data=web.input(banner_id='',banner_name='')
 
-        if user_data.banner_name=='':
+        if user_data.banner_name.strip()=='':
             return render.info('轮播图名称不能为空！')  
 
         if user_data.start_time.strip()=='' or user_data.expire_time.strip()=='':
             return render.info('起始时间不能为空！')  
+
+        if user_data.image.strip()=='':  # 图片
+            return render.info('请上传轮播图片')  
 
         if user_data['banner_id']=='n/a': # 新建
             db_pk = db.user.find_one_and_update(
@@ -66,7 +69,8 @@ class handler:
                 'sort_weight' : int(user_data['sort_weight']),
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
-                'image'       : user_data['image'].split(','), # 图片
+                'image'       : user_data['image'].split(',')[0], 
+                'click_url'   : user_data['click_url'].strip(),
                 'start_time'  : user_data['start_time'],
                 'expire_time' : user_data['expire_time'],
                 'start_tick'  : int(time.mktime(time.strptime(user_data['start_time'],'%Y-%m-%d %H:%M'))),

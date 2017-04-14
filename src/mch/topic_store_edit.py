@@ -41,7 +41,7 @@ class handler:
         render = helper.create_render()
         user_data=web.input(tpc_id='')
 
-        if user_data.tpc_name=='':
+        if user_data.tpc_name.strip()=='':
             return render.info('品名不能为空！')  
 
 

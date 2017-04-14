@@ -43,14 +43,19 @@ $else:
 <tr><td>图片</td><td>
     <ul id="image-list">
         $if sku.has_key('image') and len(sku['image'])>0:
-            $for i in sku['image']:
+            $for i in [sku['image']]:
                 $if len(i)>0:
                   <li id="$(i.split('.')[0])" style="width: 450px;">
                     <img src="/static/image/product/$(i[:2])/$i"/>
                     <button onclick="remove_image('$(i.split('.')[0])');return false;">删除</button>
                   </li>
     </ul>
-    </td><td>在页面下方上传图片</td></tr>
+    </td><td>在页面下方上传图片，<br/>只会保存第1张</td></tr>
+
+<tr><td>点击跳转的url</td><td>
+    <input type="text" name="click_url" id="click_url" value="$sku.get('click_url', '')" size="50"/>
+    </td><td>为空则无跳转</td></tr>
+
 
 <tr><td>开始时间</td><td>
     <input type="text"  value="$:sku.get('start_time','')" id="start_time" name="start_time" readonly="readonly">

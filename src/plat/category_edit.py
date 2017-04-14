@@ -41,7 +41,7 @@ class handler:
         render = helper.create_render()
         user_data=web.input(cate_id='',title='')
 
-        if user_data.title=='':
+        if user_data.title.strip()=='':
             return render.info('类目名不能为空！')  
 
         if user_data.start_time.strip()=='' or user_data.expire_time.strip()=='':

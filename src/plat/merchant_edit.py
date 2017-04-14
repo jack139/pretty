@@ -41,7 +41,7 @@ class handler:
         render = helper.create_render()
         user_data=web.input(mch_id='',mch_name='')
 
-        if user_data.mch_name=='':
+        if user_data.mch_name.strip()=='':
             return render.info('商家名不能为空！')
 
         if user_data['mch_id']=='n/a': # 新建
