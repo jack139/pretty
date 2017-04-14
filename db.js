@@ -23,10 +23,11 @@ obj_store      商品：试听课程、精品课程
     available   是否有效
     list_in_app 是否上架
     start_time  上架开始时间
-    stop_time   上架结束时间
+    expire_time   上架结束时间
 
     obj_type    类型： course 精品课程  topic 专辑课程
     tpc_id  所属专辑id
+    sort_weight 排序权重
 
     status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
 
@@ -40,7 +41,8 @@ topic_store      专辑
     available   是否有效
     list_in_app 是否上架
     start_time  上架开始时间
-    stop_time   上架结束时间
+    expire_time   上架结束时间
+    sort_weight 排序权重
 
     status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
 
@@ -100,6 +102,7 @@ progress_info   学习进度
 comment_info    评价信息
     userid  用户id
     obj_id  对象id
+    mch_id  所属商家id, 冗余方便商家检索
     star    星级
     comment 评价内容
 
@@ -111,15 +114,17 @@ banner_info 轮播图设置
     banner_id   轮播图id
     category    分类
     start_time  开始时间
-    stop_time   结束时间
+    expire_time   结束时间
     image_path  图片url
     click_url   点击跳转的url
+    sort_weight 排序权重
 
 category_info 分类信息
     cate_id     分类id
     title       分类名
     start_time  开始时间
-    stop_time   结束时间
+    expire_time   结束时间
+    sort_weight 排序权重
     
 
 用户注册／登录过程：

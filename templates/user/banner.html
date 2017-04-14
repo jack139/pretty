@@ -1,21 +1,21 @@
 $def with (name, str1, skus, pages)
 
-$var title: 类目管理
+$var title: 轮播图管理
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load:
-$var menu: #plat2
+$var menu: #plat3
 
-<div class="caption"><h2>类目管理</h2></div>
+<div class="caption"><h2>轮播图管理</h2></div>
 
-<p><a class="abtn" href="/plat/category_edit">新建类目</a></p>
+<p><a class="abtn" href="/plat/banner_edit">新建轮播图</a></p>
 
 <table class="props_tb">
 <thead>
   <tr class="even">
     <th width="15%">编号</th>
-    <th>类目名</th>
+    <th>名称</th>
     <th>状态</th>
   </tr>
 </thead>
@@ -23,8 +23,8 @@ $var menu: #plat2
 
 $for u in skus:
   <tr>
-  <td><a href="/plat/category_edit?cate_id=$u['cate_id']">$u['cate_id']</a></td>
-  <td>$u.get('title','')</td>
+  <td><a href="/plat/banner_edit?banner_id=$u['banner_id']">$u['banner_id']</a></td>
+  <td>$u.get('banner_name','')</td>
   <td>$('可使用' if u['available']==1 else '停用')</td>
   </tr>
 
@@ -35,5 +35,5 @@ $for u in skus:
 <div class="article_box">
     页码：
     $for x in pages:
-        <a href="/plat/category?page=$x">$(x+1)</a>&nbsp;&nbsp;
+        <a href="/plat/banner?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>

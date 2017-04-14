@@ -82,14 +82,10 @@ class handler:
                 'note'        : user_data['note'],
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
+                'image'       : user_data['image'].split(','), # 图片
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')
-
-        # 判断上传图片的大小和格式
-        image_list = user_data['image'].split(',')
-        if len(user_data['image'])>0 and len(image_list) > 0:
-            update_set['image'] = user_data['image'].split(',')
 
         db.obj_store.update_one({'obj_id':obj_id, 'mch_id':mch_id}, {
             '$set'  : update_set,

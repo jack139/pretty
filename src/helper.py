@@ -55,6 +55,7 @@ MENU_LEVEL = {
     'CRM'       : 3,  # 订单查询
     'REPORT'    : 4,  # 报表
     'CATEGORY'  : 5,  # 类目管理
+    'BANNER'  : 6,  # 轮播图管理
 }
 
 user_level = {

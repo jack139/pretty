@@ -44,7 +44,7 @@ $else:
             <option value="$k['mch_id']"
             $if settings.get('mch_id')==k['mch_id']:
                 selected="selected"
-            >$k['name']</option>
+            >$k['mch_name']</option>
         </select>
     </span>
 </td></tr>
@@ -69,6 +69,10 @@ $else:
     $if 'CATEGORY' in level:
         checked="checked"
     /> 类目管理
+    <input type="checkbox" name="priv" value="BANNER"
+    $if 'BANNER' in level:
+        checked="checked"
+    /> 轮播图管理
     <input type="checkbox" name="priv" value="CRM"
     $if 'CRM' in level:
         checked="checked"

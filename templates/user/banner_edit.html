@@ -1,11 +1,11 @@
 $def with (name, str1, sku)
 
-$var title: 类目管理
+$var title: 轮播图管理
 $var css: /static/css/jquery.datetimepicker.css
 $var name: $'|'.join(str1) $name
-$var js: /static/js/jquery.datetimepicker.js
-$var load: date_init();
-$var menu: #plat2
+$var js: /static/js/upload.js?v=1.011 /static/js/jquery.datetimepicker.js
+$var load: doFirst();date_init();
+$var menu: #plat3
 
 <script type="text/javascript">
 /*初始化时间控件*/
@@ -15,13 +15,14 @@ function date_init(){
 }
 </script>
 
-$if sku['cate_id']=='n/a':
-    <div class="caption"><h2>新增类目信息</h2></div>
+$if sku['banner_id']=='n/a':
+    <div class="caption"><h2>新增轮播图</h2></div>
 $else:
-    <div class="caption"><h2>修改类目信息</h2></div>
+    <div class="caption"><h2>修改轮播图</h2></div>
 
-<form name="new_sku" id="new_sku" method="post" action="/plat/category_edit">
-<input type="hidden" name="cate_id" value="$sku['cate_id']"/>
+<form name="new_sku" id="new_sku" method="post" action="/plat/banner_edit">
+<input type="hidden" name="image" id="form_image" value=""/>
+<input type="hidden" name="banner_id" value="$sku['banner_id']"/>
 
 <table class="props_tb">
 <thead>
@@ -32,12 +33,24 @@ $else:
     </tr>
 </thead>
 <tbody>
-<tr><td>类目编号</td><td>$sku['cate_id']</td><td></td></tr>
+<tr><td>编号</td><td>$sku['banner_id']</td><td></td></tr>
 
 
-<tr><td>类目名称</td><td>
-    <input type="text" name="title" id="title" value="$sku.get('title', '')"/>
-    </td><td></td></tr>
+<tr><td>轮播图名称</td><td>
+    <input type="text" name="banner_name" id="banner_name" value="$sku.get('banner_name', '')"/>
+    </td><td>内部使用</td></tr>
+
+<tr><td>图片</td><td>
+    <ul id="image-list">
+        $if sku.has_key('image') and len(sku['image'])>0:
+            $for i in sku['image']:
+                $if len(i)>0:
+                  <li id="$(i.split('.')[0])" style="width: 450px;">
+                    <img src="/static/image/product/$(i[:2])/$i"/>
+                    <button onclick="remove_image('$(i.split('.')[0])');return false;">删除</button>
+                  </li>
+    </ul>
+    </td><td>在页面下方上传图片</td></tr>
 
 <tr><td>开始时间</td><td>
     <input type="text"  value="$:sku.get('start_time','')" id="start_time" name="start_time" readonly="readonly">
@@ -67,6 +80,18 @@ $else:
 <p><input type="submit" name="submit" id="submit" value="保存"/>
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
 </form>
+
+
+<div class="article_box">
+  <div id="image-main">
+    <form method="post" enctype="multipart/form-data"  action="">
+      <input type="file" name="images" id="images" />
+      <button type="submit" id="btn">上传图片</button>
+    </form>
+    <div id="response"></div>
+  </div>
+</div>
+</br></br>
 
 
 <div class="article_box">
