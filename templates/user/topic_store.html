@@ -17,7 +17,6 @@ $var menu: #mcht2
     <th>编号</th>
     <th width="15%">专辑名</th>
     <th width="25%">标题</th>
-    <th>线上销售</th>
     <th>状态</th>
     <th width="15%">备注</th>
   </tr>
@@ -28,10 +27,6 @@ $for u in skus:
   <tr><td><a href="/mch/topic_store_edit?tpc_id=$u['tpc_id']">$u['tpc_id']</a></td>
   <td>$u['tpc_name']</td>
   <td>$u.get('title','')</td>
-  <td>
-      $if u.get('list_in_app',0)!=0: 
-        App
-  </td>
   <td>$('可使用' if u['available']==1 else '停用')</td>
   <td>$u['note']</td></tr>
 

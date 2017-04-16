@@ -30,8 +30,10 @@ class handler:
                 # 已存在的obj
                 obj_data = db_obj
 
+        db_topic = db.topic_store.find({'mch_id':mch_id,'available':1})
+
         return render.obj_store_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            obj_data, helper.CATEGORY)
+            obj_data, db_topic)
 
 
     def POST(self):
@@ -39,13 +41,13 @@ class handler:
             raise web.seeother('/')
         mch_id = helper.get_session_mch_id()
         render = helper.create_render()
-        user_data=web.input(obj_id='')
+        user_data=web.input(obj_id='', tpc_id='')
 
         if user_data.obj_name.strip()=='':
             return render.info('品名不能为空！')  
 
-        if user_data.cate_id=='':
-            return render.info('请选择类目！')  
+        if not user_data.has_key('obj_type'):
+            return render.info('请选择商品类型！')
 
         if not user_data.has_key('media'):
             return render.info('请选择媒体类型！')
@@ -68,7 +70,7 @@ class handler:
                 'obj_id'      : obj_id,
                 'obj_name'    : user_data['obj_name'],
                 #'list_in_app' : int(user_data['list_in_app']), # 在上架管理里设置
-                'cate_id'     : user_data['cate_id'],
+                #'cate_id'     : user_data['cate_id'],
                 'title'       : user_data['title'],
                 'title2'      : user_data['title2'],
                 'speaker'     : user_data['speaker'],
@@ -76,9 +78,11 @@ class handler:
                 'price'       : int(float(user_data['price'])*100), # 单位： 分
                 'volume'      : int(user_data['volume']),
                 'media'       : user_data['media'],
+                'obj_type'    : user_data['obj_type'],
+                'tpc_id'      : user_data['tpc_id'], # 如果 obj_type=='ciurse',此字段应该为空
                 'length'      : int(user_data['length']),
                 'try_time'    : int(user_data['try_time']),
-                'sort_weight' : int(user_data['sort_weight']),
+                #'sort_weight' : int(user_data['sort_weight']),
                 'note'        : user_data['note'],
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳

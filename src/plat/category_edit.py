@@ -31,15 +31,31 @@ class handler:
                 # 已存在的obj
                 cate_data = db_obj
 
+        # 此类目上架商品
+        r2 = db.online_cate_obj.find({'cate_id':user_data.cate_id}, sort=[('sort_weight', 1)])
+        online_obj = [i['obj_id'] for i in r2]
+
+        # 可上架的商品
+        all_obj = {}
+        r3 = db.obj_store.find({'obj_type':'course', 'available':1})
+        for i in r3:
+            all_obj[i['obj_id']] = {'obj_name':i['obj_name'], 'mch_id':i['mch_id']}
+
+        # 所有商家
+        all_mch = {}
+        r4  = db.merchant.find({'available':1})
+        for i in r4:
+            all_mch[i['mch_id']] = i['mch_name']
+
         return render.category_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            cate_data)
+            cate_data, online_obj, all_obj, all_mch)
 
 
     def POST(self):
         if not helper.logged(helper.PRIV_USER, 'CATEGORY'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(cate_id='',title='')
+        user_data=web.input(cate_id='',title='', online_list='')
 
         if user_data.title.strip()=='':
             return render.info('类目名不能为空！')  
@@ -80,5 +96,20 @@ class handler:
                 'history' : (helper.time_str(), helper.get_session_uname(), message), 
             }  # 纪录操作历史
         }, upsert=True)
+
+        if len(user_data.online_list.strip())>0:
+            online_list = user_data.online_list.split(',')
+        else:
+            online_list = []
+
+        print online_list
+
+        # 记录类目商品上架信息
+        db.online_cate_obj.remove({'cate_id':cate_id})
+        for i, obj_id in enumerate(online_list):
+            r3 = db.obj_store.find_one({'obj_id':obj_id},{'available':1})
+            available = r3['available'] if r3 else 0
+            db.online_cate_obj.update_one({'cate_id':cate_id,'obj_id':obj_id},
+                {'$set':{'available':available, 'sort_weight':i}}, upsert=True)
 
         return render.info('成功保存！', '/plat/category')

@@ -65,7 +65,7 @@ class handler:
                 'title'       : user_data['title'],
                 'title2'      : user_data['title2'],
                 'description' : user_data['description'],
-                'sort_weight' : int(user_data['sort_weight']),
+                #'sort_weight' : int(user_data['sort_weight']),
                 'note'        : user_data['note'],
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳

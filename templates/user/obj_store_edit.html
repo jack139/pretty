@@ -1,4 +1,4 @@
-$def with (name, str1, sku, cate)
+$def with (name, str1, sku, tpc_list)
 
 $var title: 商品管理
 $var css:
@@ -15,7 +15,6 @@ $else:
 <form name="new_sku" id="new_sku" method="post" action="/mch/obj_store_edit">
 <input type="hidden" name="image" id="form_image" value=""/>
 <input type="hidden" name="obj_id" value="$sku['obj_id']"/>
-<input type="hidden" name="list_in_app" value="$sku.get('list_in_app',0)"/>
 
 <table class="props_tb">
 <thead>
@@ -28,37 +27,46 @@ $else:
 <tbody>
 <tr><td>课程编号</td><td>$sku['obj_id']</td><td></td></tr>
 
+<tr><td>商品类型</td><td>
+    <input type="radio" name="obj_type" value="course" onchange="$$('#tpc_list').hide();"
+    $if sku.get('obj_type')=='course':
+        checked="checked"
+    /> 精品课程
+    <input type="radio" name="obj_type" value="topic" onchange="$$('#tpc_list').show();"
+    $if sku.get('obj_type')=='topic':
+        checked="checked"
+    /> 专辑课程
+    <span id='tpc_list'
+        $if sku.get('obj_type')!='topic': 
+            style="display: none;"
+    > -- 所属专辑:
+        <select id="tpc_id" name="tpc_id">
+            <option value="">--请选择--</option>
+        $for k in tpc_list:
+            <option value="$k['tpc_id']"
+            $if sku.get('tpc_id')==k['tpc_id']:
+                selected="selected"
+            >$k['tpc_name']</option>
+        </select>
+    </span>
+
+    </td><td></td></tr>
 
 <tr><td>课程名</td><td>
     <input type="text" name="obj_name" id="sku_name" value="$sku.get('obj_name', '')"/>
     </td><td>内部使用</td></tr>
-
-<tr><td>商品类目</td><td>
-    <select id="cate_id" name="cate_id">
-        <option value="">--请选择--</option>
-    $for k in cate:
-        <option value="$k['key']"
-        $if sku.get('cate_id')==k['key']:
-            selected="selected"
-        >$k['title']</option>
-    </select>
-    </td><td></td></tr>
 
 <tr><td>标题图片</td><td>
     <ul id="image-list">
         $if sku.has_key('image') and len(sku['image'])>0:
             $for i in sku['image']:
                 $if len(i)>0:
-                  <li id="$(i.split('.')[0])" style="width: 450px;">
+                  <li id="$(i.replace('.','_'))" style="width: 450px;">
                     <img src="/static/image/product/$(i[:2])/$i"/>
-                    <button onclick="remove_image('$(i.split('.')[0])');return false;">删除</button>
+                    <button onclick="remove_image('$(i.replace('.','_'))');return false;">删除</button>
                   </li>
     </ul>
     </td><td>在页面下方上传图片;</br>可以上传多图</td></tr>
-
-<tr><td>App销售</td><td>
-    $('否' if sku.get('list_in_app',0)==0 else '在售')
-    </td><td>决定是否在前端显示</td></tr>
 
 <tr><td>课程标题</td><td>
     <input type="text" name="title" id="title" value="$sku.get('title','')" />
@@ -105,10 +113,6 @@ $else:
 <tr><td>试听时长</td><td>
     <input type="text" name="try_time" value="$sku.get('try_time',0)" pattern="[0-9]+" title="必须是数字"/>
     </td><td>单位：秒，0表示不能试听</td></tr>
-
-<tr><td>App显示排序权重</td><td>
-    <input type="text" name="sort_weight" value="$sku.get('sort_weight',999)" pattern="[0-9]+" title="必须是数字" size="15"/>
-    </td><td>0排最前，999排最后</td></tr>
 
 <tr><td>状态</td><td>
     <input type="radio" name="available" value="1"

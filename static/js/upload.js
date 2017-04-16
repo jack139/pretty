@@ -83,14 +83,16 @@ function doFirst()
 			});
 		}
 	}, false);
-}());
 
     /* 初始话图片列表 */
     $("#image-list").children().each(function() {
         rand_id_list = rand_id_list.concat($(this).attr('id'));
-        image_list = image_list.concat($(this).attr('id')+".jpeg");
+        image_list = image_list.concat($(this).attr('id').replace('_','.'));
     });
     $("#form_image").val(image_list);
+
+}());
+
 
 }
 

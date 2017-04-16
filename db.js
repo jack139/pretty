@@ -15,7 +15,6 @@ obj_store      商品：试听课程、精品课程
     image   标题图片
     length  长度，单位：秒
     try_time    试听时长，单位秒，0表示不能试听
-    cate_id 分类id
     price   价格
     volume  销量
     file_path   下载文件地址
@@ -27,7 +26,6 @@ obj_store      商品：试听课程、精品课程
 
     obj_type    类型： course 精品课程  topic 专辑课程
     tpc_id  所属专辑id
-    sort_weight 排序权重
 
     status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
 
@@ -42,7 +40,6 @@ topic_store      专辑
     list_in_app 是否上架
     start_time  上架开始时间
     expire_time   上架结束时间
-    sort_weight 排序权重
 
     status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
 
@@ -126,6 +123,18 @@ category_info 分类信息
     expire_time   结束时间
     sort_weight 排序权重
     
+
+online_cate_obj    类目／商品上架状态
+    cate_id     类目id
+    obj_id      商品id
+    sort_weight 排序权重, obj_store里的sort_weight可以不用了
+    available   是否有效
+
+online_topic_obj    专辑上架状态
+    tpc_id      专辑id
+    sort_weight 排序权重, topic_store里的sort_weight可以不用了
+    available   是否有效
+
 
 用户注册／登录过程：
 1. 手机号码注册／登录：短信验证码

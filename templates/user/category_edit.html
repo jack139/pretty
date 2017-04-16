@@ -1,10 +1,10 @@
-$def with (name, str1, sku)
+$def with (name, str1, sku, online_obj, all_obj, all_mch)
 
-$var title: 类目管理
+$var title: 类目/上下架管理
 $var css: /static/css/jquery.datetimepicker.css
 $var name: $'|'.join(str1) $name
-$var js: /static/js/jquery.datetimepicker.js
-$var load: date_init();
+$var js: /static/js/jquery.datetimepicker.js /static/js/cateory_edit.js
+$var load: date_init();doFirst();
 $var menu: #plat2
 
 <script type="text/javascript">
@@ -13,6 +13,7 @@ function date_init(){
     $$('#start_time').datetimepicker();
     $$('#expire_time').datetimepicker();
 }
+
 </script>
 
 $if sku['cate_id']=='n/a':
@@ -22,6 +23,7 @@ $else:
 
 <form name="new_sku" id="new_sku" method="post" action="/plat/category_edit">
 <input type="hidden" name="cate_id" value="$sku['cate_id']"/>
+<input type="hidden" name="online_list" id="form_online" value=""/>
 
 <table class="props_tb">
 <thead>
@@ -62,6 +64,38 @@ $else:
     /> 停用
     </td><td></td></tr>
 
+
+</tbody></table>
+
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="45%">本类目上架商品</th>
+        <th></th>
+        <th width="45%">可用商品</th>
+    </tr>
+</thead>
+<tbody>
+
+<tr><td>
+    <select multiple="multiple" size="10" style="width: 90%" name="online_obj" id="online_obj">
+    $for i in online_obj:
+        <option value ="$i">$('%s [%s]'%(all_obj[i]['obj_name'],all_mch[all_obj[i]['mch_id']]))</option>
+    </select> 
+    <div><button onclick="MoveUpOrDown(true);return false;">上移</button>
+    <button onclick="MoveUpOrDown(false);return false;">下移</button></div>
+</td><td>
+    <button onclick="MoveLeftOrRight(true);return false;">⇦ 上架 </button><br/><br/>
+    <button onclick="MoveLeftOrRight(false);return false;">⇨ 下架 </button>
+</td><td>
+    <select multiple="multiple" size="10" style="width: 90%" id="all_obj">
+    $for i in all_obj.keys():
+        $if i not in online_obj:
+            <option value ="$i">$('%s [%s]'%(all_obj[i]['obj_name'],all_mch[all_obj[i]['mch_id']]))</option>
+    </select>    
+</td></tr>
+
 </tbody></table>
 
 <p><input type="submit" name="submit" id="submit" value="保存"/>
@@ -78,3 +112,4 @@ $else:
 </div>
 
 <br/>
+
