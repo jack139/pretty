@@ -78,6 +78,7 @@ class handler:
             'ip'         : web.ctx.ip,
             'attime'     : now,
             'type'       : 4,
+            'bind'       : 1 if if_bind else 0,
         })
 
         print 'if_bind', if_bind, bound_tel
