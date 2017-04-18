@@ -14,7 +14,7 @@ function generate_sign(num, list){
     var raw = "";
     var target = "#sign_"+num;
     var tick = "#tick_"+num;
-    var timestamp=new Date().getTime();
+    var timestamp=Math.floor(new Date().getTime()/1000);
 
     $(tick).val(timestamp);
 

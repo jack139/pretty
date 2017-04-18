@@ -296,6 +296,12 @@ def check_sign(param_names):
                 print md5_str, param.sign
                 return api_error(-1, '签名验证错误')
 
+            try:
+                if abs(int(param.tick)-int(time.time()))>300: # 时间戳是否再5分钟之内
+                    xx = int('a') # 故意落入下面exception
+            except ValueError:
+                return api_error(-1, '时间戳不是当前时间')
+
             return func(*args, **kw)
         return __wrap
     return _wrap
