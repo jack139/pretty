@@ -8,19 +8,26 @@ from libs import sms
 
 db = setting.db_web
 
-url = ('/app/v1/wx_rand')
+url = ('/app/v1/bind_tel_number')
 
 
-# 微信绑定手机获取验证码
+# 微信手机检查验证码
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick', 'session', 'mobile'])
     def POST(self):
         web.header('Content-Type', 'application/json')
         param = web.input(app_id='', dev_id='', ver_code='', tick='', session='', mobile='')
 
-        if '' in (param.app_id, param.number, param.dev_id, param.ver_code, param.tick, 
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.tick, 
             param.session, param.mobile):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
+
+        number = param.mobile.strip()
+        if len(number)<11 or (not number.isdigit()):
+            return json.dumps({'ret' : -10, 'msg' : '手机号码格式错误'})
+
+        if number in app_helper.BLOCK_LIST:
+            return json.dumps({'ret' : -10, 'msg' : '手机号码错误'})
 
         session = app_helper.get_session(param.session)
         if session is None:

@@ -34,9 +34,6 @@ gc.set_threshold(300,5,5)
 
 ###########################################
 
-def my_crypt(codestr):
-    return hashlib.sha1("sAlT139-"+codestr).hexdigest()
-
 def my_rand(n=8):
     return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for ch in range(n)])
 
@@ -132,7 +129,7 @@ class FisrtHand_v2:
         if db.app_device.find({'app_id' : app_id}).count()>0:
             # 两次随机仍重复的可能性，很小吧
             app_id = my_rand().upper()
-        private_key = my_crypt(app_id).upper()
+        private_key = app_helper.my_crypt(app_id).upper()
         db.app_device.insert_one({
             'app_id'      : app_id, 
             'private_key' : private_key, 

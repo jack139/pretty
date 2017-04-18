@@ -73,10 +73,11 @@ order_recharge  充值订单
 
 app_user    线上用户
     userid      用户id
-    uname       电话号码／openid
+    uname       电话号码／openid ／ QQid
     unionid     微信使用unionid
     nickname    微信昵称
     img_url     微信头像
+    type        用户类型 1 手机 2 微信app登录 3 微信公众号 4 QQ用户 
 
 cash_info   用户充值帐户
     userid      用户id

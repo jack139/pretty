@@ -381,15 +381,15 @@ function generate_sign(num, list){
 </form>
 <br/>
 
-<h2>23.用户登录注册 user_login</h2>
-<form name="23" method="post" action="/app/v1/user_login">
+<h2>23.用户注册 user_reg</h2>
+<form name="23" method="post" action="/app/v1/user_reg">
 <div>app_id: <input id="app_id_23" name="app_id" value=""/></div>
-<div>number: <input id="number_23" name="number" value=""/></div>
 <div>dev_id: <input id="dev_id_23" name="dev_id" value="12345"/></div>
 <div>ver_code: <input id="ver_code_23" name="ver_code" value="1"/></div>
 <div>tick: <input id="tick_23" name="tick" value="" readonly="readonly"/></div>
+<div>mobile: <input id="mobile_23" name="mobile" value=""/></div>
 <div>sign: <input id="sign_23" name="sign" size="50" value=""/><input type="button" value="生成签名"
-    onclick="generate_sign('23', ['#private_key','#app_id_23','#number_23','#dev_id_23','#ver_code_23','#tick_23'])"></div>
+    onclick="generate_sign('23', ['#private_key','#app_id_23','#dev_id_23','#ver_code_23','#tick_23','#mobile_23'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -402,9 +402,10 @@ function generate_sign(num, list){
 <div>tick: <input id="tick_24" name="tick" value="" readonly="readonly"/></div>
 <div>session: <input id="session_24" name="session" size="50" value=""/></div>
 <div>rand: <input id="rand_24" name="rand" value=""/></div>
+<div>passwd: <input id="passwd_24" name="passwd" value=""/></div>
 <div>sign: <input id="sign_24" name="sign" size="50" value=""/><input type="button" value="生成签名"
     onclick="generate_sign('24', ['#private_key','#app_id_24','#dev_id_24','#ver_code_24','#tick_24',
-        '#session_24','#rand_24'])"></div>
+        '#session_24','#rand_24','#passwd_24'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -489,6 +490,100 @@ function generate_sign(num, list){
 <br/>
 
 <h2>32.授权课程给店员 auth_to_user</h2>
+<br/>
+
+<h2>33.微信登录 wx_login</h2>
+<form name="33" method="post" action="/app/v1/wx_login">
+<div>app_id: <input id="app_id_33" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_33" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_33" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_33" name="tick" value="" readonly="readonly"/></div>
+<div>openid: <input id="openid_33" name="openid" size="50" value=""/></div>
+<div>unionid: <input id="unionid_33" name="unionid" size="50" value=""/></div>
+<div>nickname: <input id="nickname_33" name="nickname" size="50" value=""/></div>
+<div>img_url: <input id="img_url_33" name="img_url" size="50" value=""/></div>
+<div>sign: <input id="sign_33" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('33', ['#private_key','#app_id_33','#dev_id_33','#ver_code_33','#tick_33',
+        '#openid_33','#unionid_33','#nickname_33','#img_url_33'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>34.绑定手机号发送验证码 bind_tel_number</h2>
+<form name="34" method="post" action="/app/v1/bind_tel_number">
+<div>app_id: <input id="app_id_34" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_34" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_34" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_34" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_34" name="session" size="50" value=""/></div>
+<div>mobile: <input id="mobile_34" name="mobile" size="50" value=""/></div>
+<div>sign: <input id="sign_34" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('34', ['#private_key','#app_id_34','#dev_id_34','#ver_code_34','#tick_34',
+        '#session_34','#mobile_34'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>35.绑定手机号码 bind_check_rand</h2>
+<form name="35" method="post" action="/app/v1/bind_check_rand">
+<div>app_id: <input id="app_id_35" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_35" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_35" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_35" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_35" name="session" size="50" value=""/></div>
+<div>mobile: <input id="mobile_35" name="mobile" size="50" value=""/></div>
+<div>rand: <input id="rand_35" name="rand" size="50" value=""/></div>
+<div>sign: <input id="sign_35" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('35', ['#private_key','#app_id_35','#dev_id_35','#ver_code_35','#tick_35',
+        '#session_35','#mobile_35','#rand_35'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>36.密码登录 user_pwd_login</h2>
+<form name="36" method="post" action="/app/v1/user_pwd_login">
+<div>app_id: <input id="app_id_36" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_36" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_36" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_36" name="tick" value="" readonly="readonly"/></div>
+<div>mobile: <input id="mobile_36" name="mobile" size="50" value=""/></div>
+<div>passwd: <input id="passwd_36" name="passwd" size="50" value=""/></div>
+<div>sign: <input id="sign_36" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('36', ['#private_key','#app_id_36','#dev_id_36','#ver_code_36','#tick_36',
+        '#mobile_36','#passwd_36'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>37.忘记密码 user_pwd_forgot</h2>
+<form name="37" method="post" action="/app/v1/user_pwd_forgot">
+<div>app_id: <input id="app_id_37" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_37" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_37" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_37" name="tick" value="" readonly="readonly"/></div>
+<div>mobile: <input id="mobile_37" name="mobile" size="50" value=""/></div>
+<div>sign: <input id="sign_37" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('37', ['#private_key','#app_id_37','#dev_id_37','#ver_code_37','#tick_37',
+        '#mobile_37'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>38.QQ登录 qq_login</h2>
+<form name="38" method="post" action="/app/v1/qq_login">
+<div>app_id: <input id="app_id_38" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_38" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_38" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_38" name="tick" value="" readonly="readonly"/></div>
+<div>qqid: <input id="qqid_38" name="qqid" size="50" value=""/></div>
+<div>nickname: <input id="nickname_38" name="nickname" size="50" value=""/></div>
+<div>img_url: <input id="img_url_38" name="img_url" size="50" value=""/></div>
+<div>sign: <input id="sign_38" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('38', ['#private_key','#app_id_38','#dev_id_38','#ver_code_38','#tick_38',
+        '#qqid_38','#nickname_38','#img_url_38'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
 <br/>
 
 </html>

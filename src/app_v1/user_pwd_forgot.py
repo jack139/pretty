@@ -7,22 +7,20 @@ import time, json, hashlib
 from config import setting
 import app_helper
 from libs import sms
-#from libs import settings_helper
-#from libs import app_user_helper
 
 db = setting.db_web
 
-url = ('/app/v1/user_login')
+url = ('/app/v1/user_pwd_forgot')
 
-# 用户注册／登录
+# 用户忘记密码
 class handler: # Login2:
-    @app_helper.check_sign(['app_id','number','dev_id','ver_code','tick'])
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','mobile'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
         #print web.input()
-        param = web.input(app_id='', number='', dev_id='', ver_code='', tick='')
+        param = web.input(app_id='', mobile='', dev_id='', ver_code='', tick='')
 
-        if '' in (param.app_id, param.number, param.dev_id, param.ver_code, param.tick):
+        if '' in (param.app_id, param.mobile, param.dev_id, param.ver_code, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         # 防止flood攻击，通过app_id 访问时间判断 ---------------------------
@@ -41,16 +39,16 @@ class handler: # Login2:
 
         #------------------------------------------------------------
 
-        return self.user_login(param)
+        return self.user_forgot(param)
 
     @staticmethod
-    def user_login(param):
-        number = param.number.strip()
+    def user_forgot(param):
+        number = param.mobile.strip()
         if len(number)<11 or (not number.isdigit()):
-            return json.dumps({'ret' : -5, 'msg' : '手机号码格式错误'})
+            return json.dumps({'ret' : -3, 'msg' : '手机号码格式错误'})
 
         if number in app_helper.BLOCK_LIST:
-            return json.dumps({'ret' : -5, 'msg' : '手机号码错误'})
+            return json.dumps({'ret' : -3, 'msg' : '手机号码错误'})
 
         # 随机码
         rand = app_helper.my_rand(base=1)
@@ -60,23 +58,7 @@ class handler: # Login2:
         db_user = db.app_user.find_one({'uname':number})
         if db_user==None:
             # 未注册，新建用户记录
-            userid = app_helper.gen_new_userid()
-            new_set = {
-                'userid'   : userid, # 用户id，用于唯一标识
-                'uname'    : number,
-                'type'     : 1, # 1 电话号码用户, 2 微信app登录用户, 3 微信公众号用户
-                'bind'     : 1, # 1 已绑定,  0 未绑定, 电话用户本身就认为是绑定的
-                'mice'     : 0, # 1 正常用户, 0 黑名单用户
-                'app_id'   : param.app_id,
-                'reg_time' : app_helper.time_str(),
-                'last_status' : int(time.time()),
-            }
-
-            # 用户中心注册用户接口
-            db.app_user.update_one({'userid':userid},{'$set':new_set},upsert=True)
-
-            register = True
-
+            return json.dumps({'ret' : -5, 'msg' : '手机号码未注册'})
         else:
             # 更新app_id
             userid = db_user['userid']
@@ -119,6 +101,5 @@ class handler: # Login2:
             'ret'  : 0,
             'data' : {
                 'session'  : session_id,
-                'user_new' : register,
             }
         })

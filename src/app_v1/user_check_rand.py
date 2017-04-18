@@ -11,15 +11,15 @@ db = setting.db_web
 
 url = ('/app/v1/user_check_rand')
 
-# 检查随机码
+# 检查随机码: 注册／找回密码时
 class handler: # CheckRand:
-    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','rand'])
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','rand','passwd'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
         #print web.input()
-        param = web.input(app_id='', session='', rand='', dev_id='', ver_code='', tick='')
+        param = web.input(app_id='', session='', rand='', passwd='', dev_id='', ver_code='', tick='')
 
-        if '' in (param.app_id, param.dev_id, param.ver_code, param.session, param.rand, param.tick):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.session, param.rand, param.passwd, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         return self.check_rand(param, version)
@@ -50,7 +50,10 @@ class handler: # CheckRand:
 
 
         # 更新登录时间 2016-12-28， gt
-        db.app_user.update_one({'uname' : session['uname']}, {'$set' : {'last_time' : app_helper.time_str()}})
+        db.app_user.update_one({'uname' : session['uname']}, {'$set' : {
+            'last_time' : app_helper.time_str(),
+            'passwd'    : app_helper.my_crypt(param.passwd),
+        }})
 
 
         ## 返回

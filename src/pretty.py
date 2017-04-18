@@ -60,10 +60,6 @@ user_level = helper.user_level
 
 ###########################################
 
-def my_crypt(codestr):
-    import hashlib
-    return hashlib.sha1("sAlT139-"+codestr).hexdigest()
-
 
 class Login:
     def GET(self):
@@ -117,7 +113,7 @@ class Login:
             if session.uid != rand.upper():
                 session.menu_level += 1
                 return render.login_error('验证码错误，请重新登录！')
-            if db_user['passwd']!=my_crypt(passwd):
+            if db_user['passwd']!=app_helper.my_crypt(passwd):
                 return render.login_error('密码错误，请重新登录！')
 
             session.login = 1
@@ -185,9 +181,9 @@ class SettingsUser:
                 return render.info('密码强度太低，容易被破解，请重新输入！')
 
             db_user=db.user.find_one({'_id':session.uid},{'passwd':1})
-            if my_crypt(old_pwd)==db_user['passwd']:
+            if app_helper.my_crypt(old_pwd)==db_user['passwd']:
                 db.user.update_one({'_id':session.uid}, {'$set':{
-                    'passwd'     : my_crypt(new_pwd),
+                    'passwd'     : app_helper.my_crypt(new_pwd),
                     'pwd_update' : int(time.time()),
                     #'full_name'  : full_name
                 }})
@@ -279,7 +275,7 @@ class AdminUserSetting:
 
         # 如需要，更新密码
         if len(user_data['passwd'])>0:
-            update_set['passwd']=my_crypt(user_data['passwd'])
+            update_set['passwd']=app_helper.my_crypt(user_data['passwd'])
             update_set['pwd_update']=0
 
         if user_data['uid']=='n/a':
@@ -360,8 +356,8 @@ class AdminSelfSetting:
             if new_pwd!=new_pwd2:
                 return render.info('两次输入的新密码不一致！请重新设置。')
             db_user=db.user.find_one({'_id':session.uid},{'passwd':1})
-            if my_crypt(old_pwd)==db_user['passwd']:
-                db.user.update_one({'_id':session.uid}, {'$set':{'passwd':my_crypt(new_pwd)}})
+            if app_helper.my_crypt(old_pwd)==db_user['passwd']:
+                db.user.update_one({'_id':session.uid}, {'$set':{'passwd':app_helper.my_crypt(new_pwd)}})
                 return render.info('成功保存！','/')
             else:
                 return render.info('登录密码验证失败！请重新设置。')

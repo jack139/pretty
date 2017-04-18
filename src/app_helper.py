@@ -42,6 +42,9 @@ RAND_BASE=[
     '0123456789',
 ]
 
+def my_crypt(codestr):
+    return hashlib.sha1("sAlT139-"+codestr).hexdigest()
+
 def my_rand(n=4, base=0):
     import random
     return ''.join([random.choice(RAND_BASE[base]) for ch in range(n)])
@@ -88,7 +91,7 @@ def app_logged(session_id):
     if session==None:
         return None
     else:
-        if session['login']==1 and session['bind']==1: # 要求 登录 且 绑定
+        if session.get('login')==1 and session.get('bind')==1: # 要求 登录 且 绑定
             return {
                 'uname'  : session['uname'], 
                 'userid' : session['userid'],  
