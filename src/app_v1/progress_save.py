@@ -21,6 +21,9 @@ class handler:
             param.progress, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
+        if not param.progress.isdigit():
+            return json.dumps({'ret' : -3, 'msg' : 'progress参数必须是数字'})
+
         # 检查session登录
         uname = app_helper.app_logged(param.session) 
         if uname is None:
@@ -28,10 +31,16 @@ class handler:
 
         #--------------------------------------------------
 
-        ret_data = {}
+        r2 = db.obj_store.find_one({'obj_id' : param.object_id})
+        if r2 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+        db.progress_info.update({'userid':uname['userid'],'obj_id':param.object_id},{'$set':{
+            'progress'   : int(param.progress),
+            'last_time' : app_helper.time_str(),
+        }}, upsert=True)
 
         # 返回
         return json.dumps({
             'ret'  : 0,
-            'data' : ret_data,
         })

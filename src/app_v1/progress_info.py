@@ -27,8 +27,18 @@ class handler:
 
         #--------------------------------------------------
 
+        r2 = db.obj_store.find_one({'obj_id' : param.object_id})
+        if r2 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+        r3 = db.progress_info.find_one({'userid':uname['userid'],'obj_id':param.object_id})
+        if r3 is None:
+            progress = 0
+        else:
+            progress = r3['progress']
+
         ret_data = {
-            "progress" : 70,  # 课程进度百分比，0表示未上课，100表示已上课 
+            "progress" : progress,  # 课程进度百分比，0表示未上课，100表示已上课 
         }
 
         # 返回

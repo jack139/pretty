@@ -56,7 +56,7 @@ $else:
     <input type="text" name="obj_name" id="sku_name" value="$sku.get('obj_name', '')"/>
     </td><td>内部使用</td></tr>
 
-<tr><td>标题图片</td><td>
+<tr><td>上传图片</td><td>
     <ul id="image-list">
         $if sku.has_key('image') and len(sku['image'])>0:
             $for i in sku['image']:
@@ -66,7 +66,7 @@ $else:
                     <button onclick="remove_image('$(i.replace('.','_'))');return false;">删除</button>
                   </li>
     </ul>
-    </td><td>在页面下方上传图片;</br>可以上传多图</td></tr>
+    </td><td>在页面下方上传图片;</br>第1图是课程图片，第2图是讲师图片</td></tr>
 
 <tr><td>课程标题</td><td>
     <input type="text" name="title" id="title" value="$sku.get('title','')" />

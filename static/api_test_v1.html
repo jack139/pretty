@@ -586,4 +586,18 @@ function generate_sign(num, list){
 </form>
 <br/>
 
+<h2>39.获取课程分类 list_category</h2>
+<form name="39" method="post" action="/app/v1/list_category">
+<div>app_id: <input id="app_id_39" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_39" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_39" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_39" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_39" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_39" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('39', ['#private_key','#app_id_39','#dev_id_39','#ver_code_39','#tick_39',
+        '#session_39'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
 </html>

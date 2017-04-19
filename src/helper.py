@@ -9,7 +9,7 @@ import time, datetime, os
 import urllib2
 import re
 from config import setting
-from app_helper import IS_TEST, CATEGORY
+from app_helper import IS_TEST
 
 db = setting.db_web
 

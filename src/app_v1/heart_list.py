@@ -26,34 +26,28 @@ class handler:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
         #--------------------------------------------------
+        heart_data = []
+        r2 = db.heart_info.find({'userid':uname['userid']})
+        for i in r2:
+            r3 = db.obj_store.find_one({'obj_id' : i['obj_id']})
+            if r3 is None:
+                continue
+            r4 = db.progress_info.find_one({'userid':uname['userid'],'obj_id':i['obj_id']})
+            if r4 is None:
+                progress = 0
+            else:
+                progress = r4['progress']
+            heart_data.append({
+                "object_id"   : i['obj_id'],
+                "title"       : r3['title'],
+                "type"        : 1,  # 类型： 1 课程, 2 专辑 
+                "object_type" : 1 if r3['media']=='video' else 2,  # 1- 视频   2 － 音频  
+                "length"      : r3['length'], # 长度，单位 分钟 
+                "progress"    : progress, # 进度百分比，如果是未购买课程，此字段为-1
+            })
 
         ret_data = {
-            "heart" : [
-                {
-                    "object_id" : "100001",
-                    "title" : "课程标题1",
-                    "type" : 1,  # 类型： 1 课程, 2 专辑 
-                    "object_type" : 1,  # 1- 视频   2 － 音频  
-                    "length" : 90, # 长度，单位 分钟 
-                    "progress" : 30, # 进度百分比，如果是未购买课程，此字段为-1
-                },
-                {
-                    "object_id" : "100002",
-                    "title" : "课程标题2",
-                    "type" : 2, 
-                    "object_type" : 1,
-                    "length" : 20,
-                    "progress" : 0,
-                },
-                {
-                    "object_id" : "100003",
-                    "title" : "课程标题3",
-                    "type" : 1, 
-                    "object_type" : 2,
-                    "length" : 190,
-                    "progress" : -1,
-                },
-            ]
+            "heart" : heart_data,
         }
 
         # 返回

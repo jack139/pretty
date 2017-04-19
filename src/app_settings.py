@@ -9,14 +9,8 @@
 
 
 
-# app使用的新分类
-CATEGORY = [
-    { 'key': 'c001', 'title': '分类1' },
-    { 'key': 'c002', 'title': '分类2' },
-    { 'key': 'c003', 'title': '分类3' },
-]
-
-
+# app使用的缺省分类
+DEFAULT_CATEGORY = 'c0000015'
 
 # 默认免邮门槛、运费
 free_delivery = 200  # 免邮门槛

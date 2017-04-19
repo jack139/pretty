@@ -26,12 +26,41 @@ class handler:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
         #--------------------------------------------------
+        # 区别课程和专辑
+        #if param.object_id[0]=='1': # 1 开头是课程，2 开头是专辑
+        #    obj_type = 'course'
+        #    r3 = db.obj_store.find_one({'obj_id' : param.object_id})
+        #else:
+        #    obj_type = 'topic'
+        #    r3 = db.topic_store.find_one({'tpc_id' : param.object_id})
+
+        # 只收藏课程
+        obj_type = 'course'
+        r3 = db.obj_store.find_one({'obj_id' : param.object_id})
+        if r3 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+        r2 = db.heart_info.find_one({'userid':uname['userid'],'obj_id':param.object_id})
+        if r2 is None: # 收藏动作
+            db.heart_info.insert_one({
+                'userid'     : uname['userid'],
+                'obj_id'     : param.object_id,
+                'obj_type'   : obj_type,
+                'heart_time' : app_helper.time_str(),
+            })
+
+            status = 1
+
+        else: # 取消收藏
+            db.heart_info.delete_one({'userid':uname['userid'],'obj_id':param.object_id})
+            status = 0
 
         ret_data = {
             "object_id" : param.object_id,     # 唯一代码 
-            "type"  : 1,  # 类型： 1 课程, 2 专辑 
-            "title" : "课程标题",
-            "msg" : "收藏成功",
+            "type"  : 1 if obj_type=='course' else 2,  # 类型： 1 课程, 2 专辑 
+            "title" : r3['title'],
+            "status" : status,
+            "msg" : "收藏成功" if status==1 else "取消收藏成功",
         }
 
         # 返回

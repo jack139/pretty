@@ -89,13 +89,16 @@ auth_info   授权信息
     obj_list    被授权的对象id
 
 heart_info  收藏信息
-    userid  用户id
-    obj_list    收藏的对象id
+    userid      用户id
+    obj_id      收藏的对象id
+    obj_type    类型 course 课程, topic 专辑
+    heart_time  收藏时间
 
 progress_info   学习进度
     userid  用户id
     obj_id  对象id
     progress    进度，百分比
+    last_time 最后更新时间
 
 comment_info    评价信息
     userid  用户id

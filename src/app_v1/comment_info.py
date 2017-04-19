@@ -11,6 +11,7 @@ db = setting.db_web
 # 获取学员评价
 url = ('/app/v1/comment_info')
 
+
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','object_id','page_size','page_index'])
     def POST(self, version='v1'):
@@ -30,23 +31,30 @@ class handler:
 
         #--------------------------------------------------
 
+        r2 = db.obj_store.find_one({'obj_id' : param.object_id})
+        if r2 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+        r3 = db.comment_info.find({'obj_id':param.object_id},
+            sort=[('last_time',-1)], # 按时间倒序
+            skip=int(param.page_size)*int(param.page_index),
+            limit=int(param.page_size)
+        )
+
+        comment_data = []
+        for i in r3:
+            r4 = app_helper.get_user_detail(i['userid'])
+            comment_data.append({
+                "name"  : r4['nickname'],
+                "image" : r4['img_url'], # 头像 
+                "star"  : i['star'],  # 评的星级 
+                "time"  : i['last_time'], 
+            })
+
         ret_data = {
-            "comment" : [
-                {
-                    "name" : "学员名",
-                    "image" : "http:///…../1.png", # 头像 
-                    "star" : 5,  # 评的星级 
-                    "time" : "19天前", 
-                },
-                {
-                    "name" : "学员名2",
-                    "image" : "http:///…../1.png", # 头像 
-                    "star" : 1,  # 评的星级 
-                    "time" : "2017-01-01", 
-                },
-            ],
-            "total" : 2, # 返回的课程数量，小于 page_size说明到末尾 
-            "page_size" : param.page_size, # 分页尺寸，与调用参数相同 
+            "comment"    : comment_data,
+            "total"      : len(comment_data), # 返回的课程数量，小于 page_size说明到末尾 
+            "page_size"  : param.page_size, # 分页尺寸，与调用参数相同 
             "page_index" : param.page_index,  # 页索引 
         }
 

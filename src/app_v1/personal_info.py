@@ -27,11 +27,13 @@ class handler:
 
         #--------------------------------------------------
 
+        r4 = app_helper.get_user_detail(uname['userid'])
+
         ret_data = {
-            "name" : "用户昵称",
-            "image" : "https://pretty.f8cam.com/static/image/test/head.png",   # 用户头像 
-            "tel" : "18911111111", # 用户注册手机号 
-            "wx_login" : 0, # 是否微信登录 0 不是， 1 是 
+            "name"      : r4['nickname'],
+            "image"     : r4['img_url'],   # 用户头像 
+            "tel"       : r4['mobile'], # 用户注册手机号 
+            "user_type" : uname['type'], # 用户类型
         }
 
         # 返回

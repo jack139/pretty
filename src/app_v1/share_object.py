@@ -27,12 +27,23 @@ class handler:
 
         #--------------------------------------------------
 
+        r3 = db.obj_store.find_one({
+            'obj_id' : param.object_id, 
+        })
+        if r3 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+        if len(r3['image'])>0: # 取第1张图, 
+            image_url = app_helper.image_url(r3['image'][0])
+        else:
+            image_url = ''
+
         ret_data = {
-            "object_id" : param.object_id,     # 唯一代码 
-            "type"  : 1,  # 类型： 1 课程, 2 专辑 
-            "share_title" : "分享标题",
-            "share_content" : "分享内容",
-            "share_img" : "https://pretty.f8cam.com/static/image/banner/share.png",  # 分享图片 
+            "object_id"     : param.object_id,     # 唯一代码 
+            "type"          : 1 if r3['media']=='video' else 2,  # 类型： 1 课程, 2 专辑 
+            "share_title"   : r3['title'],
+            "share_content" : r3['description'],
+            "share_img"     : image_url,  # 分享图片 
         }
 
         # 返回

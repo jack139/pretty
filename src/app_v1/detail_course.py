@@ -25,22 +25,36 @@ class handler:
             uname = app_helper.app_logged(param.session) 
             if uname is None:
                 return json.dumps({'ret' : -4, 'msg' : '无效的session'})
+        else:
+            uname = None
 
         #--------------------------------------------------
 
+        r3 = db.obj_store.find_one({
+            'obj_id' : param.object_id, 
+        })
+        if r3 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+        if len(r3['image'])>1: # 取第2张图, 讲师头像
+            image_url = app_helper.image_url(r3['image'][1])
+        else:
+            image_url = ''
+
         ret_data = {
-            "object_id" : param.object_id,     # 唯一代码 
-            "title" : "课程标题",
-            "title2" : "课程副标题课程副标题",
-            "abstract" : "课程简介正文课程简介正文课程简介正文课程简介正文",
-            "speaker_head" : "https://pretty.f8cam.com/static/image/banner/head.png",     # 讲师头像图片url 
-            "speaker_audio" : "",     # 讲师音频介绍链接
-            "course_video" : "",     # 课程视频链接
-            "try_length" : 180,  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
-            "volume" : 10,         # 销量 
-            "comment_num" : 101,     # 学员评价总条数 
-            "exam_score" : -1,    # 课后测试成绩，-1表示未测试
-            "service_tel" : "110",     # 客服电话 
+            "object_id"     : param.object_id,     # 唯一代码 
+            "title"         : r3['title'],
+            "title2"        : r3['title2'],
+            "abstract"      : r3['description'],
+            "speaker_head"  : image_url,     # 讲师头像图片url 
+            "speaker_audio" : '',     # 讲师音频介绍链接, -------------------- 待实现
+            "course_video"  : '',     # 课程视频链接 -------------------- 待实现
+            "try_length"    : r3['try_time'],  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
+            "volume"        : r3['volume'],         # 销量 
+
+            "comment_num" : 101,     # 学员评价总条数 -------------------- 待实现
+            "exam_score" : -1,    # 课后测试成绩，-1表示未测试 -------------------- 待实现
+            "service_tel" : "110",     # 客服电话 -------------------- 待实现
         }
 
         # 返回

@@ -36,6 +36,8 @@ class handler:
                 'app_id'   : param.app_id,
                 'reg_time' : app_helper.time_str(),
                 'last_status' : int(time.time()),
+                'nickname' : param.nickname,
+                'img_url'  : param.img_url,
             }
 
             # 用户中心注册用户接口
@@ -47,6 +49,8 @@ class handler:
             db.app_user.update_one({'openid':param['openid']},{'$set':{
                 'app_id'      : param['app_id'],
                 'unionid'     : param['unionid'], # 更新unionid，预防没有unionid的情况
+                'nickname'    : param.nickname,
+                'img_url'     : param.img_url,
                 'last_status' : int(time.time()),
             }})
 

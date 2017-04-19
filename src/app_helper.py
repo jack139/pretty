@@ -314,3 +314,27 @@ def api_error(ret, msg=''):
     web.ctx.headers = [('Content-Type', 'application/json')]
 
     return json.dumps({'ret': ret, 'msg': msg})
+
+# 生成图片库的url
+def image_url(image_name):
+    return 'https://%s/image/product/%s/%s'%(setting.image_host, image_name[:2], image_name)
+
+# 获取用户信息
+def get_user_detail(userid):
+    ret_data = {
+        'mobile'      : '',
+        'nickname'   : '手机用户',
+        'img_url'    : '',
+    }
+    r5 = db.app_user.find({'userid':userid})
+    for i in r5:
+        if i['type']==1:
+            ret_data['mobile'] = i['uname']
+        elif i['type']==4:
+            ret_data['nickname'] = i.get('nickname','QQ昵称')
+            ret_data['img_url'] = i.get('img_url','')
+        else:
+            ret_data['nickname'] = i.get('nickname','微信昵称')
+            ret_data['img_url'] = i.get('img_url','')
+
+    return ret_data

@@ -25,39 +25,56 @@ class handler:
             uname = app_helper.app_logged(param.session) 
             if uname is None:
                 return json.dumps({'ret' : -4, 'msg' : '无效的session'})
+        else:
+            uname = None
 
         #--------------------------------------------------
 
+        r2 = db.topic_store.find_one({
+            'tpc_id' : param.object_id, 
+        })
+        if r2 is None:
+            return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
+
+
+        r3 = db.obj_store.find({
+            'obj_type' : 'topic',
+            'tpc_id' : param.object_id, 
+        })
+
+        # 专辑内课程数据
+        course_data = []
+        for i in r3:
+            if len(i['image'])>0: # 取第1张图
+                image_url = app_helper.image_url(i['image'][0])
+            else:
+                image_url = ''
+            course_data.append({
+                "object_id" : i['obj_id'],  # 内部唯一标识 
+                "title"     : i['title'],
+                "title2"    : i['title2'],
+                "speaker"   : i['speaker'],
+                "type"      : 1 if i['media']=='video' else 2,  # 1- 视频   2 － 音频  
+                "image"     : image_url,  # 课程主图 
+                "length"    : i['length'],  # 长度，单位：秒 
+                "price"     : i['price'],  # 价格，整数，单位：分 
+                "volume"    : i['volume'],  # 销量，整数 
+            })
+
+        # 取专辑图片
+        if len(r2['image'])>0: # 取第1张图
+            image_url = app_helper.image_url(r2['image'][0])
+        else:
+            image_url = ''
+
+        # 返回数据
         ret_data = {
-            "object_id" : param.object_id,     # 唯一代码 
-            "title" : "专辑标题",
-            "title2" : "专辑副标题专辑副标题",
-            "abstract" : "专辑简介正文专辑简介正文专辑简介正文专辑简介正文专辑简介正文",
-            "topic_image" : "https://pretty.f8cam.com/static/image/banner/course.png",     # 专辑图片url 
-            "course" : [
-                {
-                    "object_id" : "300001",  # 内部唯一标识 
-                    "title" : "课程标题",
-                    "title2" : "课程副标题课程副标题",
-                    "speaker" : "讲师名",
-                    "type" : 2,  # 1- 视频   2 － 音频  
-                    "image" : "https://pretty.f8cam.com/static/image/banner/course.png",  # 课程主图 
-                    "length" : 90,  # 长度，单位：分钟 
-                    "price" : 100000,  # 价格，整数，单位：分 
-                    "volume" : 10000,  # 销量，整数 
-                },
-                {
-                    "object_id" : "300002",  # 内部唯一标识 
-                    "title" : "课程标题2",
-                    "title2" : "课程副标题课程副标题2",
-                    "speaker" : "讲师名",
-                    "type" : 1,  # 1- 视频   2 － 音频  
-                    "image" : "https://pretty.f8cam.com/static/image/banner/course.png",  # 课程主图 
-                    "length" : 120,  # 长度，单位：分钟 
-                    "price" : 200000,  # 价格，整数，单位：分 
-                    "volume" : 20000,  # 销量，整数 
-                },
-            ],
+            "object_id"   : param.object_id,     # 唯一代码 
+            "title"       : r2['title'],
+            "title2"      : r2['title2'],
+            "abstract"    : r2['description'],
+            "topic_image" : image_url,     # 专辑图片url 
+            "course"      : course_data,
         }
 
         # 返回
