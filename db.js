@@ -108,8 +108,19 @@ comment_info    评价信息
     comment 评价内容
 
 exam_info   课程测试
+    exam_id     题目id
+    obj_id      对象id
+    mch_id      商家id
+    question    问题
+    option      选项 [ ]
+    answer      正确答案 [ ]
 
 test_info   测试答案信息
+    userid      用户id
+    exam_id     题目id
+    obj_id      对象id
+    user_anwser 用户答案
+    correct     是否正确
 
 banner_info 轮播图设置
     banner_id   轮播图id

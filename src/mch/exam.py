@@ -7,18 +7,17 @@ import helper
 
 db = setting.db_web
 
-# 专辑管理
-
-url = ('/mch/topic_store')
+url = ('/mch/exam')
 
 PAGE_SIZE = 50
 
-# SKU -------------------
+# 课程测试题
+# -------------------
 class handler:  
     def GET(self):
-        if not helper.logged(helper.PRIV_MCH, 'TOPIC_STORE'):
+        if not helper.logged(helper.PRIV_MCH, 'OBJ_STORE'):
             raise web.seeother('/')
-        user_data=web.input(page='0')
+        user_data=web.input(page='0', obj_id='')
         render = helper.create_render()
         mch_id = helper.get_session_mch_id()
         #print mch_id
@@ -26,9 +25,11 @@ class handler:
         if not user_data['page'].isdigit():
             return render.info('参数错误！')  
 
-        # 分页获取数据
-        db_sku = db.topic_store.find({'mch_id':mch_id}, 
-            sort=[('available', -1), ('obj_id', -1)],
+        if user_data['obj_id']=='':
+            return render.info('obj_id参数错误！')  
+
+        db_sku = db.exam_info.find({'obj_id':user_data['obj_id'],'mch_id':mch_id}, 
+            sort=[('available', -1), ('exam_id', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
         )
@@ -36,15 +37,11 @@ class handler:
         sku_data = []
         for x in db_sku:
             one = {
-                'tpc_id'   : x['tpc_id'],
-                'tpc_name' : x['tpc_name'],
-                'title'    : x['title'],
-                'obj_count' : 0,
+                'exam_id'  : x['exam_id'],
+                'question' : x['question'],
                 'available': x['available'],
-                'note'     : x['note'],
+                'mch_id'   : x['mch_id'],
             }
-            r2 = db.obj_store.find({'obj_type':'topic', 'tpc_id':x['tpc_id']})
-            one['obj_count'] = r2.count()
             sku_data.append(one)
 
         num = db_sku.count()
@@ -53,5 +50,5 @@ class handler:
         else:
             num = num / PAGE_SIZE
         
-        return render.topic_store(helper.get_session_uname(), helper.get_privilege_name(), sku_data,
-            range(0, num))
+        return render.exam(helper.get_session_uname(), helper.get_privilege_name(), sku_data,
+            range(0, num), user_data['obj_id'])

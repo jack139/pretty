@@ -14,8 +14,11 @@ $var menu: #plat2
 <table class="props_tb">
 <thead>
   <tr class="even">
-    <th width="15%">编号</th>
+    <th width="10%">编号</th>
     <th>类目名</th>
+    <th>开始时间</th>
+    <th>结束时间</th>
+    <th>排序权重</th>
     <th>状态</th>
   </tr>
 </thead>
@@ -25,6 +28,9 @@ $for u in skus:
   <tr>
   <td><a href="/plat/category_edit?cate_id=$u['cate_id']">$u['cate_id']</a></td>
   <td>$u.get('title','')</td>
+  <td>$u.get('start_time')</td>
+  <td>$u.get('expire_time')</td>
+  <td>$u.get('sort_weight')</td>
   <td>$('可使用' if u['available']==1 else '停用')</td>
   </tr>
 

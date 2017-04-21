@@ -26,7 +26,7 @@ class handler:
 
         # 分页获取数据
         db_sku = db.banner_info.find(
-            sort=[('available', -1), ('mch_id', -1)],
+            sort=[('available', -1), ('sort_weight', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
         )

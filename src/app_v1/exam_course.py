@@ -27,19 +27,30 @@ class handler:
 
         #--------------------------------------------------
 
+        r2 = db.obj_store.find_one({'obj_id':param['object_id']})
+        if r2 is None:
+            return json.dumps({'ret' : -5, 'msg' : 'object_id错误'})
+
+        db_exam = db.exam_info.find({'obj_id':param['object_id'], 'available':1}, 
+            sort=[('exam_id', 1)]
+        )
+
+        exam_data = []
+        for i in db_exam:
+            option = []
+            for j in i['option']:
+                if len(j.strip())==0:
+                    break
+                option.append(j)
+            exam_data.append({
+                "problem" : i['question'],
+                "option" : option,
+            })
+
         ret_data = {
-           "title" : "课程标题",
-           "note" : "测试说明测试说明测试说明测试说明",
-           "question" : [
-                  {
-                       "problem" : "问题问题问题1",
-                       "option" : ["答案1", "答案2", "答案3", "答案4"]
-                  },
-                  {
-                       "problem" : "问题问题问题2",
-                       "option" : ["答案1", "答案2", "答案3"]
-                  },
-           ]
+           "title"    : r2['title'],
+           "note"     : r2.get('exam_note',''),
+           "question" : exam_data, 
         }
 
         # 返回

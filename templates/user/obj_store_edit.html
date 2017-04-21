@@ -1,6 +1,6 @@
 $def with (name, str1, sku, tpc_list)
 
-$var title: 商品管理
+$var title: 课程管理
 $var css:
 $var name: $'|'.join(str1) $name
 $var js: /static/js/upload.js?v=1.010
@@ -8,9 +8,12 @@ $var load: doFirst();
 $var menu: #mcht1
 
 $if sku['obj_id']=='n/a':
-    <div class="caption"><h2>新增商品信息</h2></div>
+    <div class="caption"><h2>新增课程信息</h2></div>
 $else:
-    <div class="caption"><h2>修改商品信息</h2></div>
+    <div class="caption"><h2>修改课程信息</h2></div>
+
+<p><a class="abtn" href="/mch/exam?obj_id=$sku['obj_id']">管理测试试题</a></p>
+
 
 <form name="new_sku" id="new_sku" method="post" action="/mch/obj_store_edit">
 <input type="hidden" name="image" id="form_image" value=""/>
@@ -27,7 +30,7 @@ $else:
 <tbody>
 <tr><td>课程编号</td><td>$sku['obj_id']</td><td></td></tr>
 
-<tr><td>商品类型</td><td>
+<tr><td>课程类型</td><td>
     <input type="radio" name="obj_type" value="course" onchange="$$('#tpc_list').hide();"
     $if sku.get('obj_type')=='course':
         checked="checked"
@@ -114,6 +117,10 @@ $else:
     <input type="text" name="try_time" value="$sku.get('try_time',0)" pattern="[0-9]+" title="必须是数字"/>
     </td><td>单位：秒，0表示不能试听</td></tr>
 
+<tr><td>测试说明</td><td>
+    <textarea rows="3" name="exam_note">$sku.get('exam_note','')</textarea>
+    </td><td>在测试题目前显示</td></tr>
+
 <tr><td>状态</td><td>
     <input type="radio" name="available" value="1"
     $if int(sku.get('available','0'))==1:
@@ -136,6 +143,7 @@ $else:
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
 </form>
 
+
 <div class="article_box">
   <div id="image-main">
     <form method="post" enctype="multipart/form-data"  action="">
@@ -146,6 +154,7 @@ $else:
   </div>
 </div>
 </br></br>
+
 
 <div class="article_box">
   <div>操作日志：</div>

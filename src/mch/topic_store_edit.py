@@ -22,16 +22,18 @@ class handler:
         render = helper.create_render()
         user_data = web.input(tpc_id='')
 
-        obj_data = { 'tpc_id' : 'n/a'}
+        obj_data = { 'tpc_id' : 'n/a' }
+        obj_list = []
 
         if user_data.tpc_id != '': 
             db_obj=db.topic_store.find_one({'tpc_id':user_data.tpc_id, 'mch_id':mch_id})
-            if db_obj!=None:
+            if db_obj is not None:
                 # 已存在的obj
                 obj_data = db_obj
+                obj_list = db.obj_store.find({'obj_type':'topic', 'tpc_id':user_data.tpc_id})
 
         return render.topic_store_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            obj_data)
+            obj_data, obj_list)
 
 
     def POST(self):
@@ -49,9 +51,9 @@ class handler:
             db_pk = db.user.find_one_and_update(
                 {'uname'    : 'settings'},
                 {'$inc'     : {'sa_count' : 1}},
-                {'pk_count' : 1}
+                {'sa_count' : 1}
             )
-            tpc_id = '2%07d' % db_pk['pk_count']
+            tpc_id = '2%07d' % db_pk['sa_count']
             message = '新建'
         else:
             tpc_id = user_data['tpc_id']
@@ -61,11 +63,9 @@ class handler:
             update_set={
                 'tpc_id'      : tpc_id,
                 'tpc_name'    : user_data['tpc_name'],
-                #'list_in_app' : int(user_data['list_in_app']), # 在上架管理里设置
                 'title'       : user_data['title'],
                 'title2'      : user_data['title2'],
                 'description' : user_data['description'],
-                #'sort_weight' : int(user_data['sort_weight']),
                 'note'        : user_data['note'],
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳

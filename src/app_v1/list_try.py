@@ -53,13 +53,17 @@ class handler:
         for i in obj_list:
             if i not in obj_data.keys():
                 continue
+            if len(obj_data[i]['image'])>0: # 取第1张图
+                image_url = app_helper.image_url(obj_data[i]['image'][0])
+            else:
+                image_url = ''
             try_obj_list.append({
                 'object_id' : obj_data[i]['obj_id'], 
                 'title'     : obj_data[i]['title'],
                 'title2'    : obj_data[i]['title2'],
                 'speaker'   : obj_data[i]['speaker'],
                 'type'      : 1 if obj_data[i]['media']=='video' else 2,  # 1- 视频   2 － 音频  
-                'image'     : [app_helper.image_url(x) for x in obj_data[i]['image']], 
+                'image'     : image_url, 
                 'length'    : obj_data[i]['length'],  # 长度，单位：秒
                 'try_time'  : obj_data[i]['try_time'],  # 试听长度，单位：秒 
             })

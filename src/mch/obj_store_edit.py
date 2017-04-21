@@ -57,9 +57,9 @@ class handler:
             db_pk = db.user.find_one_and_update(
                 {'uname'    : 'settings'},
                 {'$inc'     : {'sa_count' : 1}},
-                {'pk_count' : 1}
+                {'sa_count' : 1}
             )
-            obj_id = '1%07d' % db_pk['pk_count']
+            obj_id = '1%07d' % db_pk['sa_count']
             message = '新建'
         else:
             obj_id = user_data['obj_id']
@@ -69,8 +69,6 @@ class handler:
             update_set={
                 'obj_id'      : obj_id,
                 'obj_name'    : user_data['obj_name'],
-                #'list_in_app' : int(user_data['list_in_app']), # 在上架管理里设置
-                #'cate_id'     : user_data['cate_id'],
                 'title'       : user_data['title'],
                 'title2'      : user_data['title2'],
                 'speaker'     : user_data['speaker'],
@@ -82,8 +80,8 @@ class handler:
                 'tpc_id'      : user_data['tpc_id'], # 如果 obj_type=='ciurse',此字段应该为空
                 'length'      : int(user_data['length']),
                 'try_time'    : int(user_data['try_time']),
-                #'sort_weight' : int(user_data['sort_weight']),
                 'note'        : user_data['note'],
+                'exam_note'   : user_data['exam_note'],
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
                 'image'       : user_data['image'].split(','), # 图片

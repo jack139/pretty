@@ -1,4 +1,4 @@
-$def with (name, str1, sku)
+$def with (name, str1, sku, obj_list)
 
 $var title: 专辑管理
 $var css:
@@ -55,6 +55,11 @@ $else:
 <tr><td>描述说明</td><td>
     <textarea rows="3" name="description" id="description">$sku.get('description', '')</textarea>
     </td><td></td></tr>
+
+<tr><td>课程列表</td><td>
+    $for x in obj_list:
+        <div><a href="/mch/obj_store_edit?obj_id=$x['obj_id']">$x['obj_id'] - $x['obj_name']（$x['title']）</a></div>
+    </td><td>在课程管理里添加课程</td></tr>
 
 <tr><td>状态</td><td>
     <input type="radio" name="available" value="1"

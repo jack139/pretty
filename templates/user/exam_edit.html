@@ -1,0 +1,87 @@
+$def with (name, str1, sku, obj_id)
+
+$var title: 课程管理
+$var css:
+$var name: $'|'.join(str1) $name
+$var js: 
+$var load: 
+$var menu: #mcht1
+
+$if sku['exam_id']=='n/a':
+    <div class="caption"><h2>新增课程测试题</h2></div>
+$else:
+    <div class="caption"><h2>修改课程测试题</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/mch/exam_edit">
+<input type="hidden" name="exam_id" value="$sku['exam_id']"/>
+<input type="hidden" name="obj_id" value="$obj_id"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="50%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+<tr><td>试题编号</td><td>$sku['exam_id']</td><td></td></tr>
+
+<tr><td>试题题目</td><td>
+    <textarea rows="3" name="question" cols="40">$sku.get('question','')</textarea>
+    </td><td></td></tr>
+
+<tr><td>本题分数</td><td>
+    <input type="text" name="score" value="$sku.get('score',10)" pattern="[0-9]+" title="必须是数字" />
+    </td><td></td></tr>
+
+<tr><td rowspan="6">试题选项</td>
+    <td>A. <input type="text" name="option" value="$(sku.get('option',['']*6)[0])" />&nbsp;&nbsp;
+        <input type="checkbox" name="correct" value="0"
+        $if '0' in sku.get('correct',[]):
+            checked="checked"
+        /> 是答案
+    </td>
+    <td>选项内容为空则此项不展示<br/>“是答案”打勾表示是正确答案之一</td>
+</tr>
+
+$for x in [1,2,3,4,5]:
+    <tr>
+        <td>$('ABCDEF'[x]). <input type="text" name="option" value="$(sku.get('option',['']*6)[x])" />&nbsp;&nbsp;
+            <input type="checkbox" name="correct" value="$x"
+            $if (u'%d'%x) in sku.get('correct',[]):
+                checked="checked"
+            /> 是答案
+        </td>
+        <td></td>
+    </tr>
+    
+<tr><td>状态</td><td>
+    <input type="radio" name="available" value="1"
+    $if int(sku.get('available','0'))==1:
+        checked="checked"
+    /> 在使用
+    <input type="radio" name="available" value="0"
+    $if int(sku.get('available','0'))==0:
+        checked="checked"
+    /> 停用
+
+    </td><td>停用时，用户不可见</td></tr>
+
+</tbody></table>
+
+<p><input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+</br></br>
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>

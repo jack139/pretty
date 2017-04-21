@@ -30,11 +30,29 @@ class handler:
             skip=int(user_data['page'])*PAGE_SIZE
         )
 
+        sku_data = []
+        for x in db_sku:
+            one = {
+                'obj_id'   : x['obj_id'],
+                'obj_name' : x['obj_name'],
+                'title'    : x['title'],
+                'obj_type' : x['obj_type'],
+                'price'    : x['price'],
+                'tpc_name' : 'n/a',
+                'available': x['available'],
+                'note'    : x['note'],
+            }
+            if x['obj_type']=='topic':
+                r2 = db.topic_store.find_one({'tpc_id':x['tpc_id']})
+                one['tpc_name'] = one['tpc_name'] if r2 is None else r2['tpc_name']
+            sku_data.append(one)
+
+
         num = db_sku.count()
         if num%PAGE_SIZE>0:
             num = num / PAGE_SIZE + 1
         else:
             num = num / PAGE_SIZE
         
-        return render.obj_store(helper.get_session_uname(), helper.get_privilege_name(), db_sku,
+        return render.obj_store(helper.get_session_uname(), helper.get_privilege_name(), sku_data,
             range(0, num))

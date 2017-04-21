@@ -1,0 +1,41 @@
+$def with (name, str1, skus, pages, obj_id)
+
+$var title: 课程管理
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #mcht1
+
+<div class="caption"><h2>课程测试</h2></div>
+
+<p><a class="abtn" href="/mch/exam_edit?obj_id=$obj_id">新建试题</a></p>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th width="10%">试题编号</th>
+    <th>问题</th>
+    <th>状态</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/mch/exam_edit?obj_id=$obj_id&exam_id=$u['exam_id']">$u['exam_id']</a></td>
+  <td>$u['question']</td>
+  <td>$('可使用' if u['available']==1 else '停用')</td>
+  </tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/mch/exam?obj_id=$obj_id&page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>
+
+<br/>
+<p><a class="abtn" href="/mch/obj_store_edit?obj_id=$obj_id">返回课程管理</a></p>
