@@ -209,11 +209,9 @@ function generate_sign(num, list){
 <div>session: <input id="session_12" name="session" size="50" value=""/></div>
 <div>object_id: <input id="object_id_12" name="object_id" value=""/></div>
 <div>pay_type: <input id="pay_type_12" name="pay_type" value="0"/></div>
-<div>order_id: <input id="order_id_12" name="order_id" value=""/></div>
-<div>total: <input id="total_12" name="total" value=""/></div>
 <div>sign: <input id="sign_12" name="sign" size="50" value=""/><input type="button" value="生成签名"
     onclick="generate_sign('12', ['#private_key','#app_id_12','#dev_id_12','#ver_code_12','#tick_12',
-        '#session_12','#object_id_12','#pay_type_12','#order_id_12','#total_12'])"></div>
+        '#session_12','#object_id_12','#pay_type_12'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -457,8 +455,8 @@ function generate_sign(num, list){
 <br/>
 
 
-<h2>29.获取购买记录 order_list</h2>
-<form name="29" method="post" action="/app/v1/order_list">
+<h2>29.获取购买记录 cash_log</h2>
+<form name="29" method="post" action="/app/v1/cash_log">
 <div>app_id: <input id="app_id_29" name="app_id" value=""/></div>
 <div>dev_id: <input id="dev_id_29" name="dev_id" value="12375"/></div>
 <div>ver_code: <input id="ver_code_29" name="ver_code" value="1"/></div>
@@ -599,5 +597,23 @@ function generate_sign(num, list){
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
+
+
+<h2>40.发起充值操作 deposit_cash</h2>
+<form name="40" method="post" action="/app/v1/deposit_cash">
+<div>app_id: <input id="app_id_40" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_40" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_40" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_40" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_40" name="session" size="50" value=""/></div>
+<div>pay_sum: <input id="pay_sum_40" name="pay_sum" size="50" value=""/></div>
+<div>pay_type: <input id="pay_type_40" name="pay_type" size="50" value=""/></div>
+<div>sign: <input id="sign_40" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('40', ['#private_key','#app_id_40','#dev_id_40','#ver_code_40','#tick_40',
+        '#session_40', '#pay_sum_40', '#pay_type_40'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
 
 </html>

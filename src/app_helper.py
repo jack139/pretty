@@ -142,8 +142,8 @@ def generate_sign(c): # c时列表，c[0]一定是app_id
 
 
 
-# 生成order_id
-def get_new_order_id(version='v1', prefix='acme'):
+# 生成 order_trade_id
+def get_new_order_id(version='v1', prefix=''):
     if IS_TEST or IS_STAGING:
         surfix = '-test'
     else:
@@ -151,11 +151,11 @@ def get_new_order_id(version='v1', prefix='acme'):
 
     cc=1
     while cc!=None:
-        # order_id 城市(1位)+日期时间(6+4位)+随机数(5位)+版本
-        order_id = '%s20%s%s%s%s' % (prefix,time_str(format=2)[2:],my_rand(6,1),version[-1],surfix)
-        cc = db.order_app.find_one({'order_id' : order_id},{'_id':1})
-    db.order_app.insert_one({'order_id':order_id}) # 先占位 2016-03-17,gt
-    return order_id
+        # order_trade_id 城市(1位)+日期时间(6+4位)+随机数(6位)+版本
+        order_trade_id = '%s20%s%s%s%s' % (prefix,time_str(format=2)[2:],my_rand(6,1),version[-1],surfix)
+        cc = db.order_trade.find_one({'order_trade_id' : order_trade_id},{'_id':1})
+    db.order_trade.insert_one({'order_trade_id':order_trade_id}) # 先占位 2016-03-17,gt
+    return order_trade_id
 
 
 # 生成userid

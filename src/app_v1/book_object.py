@@ -5,6 +5,7 @@ import web
 import time, json
 from config import setting
 import app_helper
+from libs import checkout_helper
 
 db = setting.db_web
 
@@ -27,11 +28,15 @@ class handler:
 
         #--------------------------------------------------
 
+        r = checkout_helper.checkout_obj(uname, param.object_id)
+        if r['ret']<0:
+            return json.dumps({'ret' : r['ret'], 'msg' : r['msg']})            
+
         ret_data = {
             "object_id" : param.object_id,     # 唯一代码 
-            "type"  : 1,  # 类型： 1 课程, 2 专辑 
-            "title" : "课程／专辑标题",
-            "due"   : 100000,  # 应付金额，单位 分 
+            "type"  : 1 if r['obj_type']=='course' else 2,  # 类型： 1 课程, 2 专辑 
+            "title" : r['title'],
+            "due"   : r['due'],  # 应付金额，单位 分 , 默认1分
         }
 
         # 返回

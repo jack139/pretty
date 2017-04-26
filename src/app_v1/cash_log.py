@@ -9,7 +9,7 @@ import app_helper
 db = setting.db_web
 
 # 我的购买记录
-url = ('/app/v1/order_list')
+url = ('/app/v1/cash_log')
 
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session'])
@@ -27,21 +27,23 @@ class handler:
 
         #--------------------------------------------------
 
+        r2 = db.order_trade.find({'userid':uname['userid']}, sort=[('_id',-1)])
+
+        orders = []
+        for i in r2:
+            if i['trade_type']=='consume':
+                sign = -1
+            else:
+                sign = 1
+            orders.append({
+                "action" : i['comment'],
+                "cash" : i['total_sum']*sign, # 金额，单位 分
+                "date" : i['pay_time'], # 发生时间 
+                "order_id" : i['order_trade_id'], # 订单号
+            })
+
         ret_data = {
-           "order" : [
-                {
-                    "action" : "课程名称",
-                    "cash" : -499, # 金额，单位 分
-                    "date" : "2017-03-12 17:00", # 发生时间 
-                    "order_id" : "n00001", # 订单号
-                },
-                {
-                    "action" : "充值",
-                    "cash" : 10000, # 金额，单位 分 
-                    "date" : "2017-03-12 17:00", # 发生时间 
-                    "order_id" : "d00002", # 充值订单号
-                },
-            ]
+           "order" : orders
         }
 
         # 返回

@@ -56,6 +56,11 @@ $else:
     <textarea rows="3" name="description" id="description">$sku.get('description', '')</textarea>
     </td><td></td></tr>
 
+<tr><td>售价</td><td>
+    <input type="text" name="price" id="price" value="$('%.2f'%(sku.get('price',0)/100.0))" size="15"
+    pattern="[0-9]+[.]{0,1}[0-9]*" title="必须是数字"/> 元
+    </td><td>默认售价</td></tr>
+
 <tr><td>课程列表</td><td>
     $for x in obj_list:
         <div><a href="/mch/obj_store_edit?obj_id=$x['obj_id']">$x['obj_id'] - $x['obj_name']（$x['title']）</a></div>

@@ -5,20 +5,20 @@ import web
 import time, json
 from config import setting
 import app_helper
-from libs import credit_helper
 
 db = setting.db_web
 
-# 余额信息
-url = ('/app/v1/cash_info')
+# 余额充值
+url = ('/app/v1/deposit_cash')
 
 class handler: 
-    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session'])
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','pay_sum','pay_type'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param = web.input(app_id='', dev_id='', ver_code='', session='', tick='')
+        param = web.input(app_id='', dev_id='', ver_code='', session='', tick='', pay_sum='', pay_type='')
 
-        if '' in (param.app_id, param.dev_id, param.ver_code, param.session, param.tick):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.session, param.tick, 
+            param.pay_sum, param.pay_type):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         # 检查session登录
@@ -28,10 +28,8 @@ class handler:
 
         #--------------------------------------------------
 
-        r2 = credit_helper.check_balance(uname['userid'])
-
         ret_data = {
-            "cash" : r2,  # 余额 单位 分 
+            "order_trade_id" : 'can_not_use',  
         }
 
         # 返回

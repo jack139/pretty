@@ -43,33 +43,6 @@ topic_store      专辑
 
     status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
 
-order_trade   支付交易订单
-    order_trade_id   交易流水号
-    userid      用户id
-    alipay_trade_no 支付宝流水号
-    wxpay_trade_no  微信支付流水号
-    total_sum   发生总金额，单位：分
-    cash_sum    余额发生金额
-    alipay_sum  支付宝发生金额
-    wxpay_sum   微信支付发生金额
-    type    交易类型： receipt 收款   refund 退款
-    pay_type    cash 余额 alipay 支付宝 wxpay 微信支付
-    pay_time    付款时间
-
-order_app   购买订单
-    order_id    订单号 
-    userid      用户id
-    cart        购物车信息
-    status  订单状态
-    type    订单类型： virtual 虚拟商品  entity  实物商品
-    order_time    下单时间
-    order_trade_id   交易订单号
-
-order_recharge  充值订单
-    recharge_id     充值流水号
-    order_trade_id   交易订单号
-    recharge_sum    充值金额，单位 分
-    pay_sum     付款金额，单位 分
 
 app_user    线上用户
     userid      用户id
@@ -82,7 +55,6 @@ app_user    线上用户
 cash_info   用户充值帐户
     userid      用户id
     balance     余额金额, 单位 分
-
 
 auth_info   授权信息
     userid      用户id
@@ -149,6 +121,33 @@ online_topic_obj    专辑上架状态
     tpc_id      专辑id
     sort_weight 排序权重, topic_store里的sort_weight可以不用了
     available   是否有效
+
+user_property   用户已购商品
+    userid      用户id
+    obj_id      课程id／专辑id
+    obj_type    course 课程 topic 专辑
+    status      状态： paid 已购   cancel 取消   can_not_use 不能使用
+    order_trade_id    交易流水号
+
+order_trade   支付交易订单
+    order_trade_id   交易流水号
+    userid      用户id
+    total_sum   发生总金额，单位：分
+    type    交易类型： receipt 收款   refund 退款  consume 消费
+    pay_type    cash 余额 alipay 支付宝 wxpay 微信支付
+    pay_time    付款时间
+    cash_sum    余额发生金额
+    alipay_sum  支付宝发生金额
+    wxpay_sum   微信支付发生金额
+    alipay_trade_no 支付宝流水号
+    wxpay_trade_no  微信支付流水号
+
+order_recharge  充值订单
+    userid          用户id
+    recharge_id     充值流水号
+    order_trade_id  交易订单号
+    recharge_sum    充值金额，单位 分
+    pay_sum         付款金额，单位 分
 
 
 用户注册／登录过程：

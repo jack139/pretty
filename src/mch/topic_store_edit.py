@@ -70,6 +70,7 @@ class handler:
                 'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
                 'image'       : user_data['image'].split(','), # 图片
+                'price'       : int(float(user_data['price'])*100), # 单位： 分
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')
