@@ -1,0 +1,78 @@
+$def with (name, str1, skus, pages, OBJ_STATUS, topic, action)
+
+$var title: 专辑审核
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #plat6
+
+<div class="caption"><h2>专辑审核: $topic['tpc_name']</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/plat/check_topic_detail">
+<input type="hidden" name="tpc_id" value="$topic['tpc_id']"/>
+
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th>课程编号</th>
+    <th width="30%">专辑内课程名</th>
+    <th width="35%">标题</th>
+    <th>备注</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/plat/check_obj_detail?obj_id=$u['obj_id']&action=VIEW">$u['obj_id']</a></td>
+  <td>$u['obj_name']</td>
+  <td>$u.get('title','')</td>
+  <td>$u['note']</td>
+  </tr>
+
+$if action=='CHECK':
+    <tr><td>审核结果</td><td colspan="2">
+        <input type="radio" name="status" value="PASSED"
+        $if topic.get('status')=='PASSED':
+            checked='checked'
+        > 审核通过</input>&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="status" value="DENY"
+        $if topic.get('status')=='DENY':
+            checked='checked'
+        > 不通过</input>
+        </td><td></td></tr>
+
+<tr><td>审核意见</td><td colspan="2">
+    <textarea rows="5" cols="40" name="check_comment">$topic.get('check_comment','')</textarea>
+    </td><td>如审核不通过，请填写原因</td></tr>
+
+</tbody>
+</table>
+
+<p>
+$if action=='CHECK':
+    <input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/plat/check_topic_detail?page=$x&tpc_id=$topic['tpc_id']">$(x+1)</a>&nbsp;&nbsp;
+</div>
+
+<br/>
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in topic.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>

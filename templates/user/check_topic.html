@@ -1,0 +1,50 @@
+$def with (name, str1, skus, pages, OBJ_STATUS)
+
+$var title: 专辑审核
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #plat6
+
+<div class="caption"><h2>专辑审核</h2></div>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th>专辑编号</th>
+    <th width="15%">专辑名</th>
+    <th width="25%">标题</th>
+    <th>售价</th>
+    <th>状态</th>
+    <th width="15%">备注</th>
+    <th>操作</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td>$u['tpc_id']</td>
+  <td>$u['tpc_name']</td>
+  <td>$u.get('title','')</td>
+  <td>$('%.2f'%(u['price']/100.0))</td>
+  <td>$OBJ_STATUS[u['status']]</td>
+  <td>$u['note']</td>
+  <td>
+    <a class="abtn" href="/plat/check_topic_detail?tpc_id=$u['tpc_id']&action=VIEW">查看</a>&nbsp;
+    $if u['status'] == 'WAIT':
+        <a class="abtn" href="/plat/check_topic_detail?tpc_id=$u['tpc_id']&action=CHECK">开始审核</a>
+    $elif u['status'] in ['DENY', 'PASSED']:
+        <a class="abtn" href="/plat/check_topic_detail?tpc_id=$u['tpc_id']&action=CHECK">修改审核结果</a>
+
+  </td></tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/plat/check_obj?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

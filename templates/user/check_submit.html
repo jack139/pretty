@@ -1,0 +1,47 @@
+$def with (name, str1, obj_id, tpc_id, obj_name, title)
+
+$var title: 课程管理
+$var css:
+$var name: $'|'.join(str1) $name
+$var js: 
+$var load: 
+$var menu: #mcht1
+
+<div class="caption"><h2>提交审核</h2></div>
+
+<table class="props_tb" with="60%">
+<thead>
+    <tr class="even">
+        <th width="20%">编号</th>
+        <th>$('课程' if len(obj_id)>0 else '专辑')名称</th>
+        <th>标题</th>
+    </tr>
+</thead>
+<tbody>
+    <tr><td>$(obj_id if len(obj_id)>0 else tpc_id)</td>
+    <td>$obj_name</td>
+    <td>$title</td></tr>
+</tbody></table>
+
+<form name="new_sku" id="new_sku" method="post" action="/mch/check_submit">
+<input type="hidden" name="obj_id" value="$obj_id"/>
+<input type="hidden" name="tpc_id" value="$tpc_id"/>
+
+<div class="article_box">
+    <textarea rows="30" cols="100" readonly="readonly">
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+    </textarea>
+</div>
+
+<p><input type="submit" name="submit" id="submit" value="同意以上文本，并提交审核"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+<br/>

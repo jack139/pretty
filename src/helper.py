@@ -49,13 +49,14 @@ PRIV_VISITOR  = 0b00000000  # 0
 
 # 菜单权限
 MENU_LEVEL = {
-    'OBJ_STORE' : 0,   # 对象管理
-    'MERCHANT'  : 1,   # 商家管理
+    'OBJ_STORE'   : 0,   # 对象管理
+    'MERCHANT'    : 1,   # 商家管理
     'TOPIC_STORE' : 2,   # 专辑管理
-    'CRM'       : 3,  # 订单查询
-    'REPORT'    : 4,  # 报表
-    'CATEGORY'  : 5,  # 类目管理
-    'BANNER'  : 6,  # 轮播图管理
+    'CRM'         : 3,  # 订单查询
+    'REPORT'      : 4,  # 报表
+    'CATEGORY'    : 5,  # 类目管理
+    'BANNER'      : 6,  # 轮播图管理
+    'CHECK_OBJ'   : 7,  # 课程／专辑审核
 }
 
 user_level = {
@@ -90,21 +91,27 @@ SHOP_TYPE = {
 
 
 ORDER_STATUS = {
-    'APP' : { # 线上订单
-        'name'     : '线上订单',
-        'DUE'      : '待支付',
-        'PREPAID'  : '付款确认中',
-        'PAID'     : '已付款',
-        'DISPATCH' : '待配送',
-        'ONROAD'   : '配送中',
-        'COMPLETE' : '配送完成',
-        'FINISH'   : '已完成',
-        'CANCEL'   : '已取消',
-        'TIMEOUT'  : '已过付款期限',
-        'FAIL'     : '配送失败',
-        'CANCEL_TO_REFUND' : '等待退款',
-        'REFUND'   : '已操作退款',
-    }
+    # 线上订单
+    'name'     : '线上订单',
+    'DUE'      : '待支付',
+    'PREPAID'  : '付款确认中',
+    'PAID'     : '已付款',
+    'DISPATCH' : '待配送',
+    'ONROAD'   : '配送中',
+    'COMPLETE' : '配送完成',
+    'FINISH'   : '已完成',
+    'CANCEL'   : '已取消',
+    'TIMEOUT'  : '已过付款期限',
+    'FAIL'     : '配送失败',
+    'CANCEL_TO_REFUND' : '等待退款',
+    'REFUND'   : '已操作退款',
+}
+
+OBJ_STATUS = {
+    'SAVED' : '已修改未提交',
+    'WAIT'  : '提交等待审核',
+    'PASSED'  : '审核通过',
+    'DENY'  : '审核拒绝',
 }
 
 # 退款原因

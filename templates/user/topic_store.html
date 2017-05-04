@@ -1,4 +1,4 @@
-$def with (name, str1, skus, pages)
+$def with (name, str1, skus, pages, OBJ_STATUS)
 
 $var title: 专辑管理
 $var css:
@@ -20,18 +20,23 @@ $var menu: #mcht2
     <th>课程数</th>
     <th>状态</th>
     <th width="15%">备注</th>
+    <th>操作</th>
   </tr>
 </thead>
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/mch/topic_store_edit?tpc_id=$u['tpc_id']">$u['tpc_id']</a></td>
+  <tr><td>$u['tpc_id']</td>
   <td>$u['tpc_name']</td>
   <td>$u.get('title','')</td>
   <td>$u.get('obj_count')</td>
-  <td>$('可使用' if u['available']==1 else '停用')</td>
-  <td>$u['note']</td></tr>
-
+  <td>$OBJ_STATUS[u['status']]</td>
+  <td>$u['note']</td>
+  <td>
+    <a class="abtn" href="/mch/topic_store_edit?tpc_id=$u['tpc_id']">修改</a>&nbsp;
+    $if u['status']=='SAVED':
+        <a class="abtn" href="/mch/check_submit?tpc_id=$u['tpc_id']">提交审核</a>
+  </td></tr>
 </tbody>
 </table>
 

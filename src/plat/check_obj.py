@@ -7,28 +7,26 @@ import helper
 
 db = setting.db_web
 
-# 专辑管理
 
-url = ('/mch/topic_store')
+# 审核课程
+
+url = ('/plat/check_obj')
 
 PAGE_SIZE = 50
 
 # SKU -------------------
 class handler:  
     def GET(self):
-        if not helper.logged(helper.PRIV_MCH, 'TOPIC_STORE'):
+        if not helper.logged(helper.PRIV_USER, 'CHECK_OBJ'):
             raise web.seeother('/')
         user_data=web.input(page='0')
         render = helper.create_render()
-        mch_id = helper.get_session_mch_id()
-        #print mch_id
 
         if not user_data['page'].isdigit():
             return render.info('参数错误！')  
 
-        # 分页获取数据
-        db_sku = db.topic_store.find({'mch_id':mch_id}, 
-            sort=[('available', -1), ('obj_id', -1)],
+        db_sku = db.obj_store.find({'obj_type':'course','status':{'$in':['WAIT', 'PASSED', 'DENY']}},  # 只显示精品课程
+            sort=[('obj_id', -1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
         )
@@ -36,16 +34,13 @@ class handler:
         sku_data = []
         for x in db_sku:
             one = {
-                'tpc_id'   : x['tpc_id'],
-                'tpc_name' : x['tpc_name'],
+                'obj_id'   : x['obj_id'],
+                'obj_name' : x['obj_name'],
                 'title'    : x['title'],
-                'obj_count' : 0,
-                'available': x['available'],
+                'price'    : x['price'],
                 'note'     : x['note'],
                 'status'   : x.get('status','SAVED'),
             }
-            r2 = db.obj_store.find({'obj_type':'topic', 'tpc_id':x['tpc_id']})
-            one['obj_count'] = r2.count()
             sku_data.append(one)
 
         num = db_sku.count()
@@ -54,5 +49,5 @@ class handler:
         else:
             num = num / PAGE_SIZE
         
-        return render.topic_store(helper.get_session_uname(), helper.get_privilege_name(), sku_data,
+        return render.check_obj(helper.get_session_uname(), helper.get_privilege_name(), sku_data,
             range(0, num), helper.OBJ_STATUS)

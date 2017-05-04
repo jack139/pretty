@@ -7,6 +7,7 @@ merchant    商家企业
 
 obj_store      商品：试听课程、精品课程
     obj_id  商品id
+    mch_id  商家id
     media    媒体类型： audio 音频 video 视频
     obj_name    对象名称，内部使用
     title   标题
@@ -27,7 +28,7 @@ obj_store      商品：试听课程、精品课程
     obj_type    类型： course 精品课程  topic 专辑课程
     tpc_id  所属专辑id
 
-    status  审核状态： WAIT 等待审核  PASS 审核通过 NOGO 审核拒绝
+    status  审核状态： SAVED 已修改未提交 WAIT 提交等待审核  PASSED 审核通过 DENY 审核拒绝
 
 topic_store      专辑
     tpc_id  专辑id

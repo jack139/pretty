@@ -1,0 +1,127 @@
+$def with (name, str1, sku, tpc_name, action)
+
+$var title: 课程审核
+$var css:
+$var name: $'|'.join(str1) $name
+$var js: 
+$var load: 
+$var menu: #plat5
+
+<div class="caption"><h2>审核课程信息</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/plat/check_obj_detail">
+<input type="hidden" name="obj_id" value="$sku['obj_id']"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="40%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+<tr><td>课程编号</td><td>$sku['obj_id']</td><td></td></tr>
+
+<tr><td>课程类型</td><td>
+    $if sku.get('obj_type')=='course':
+        精品课程
+    $elif sku.get('obj_type')=='topic':
+        专辑课程 -- 所属专辑: $tpc_name
+
+    </td><td></td></tr>
+
+<tr><td>课程名</td><td>
+    $sku.get('obj_name', '')
+    </td><td>内部使用</td></tr>
+
+<tr><td>上传图片</td><td>
+    <ul id="image-list">
+        $if sku.has_key('image') and len(sku['image'])>0:
+            $for i in sku['image']:
+                $if len(i)>0:
+                  <li id="$(i.replace('.','_'))" style="width: 450px;">
+                    <img src="/static/image/product/$(i[:2])/$i"/>
+                  </li>
+    </ul>
+    </td><td>在页面下方上传图片;</br>第1图是课程图片，第2图是讲师图片</td></tr>
+
+<tr><td>课程标题</td><td>
+    $sku.get('title','')
+    </td><td>在app中显示</td></tr>
+    
+<tr><td>副标题</td><td>
+    $sku.get('title2','')
+    </td><td>在app中显示</td></tr>
+
+<tr><td>讲师</td><td>
+    $sku.get('speaker','')
+    </td><td></td></tr>
+
+
+<tr><td>描述说明</td><td>
+    $sku.get('description', '')
+    </td><td></td></tr>
+
+
+<tr><td>售价</td><td>
+    $('%.2f'%(sku.get('price',0)/100.0)) 元
+    </td><td>默认售价</td></tr>
+
+<tr><td>当前销量</td><td>
+    $sku.get('volume',0)
+    </td><td>须大于0</td></tr>
+
+<tr><td>媒体类型</td><td>
+    $if sku.get('media')=='audio':
+        音频
+    $if sku.get('media')=='video':
+        视频
+    </td><td></td></tr>
+
+<tr><td>长度</td><td>
+    $sku.get('length',1)
+    </td><td>单位：秒</td></tr>
+
+<tr><td>试听时长</td><td>
+    $sku.get('try_time',0)
+    </td><td>单位：秒，0表示不能试听</td></tr>
+
+<tr><td>测试说明</td><td>
+    $sku.get('exam_note','')
+    </td><td>在测试题目前显示</td></tr>
+
+$if action=='CHECK':
+    <tr><td>审核结果</td><td>
+        <input type="radio" name="status" value="PASSED"
+        $if sku.get('status')=='PASSED':
+            checked='checked'
+        > 审核通过</input>&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="status" value="DENY"
+        $if sku.get('status')=='DENY':
+            checked='checked'
+        > 不通过</input>
+        </td><td></td></tr>
+
+<tr><td>审核意见</td><td>
+    <textarea rows="5" cols="40" name="check_comment">$sku.get('check_comment','')</textarea>
+    </td><td>如审核不通过，请填写原因</td></tr>
+
+</tbody></table>
+
+<p>
+$if action=='CHECK':
+    <input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>

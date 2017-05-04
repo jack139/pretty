@@ -39,8 +39,9 @@ class handler:
                 'obj_type' : x['obj_type'],
                 'price'    : x['price'],
                 'tpc_name' : 'n/a',
-                'available': x['available'],
-                'note'    : x['note'],
+                #'available': x['available'],
+                'note'     : x['note'],
+                'status'   : x.get('status','SAVED'),
             }
             if x['obj_type']=='topic':
                 r2 = db.topic_store.find_one({'tpc_id':x['tpc_id']})
@@ -55,4 +56,4 @@ class handler:
             num = num / PAGE_SIZE
         
         return render.obj_store(helper.get_session_uname(), helper.get_privilege_name(), sku_data,
-            range(0, num))
+            range(0, num), helper.OBJ_STATUS)

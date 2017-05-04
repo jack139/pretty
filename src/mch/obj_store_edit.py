@@ -5,7 +5,7 @@ import web
 import time
 from bson.objectid import ObjectId
 from config import setting
-#from libs import pos_func
+from libs import object_helper
 import helper
 
 db = setting.db_web
@@ -77,14 +77,15 @@ class handler:
                 'volume'      : int(user_data['volume']),
                 'media'       : user_data['media'],
                 'obj_type'    : user_data['obj_type'],
-                'tpc_id'      : user_data['tpc_id'], # 如果 obj_type=='ciurse',此字段应该为空
+                'tpc_id'      : user_data['tpc_id'] if user_data['obj_type']=='topic' else '', # 如果 obj_type=='course',此字段应该为空
                 'length'      : int(user_data['length']),
                 'try_time'    : int(user_data['try_time']),
                 'note'        : user_data['note'],
                 'exam_note'   : user_data['exam_note'],
-                'available'   : int(user_data['available']),
+                #'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
                 'image'       : user_data['image'].split(','), # 图片
+                'status'      : 'SAVED', # 审核状态： SAVED 已修改未提交 WAIT 提交等待审核  PASS 审核通过 NOGO 审核拒绝
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')
@@ -95,5 +96,9 @@ class handler:
                 'history' : (helper.time_str(), helper.get_session_uname(), message), 
             }  # 纪录操作历史
         }, upsert=True)
+
+        if user_data['obj_type']=='topic':
+            # 专辑课程，需要将专辑状态设置为已保存
+            object_helper.topic_change_status(user_data['tpc_id'], 'SAVED',u'课程%s修改'%obj_id)
 
         return render.info('成功保存！', '/mch/obj_store')

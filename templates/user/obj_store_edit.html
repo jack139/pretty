@@ -121,18 +121,6 @@ $else:
     <textarea rows="3" name="exam_note">$sku.get('exam_note','')</textarea>
     </td><td>在测试题目前显示</td></tr>
 
-<tr><td>状态</td><td>
-    <input type="radio" name="available" value="1"
-    $if int(sku.get('available','0'))==1:
-        checked="checked"
-    /> 在使用
-    <input type="radio" name="available" value="0"
-    $if int(sku.get('available','0'))==0:
-        checked="checked"
-    /> 停用
-
-    </td><td>停用时，将自动下架</td></tr>
-
 <tr><td>备注</td><td>
     <textarea rows="3" name="note">$sku.get('note','')</textarea>
     </td><td>内部备注</td></tr>

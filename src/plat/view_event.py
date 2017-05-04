@@ -58,7 +58,7 @@ class handler:
                 return render.view_event(helper.get_session_uname(), helper.get_privilege_name(), 
                     user_data.todo, db_todo, int(time.time()-db_todo['e_time']), 
                     auth_level, 
-                    helper.ORDER_STATUS['APP'][db_todo['status']],
+                    helper.ORDER_STATUS[db_todo['status']],
                     helper.REFUND_REASON, 
                     product_detail, 
                     due_no_delivery,

@@ -1,15 +1,13 @@
 $def with (name, str1, skus, pages, OBJ_STATUS)
 
-$var title: 课程管理
+$var title: 课程审核
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load:
-$var menu: #mcht1
+$var menu: #plat5
 
-<div class="caption"><h2>课程管理</h2></div>
-
-<p><a class="abtn" href="/mch/obj_store_edit">新建课程</a></p>
+<div class="caption"><h2>课程审核</h2></div>
 
 <table class="props_tb">
 <thead>
@@ -18,8 +16,6 @@ $var menu: #mcht1
     <th width="15%">课程名</th>
     <th width="25%">标题</th>
     <th>售价</th>
-    <th>类型</th>
-    <th>所属专辑</th>
     <th>状态</th>
     <th width="15%">备注</th>
     <th>操作</th>
@@ -32,19 +28,15 @@ $for u in skus:
   <td>$u['obj_name']</td>
   <td>$u.get('title','')</td>
   <td>$('%.2f'%(u['price']/100.0))</td>
-  <td>
-        $if u.get('obj_type')=='topic': 
-            专辑课程
-        $else:
-            精品课程
-  </td>
-  <td>$u.get('tpc_name')</td>
   <td>$OBJ_STATUS[u['status']]</td>
   <td>$u['note']</td>
   <td>
-    <a class="abtn" href="/mch/obj_store_edit?obj_id=$u['obj_id']">修改</a>&nbsp;
-    $if u['status']=='SAVED' and u.get('obj_type')!='topic':
-        <a class="abtn" href="/mch/check_submit?obj_id=$u['obj_id']">提交审核</a>
+    <a class="abtn" href="/plat/check_obj_detail?obj_id=$u['obj_id']&action=VIEW">查看</a>&nbsp;
+    $if u['status'] == 'WAIT':
+        <a class="abtn" href="/plat/check_obj_detail?obj_id=$u['obj_id']&action=CHECK">开始审核</a>
+    $elif u['status'] in ['DENY', 'PASSED']:
+        <a class="abtn" href="/plat/check_obj_detail?obj_id=$u['obj_id']&action=CHECK">修改审核结果</a>
+
   </td></tr>
 
 </tbody>
@@ -54,5 +46,5 @@ $for u in skus:
 <div class="article_box">
     页码：
     $for x in pages:
-        <a href="/mch/obj_store?page=$x">$(x+1)</a>&nbsp;&nbsp;
+        <a href="/plat/check_obj?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>

@@ -5,7 +5,7 @@ import web
 import time
 from bson.objectid import ObjectId
 from config import setting
-#from libs import pos_func
+from libs import object_helper
 import helper
 
 db = setting.db_web
@@ -67,19 +67,23 @@ class handler:
                 'title2'      : user_data['title2'],
                 'description' : user_data['description'],
                 'note'        : user_data['note'],
-                'available'   : int(user_data['available']),
+                #'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
                 'image'       : user_data['image'].split(','), # 图片
                 'price'       : int(float(user_data['price'])*100), # 单位： 分
+                'status'      : 'SAVED', # 审核状态： SAVED 已修改未提交 WAIT 提交等待审核  PASS 审核通过 NOGO 审核拒绝
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')
 
-        db.topic_store.update_one({'tpc_id':tpc_id, 'mch_id':mch_id}, {
+        r2 = db.topic_store.find_one_and_update({'tpc_id':tpc_id, 'mch_id':mch_id}, {
             '$set'  : update_set,
             '$push' : {
                 'history' : (helper.time_str(), helper.get_session_uname(), message), 
             }  # 纪录操作历史
         }, upsert=True)
+
+        if r2['status']!='SAVED':
+            object_helper.topic_change_status(tpc_id, 'SAVED', u'专辑修改')
 
         return render.info('成功保存！', '/mch/topic_store')
