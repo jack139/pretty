@@ -46,6 +46,7 @@ class handler:
             "title"         : r3['title'],
             "title2"        : r3['title2'],
             "abstract"      : r3['description'],
+            "type"          : 1 if r3['media']=='video' else 2,
             "speaker_head"  : image_url,     # 讲师头像图片url 
             "speaker_audio" : '',     # 讲师音频介绍链接, -------------------- 待实现
             "course_video"  : '',     # 课程视频链接 -------------------- 待实现

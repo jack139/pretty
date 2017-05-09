@@ -37,9 +37,9 @@ class handler:
 
         # 可上架的商品
         all_obj = {}
-        r3 = db.obj_store.find({'obj_type':'course', 'available':1})
+        r3 = db.obj_store.find({'obj_type':'course', 'status':'PASSED'})
         for i in r3:
-            all_obj[i['obj_id']] = {'obj_name':i['obj_name'], 'mch_id':i['mch_id']}
+            all_obj[i['obj_id']] = {'obj_name':i['obj_name'], 'mch_id':i['mch_id'], 'obj_id':i['obj_id']}
 
         # 所有商家
         all_mch = {}
@@ -107,8 +107,8 @@ class handler:
         # 记录类目商品上架信息
         db.online_cate_obj.remove({'cate_id':cate_id})
         for i, obj_id in enumerate(online_list):
-            r3 = db.obj_store.find_one({'obj_id':obj_id},{'available':1})
-            available = r3['available'] if r3 else 0
+            r3 = db.obj_store.find_one({'obj_id':obj_id},{'status':1})
+            available = (1 if r3['status']=='PASSED' else 0) if r3 else 0
             db.online_cate_obj.update_one({'cate_id':cate_id,'obj_id':obj_id},
                 {'$set':{'available':available, 'sort_weight':i}}, upsert=True)
 

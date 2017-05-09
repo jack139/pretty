@@ -49,6 +49,9 @@ class handler:
         # 准备返回数据
         ret_tpc_list = []
         for i in tpc_list_page:
+            if tpc_data[i].get('status')!='PASSED': # 审核未通过，应该是上架后又有修改
+                continue
+
             r4 = db.obj_store.find({'obj_type':'topic','tpc_id':tpc_data[i]['tpc_id']})
             topic_count = r4.count() # 专辑内课程数
             if topic_count>0:

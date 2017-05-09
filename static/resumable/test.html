@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <link rel="stylesheet" href="/static/css/layout2.css?ver=1.01" />
+    <link rel="stylesheet" href="/static/css/alertify.min.css" />
+    <link rel="stylesheet" href="/static/css/themes/default.min.css" />
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/alertify.min.js?ver=1.5"></script>
+    <script type="text/javascript" src="/static/resumable/resumable.js"></script>
+</head>
+<body>
+
+<a href="#" id="browseButton">Select files</a>
+
+<script type="text/javascript">
+var tmp_id = {'obj_id':'test', 'new_image_name':''};
+function f_test(){
+    return tmp_id;
+}
+
+function randomid()
+{
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz";
+
+    for( var i=0; i < 10; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+var r = new Resumable({
+  target     : '/plat/bigload',
+  chunkSize  : 1024*512,
+  query      : f_test,
+  maxFiles   : 1,
+  testChunks : false,
+});
+
+
+//r.assignBrowse(document.getElementById('browseButton'), false);
+r.assignBrowse($('#browseButton')[0], false);
+
+r.on('fileAdded', function(file, event){
+    if (file.size>1024*1024*20){
+        r.cancel();
+        alertify.error("文件大小超过限制！");
+    }else if (!!file.file.type.match(/image.*|audio.*|video.*/)){
+        tmp_id['new_image_name'] = randomid();
+        r.upload();
+    }else{
+        r.cancel();
+        alertify.error("不是图片／音频／视频文件！");
+    }
+  });
+r.on('uploadStart', function(){
+    $("#layout").show();
+    $("#over").show();
+  });
+r.on('complete', function(){
+    $("#layout").hide();
+    $("#over").hide();
+    alertify.warning("上传成功！");
+  });
+r.on('error', function(message, file){
+    $("#layout").hide();
+    $("#over").hide();
+    alertify.error("出错了："+message);
+  });
+r.on('cancel', function(){
+    $("#layout").hide();
+    $("#over").hide();
+  });
+</script>
+
+
+<div id="page_body">
+    <div id="over" class="over"></div>
+    <div id="layout" class="layout"><img src="/static/image/lazyload.gif" alt="" /></div>
+</div>
+
+</body>
+</html>

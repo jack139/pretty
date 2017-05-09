@@ -55,6 +55,8 @@ class handler:
         # 准备返回数据
         ret_obj_list = []
         for i in obj_list_page:
+            if obj_data[i].get('status')!='PASSED': # 审核未通过，应该是上架后又有修改
+                continue
             if len(obj_data[i]['image'])>0: # 取第1张图
                 image_url = app_helper.image_url(obj_data[i]['image'][0])
             else:

@@ -3,8 +3,8 @@ $def with (name, str1, sku, tpc_list)
 $var title: 课程管理
 $var css:
 $var name: $'|'.join(str1) $name
-$var js: /static/js/upload.js?v=1.010
-$var load: doFirst();
+$var js: /static/js/upload.js?v=1.010 /static/js/resumable.js /static/js/upload_media.js?v=1.0
+$var load: doFirst();doFirst_media();
 $var menu: #mcht1
 
 $if sku['obj_id']=='n/a':
@@ -13,7 +13,6 @@ $else:
     <div class="caption"><h2>修改课程信息</h2></div>
 
 <p><a class="abtn" href="/mch/exam?obj_id=$sku['obj_id']">管理测试试题</a></p>
-
 
 <form name="new_sku" id="new_sku" method="post" action="/mch/obj_store_edit">
 <input type="hidden" name="image" id="form_image" value=""/>
@@ -109,6 +108,11 @@ $else:
     /> 视频
     </td><td></td></tr>
 
+<tr><td>上传媒体文件</td><td>
+    <input type="text" id="media_file" name="media_file" value="$sku.get('media_file','')" readonly="readonly"/>
+    <a class="abtn" href="javascript:void(0);" id="browseButton">上传媒体文件</a>
+    </td><td>只接受音频和视频文件， 文件大小不能超过100M</td></tr>
+
 <tr><td>长度</td><td>
     <input type="text" name="length" value="$sku.get('length',1)" pattern="[0-9]+" title="必须是数字"/>
     </td><td>单位：秒，须大于0</td></tr>
@@ -150,6 +154,11 @@ $else:
   $for h in sku.get('history',[]):
       $h[0]，用户：$h[1]，操作：$h[2]；
   </textarea>
+</div>
+
+<div id="page_body">
+    <div id="over" class="over"></div>
+    <div id="layout" class="layout"><img src="/static/image/ajax-loader.gif" alt="" /></div>
 </div>
 
 <br/>

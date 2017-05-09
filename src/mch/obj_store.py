@@ -25,7 +25,7 @@ class handler:
             return render.info('参数错误！')  
 
         db_sku = db.obj_store.find({'mch_id':mch_id}, 
-            sort=[('available', -1), ('obj_id', -1)],
+            sort=[('obj_id', -1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
         )
@@ -39,7 +39,6 @@ class handler:
                 'obj_type' : x['obj_type'],
                 'price'    : x['price'],
                 'tpc_name' : 'n/a',
-                #'available': x['available'],
                 'note'     : x['note'],
                 'status'   : x.get('status','SAVED'),
             }

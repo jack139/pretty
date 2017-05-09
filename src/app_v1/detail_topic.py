@@ -74,6 +74,7 @@ class handler:
             "title2"      : r2['title2'],
             "abstract"    : r2['description'],
             "topic_image" : image_url,     # 专辑图片url 
+            "booked_num"  : 29999,  # 订阅人数， -------------------- 待实现
             "course"      : course_data,
         }
 

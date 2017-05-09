@@ -34,7 +34,8 @@ cs_admin = ['cs0']
 
 tmp_path = '/usr/local/nginx/html/fair/static/tmp'
 logs_path = '/usr/local/nginx/logs'
-image_store_path = '/usr/local/nginx/html/herb/static/image/product'
+image_store_path = '/usr/local/nginx/html/pretty/static/image/product'
+media_store_path = '/usr/local/nginx/html/pretty/static/image/media_upload'
 
 app_host='pretty.f8cam.com'
 wx_host='pretty.f8cam.com'

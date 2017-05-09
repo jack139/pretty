@@ -20,7 +20,6 @@ obj_store      商品：试听课程、精品课程
     volume  销量
     file_path   下载文件地址
     tpc_id  所属专辑id
-    available   是否有效
     list_in_app 是否上架
     start_time  上架开始时间
     expire_time   上架结束时间
@@ -37,7 +36,6 @@ topic_store      专辑
     title2  副标题
     image   标题图片
     obj_list 课程列表
-    available   是否有效
     list_in_app 是否上架
     start_time  上架开始时间
     expire_time   上架结束时间

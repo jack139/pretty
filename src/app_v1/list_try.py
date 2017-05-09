@@ -53,6 +53,8 @@ class handler:
         for i in obj_list:
             if i not in obj_data.keys():
                 continue
+            if obj_data[i].get('status')!='PASSED': # 审核未通过，应该是上架后又有修改
+                continue
             if len(obj_data[i]['image'])>0: # 取第1张图
                 image_url = app_helper.image_url(obj_data[i]['image'][0])
             else:

@@ -81,7 +81,8 @@ $else:
 <tr><td>
     <select multiple="multiple" size="10" style="width: 90%" name="online_obj" id="online_obj">
     $for i in online_obj:
-        <option value ="$i">$('%s [%s]'%(all_obj[i]['obj_name'],all_mch[all_obj[i]['mch_id']]))</option>
+        $if all_obj.has_key(i):
+            <option value ="$i">$('[%s %s] %s'%(all_mch[all_obj[i]['mch_id']],all_obj[i]['obj_id'],all_obj[i]['obj_name']))</option>
     </select> 
     <div><button onclick="MoveUpOrDown(true);return false;">上移</button>
     <button onclick="MoveUpOrDown(false);return false;">下移</button></div>
@@ -92,7 +93,7 @@ $else:
     <select multiple="multiple" size="10" style="width: 90%" id="all_obj">
     $for i in all_obj.keys():
         $if i not in online_obj:
-            <option value ="$i">$('%s [%s]'%(all_obj[i]['obj_name'],all_mch[all_obj[i]['mch_id']]))</option>
+            <option value ="$i">$('[%s %s] %s'%(all_mch[all_obj[i]['mch_id']],all_obj[i]['obj_id'],all_obj[i]['obj_name']))</option>
     </select>    
 </td></tr>
 

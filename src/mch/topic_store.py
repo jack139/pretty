@@ -28,7 +28,7 @@ class handler:
 
         # 分页获取数据
         db_sku = db.topic_store.find({'mch_id':mch_id}, 
-            sort=[('available', -1), ('obj_id', -1)],
+            sort=[('obj_id', -1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
         )
@@ -40,7 +40,6 @@ class handler:
                 'tpc_name' : x['tpc_name'],
                 'title'    : x['title'],
                 'obj_count' : 0,
-                'available': x['available'],
                 'note'     : x['note'],
                 'status'   : x.get('status','SAVED'),
             }

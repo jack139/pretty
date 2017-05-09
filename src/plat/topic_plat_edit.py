@@ -30,9 +30,9 @@ class handler:
 
         # 可上架的专辑
         all_obj = {}
-        r3 = db.topic_store.find({'available':1})
+        r3 = db.topic_store.find({'status':'PASSED'})
         for i in r3:
-            all_obj[i['tpc_id']] = {'tpc_name':i['tpc_name'], 'mch_id':i['mch_id']}
+            all_obj[i['tpc_id']] = {'tpc_name':i['tpc_name'], 'mch_id':i['mch_id'], 'tpc_id':i['tpc_id']}
 
         # 所有商家
         all_mch = {}
@@ -60,8 +60,8 @@ class handler:
         # 记录类目商品上架信息
         db.online_topic_obj.remove({})
         for i, tpc_id in enumerate(online_list):
-            r3 = db.topic_store.find_one({'tpc_id':tpc_id},{'available':1})
-            available = r3['available'] if r3 else 0
+            r3 = db.topic_store.find_one({'tpc_id':tpc_id},{'status':1})
+            available = (1 if r3['status']=='PASSED' else 0) if r3 else 0
             db.online_topic_obj.update_one({'tpc_id':tpc_id},
                 {'$set':{'available':available, 'sort_weight':i}}, upsert=True)
 

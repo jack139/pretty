@@ -30,7 +30,7 @@ class handler:
                 # 已存在的obj
                 obj_data = db_obj
 
-        db_topic = db.topic_store.find({'mch_id':mch_id,'available':1})
+        db_topic = db.topic_store.find({'mch_id':mch_id})
 
         return render.obj_store_edit(helper.get_session_uname(), helper.get_privilege_name(), 
             obj_data, db_topic)
@@ -82,9 +82,9 @@ class handler:
                 'try_time'    : int(user_data['try_time']),
                 'note'        : user_data['note'],
                 'exam_note'   : user_data['exam_note'],
-                #'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
                 'image'       : user_data['image'].split(','), # 图片
+                'media_file'  : user_data['media_file'],
                 'status'      : 'SAVED', # 审核状态： SAVED 已修改未提交 WAIT 提交等待审核  PASS 审核通过 NOGO 审核拒绝
             }
         except ValueError:

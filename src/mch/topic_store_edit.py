@@ -67,7 +67,6 @@ class handler:
                 'title2'      : user_data['title2'],
                 'description' : user_data['description'],
                 'note'        : user_data['note'],
-                #'available'   : int(user_data['available']),
                 'last_tick'   : int(time.time()),  # 更新时间戳
                 'image'       : user_data['image'].split(','), # 图片
                 'price'       : int(float(user_data['price'])*100), # 单位： 分
