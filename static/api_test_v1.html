@@ -423,6 +423,20 @@ function generate_sign(num, list){
 <br/>
 
 <h2>26.修改个人信息 personal_save</h2>
+<form name="26" method="post" action="/app/v1/personal_save">
+<div>app_id: <input id="app_id_26" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_26" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_26" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_26" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_26" name="session" size="50" value=""/></div>
+<div>nickname: <input id="nickname_26" name="nickname" size="50" value=""/></div>
+<div>headimage: <input id="headimage_26" name="headimage" size="50" value=""/></div>
+<div>image_type: <input id="image_type_26" name="image_type" size="50" value=""/></div>
+<div>sign: <input id="sign_26" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('26', ['#private_key','#app_id_26','#dev_id_26','#ver_code_26','#tick_26',
+        '#session_26','#nickname_26','#headimage_26','#image_type_26'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
 <br/>
 
 <h2>27.获取个人信息 personal_info</h2>
@@ -485,9 +499,34 @@ function generate_sign(num, list){
 
 
 <h2>31.获取系统消息 system_info</h2>
+<form name="31" method="post" action="/app/v1/system_info">
+<div>app_id: <input id="app_id_31" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_31" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_31" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_31" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_31" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_31" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('31', ['#private_key','#app_id_31','#dev_id_31','#ver_code_31','#tick_31',
+        '#session_31'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
 <br/>
 
-<h2>32.授权课程给店员 auth_to_user</h2>
+<h2>32.授权课程给店员 employee_auth_to</h2>
+<form name="32" method="post" action="/app/v1/employee_auth_to">
+<div>app_id: <input id="app_id_32" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_32" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_32" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_32" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_32" name="session" size="50" value=""/></div>
+<div>userid: <input id="userid_32" name="userid" size="50" value=""/></div>
+<div>object_id: <input id="object_id_32" name="object_id" size="50" value=""/></div>
+<div>action: <input id="action_32" name="action" size="50" value=""/></div>
+<div>sign: <input id="sign_32" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('32', ['#private_key','#app_id_32','#dev_id_32','#ver_code_32','#tick_32',
+        '#session_32','#userid_32','#object_id_32','#action_32'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
 <br/>
 
 <h2>33.微信登录 wx_login</h2>
@@ -611,6 +650,89 @@ function generate_sign(num, list){
 <div>sign: <input id="sign_40" name="sign" size="50" value=""/><input type="button" value="生成签名"
     onclick="generate_sign('40', ['#private_key','#app_id_40','#dev_id_40','#ver_code_40','#tick_40',
         '#session_40', '#pay_sum_40', '#pay_type_40'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>41.店员已授权课程 employee_auth_list</h2>
+<form name="41" method="post" action="/app/v1/employee_auth_list">
+<div>app_id: <input id="app_id_41" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_41" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_41" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_41" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_41" name="session" size="50" value=""/></div>
+<div>userid: <input id="userid_41" name="userid" size="50" value=""/></div>
+<div>sign: <input id="sign_41" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('41', ['#private_key','#app_id_41','#dev_id_41','#ver_code_41','#tick_41',
+        '#session_41', '#userid_41'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>42.修改店员信息 employee_info</h2>
+<form name="42" method="post" action="/app/v1/employee_info">
+<div>app_id: <input id="app_id_42" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_42" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_42" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_42" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_42" name="session" size="50" value=""/></div>
+<div>shop_name: <input id="shop_name_42" name="shop_name" size="50" value=""/></div>
+<div>real_name: <input id="real_name_42" name="real_name" size="50" value=""/></div>
+<div>shop_nickname: <input id="shop_nickname_42" name="shop_nickname" size="50" value=""/></div>
+<div>contact_info: <input id="contact_info_42" name="contact_info" size="50" value=""/></div>
+<div>sign: <input id="sign_42" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('42', ['#private_key','#app_id_42','#dev_id_42','#ver_code_42','#tick_42',
+        '#session_42', '#shop_name_42', '#real_name_42', '#shop_nickname_42', '#contact_info_42'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>43.已授权店员清单 employee_list</h2>
+<form name="43" method="post" action="/app/v1/employee_list">
+<div>app_id: <input id="app_id_43" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_43" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_43" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_43" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_43" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_43" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('43', ['#private_key','#app_id_43','#dev_id_43','#ver_code_43','#tick_43',
+        '#session_43'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>44.店主上传图片 upload_img</h2>
+<form name="44" method="post" action="/app/v1/upload_img">
+<div>app_id: <input id="app_id_44" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_44" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_44" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_44" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_44" name="session" size="50" value=""/></div>
+<div>category: <input id="category_44" name="category" size="50" value=""/></div>
+<div>pic1: <input id="pic1_44" name="pic1" size="50" value=""/></div>
+<div>pic1_type: <input id="pic1_type_44" name="pic1_type" size="50" value=""/></div>
+<div>pic2: <input id="pic2_44" name="pic2" size="50" value=""/></div>
+<div>pic2_type: <input id="pic2_type_44" name="pic2_type" size="50" value=""/></div>
+<div>sign: <input id="sign_44" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('44', ['#private_key','#app_id_44','#dev_id_44','#ver_code_44','#tick_44',
+        '#session_44', '#category_44', '#pic1_44', '#pic1_type_44', '#pic2_44', '#pic2_type_44'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>45.添加／删除店员 employee_add</h2>
+<form name="45" method="post" action="/app/v1/employee_add">
+<div>app_id: <input id="app_id_45" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_45" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_45" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_45" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_45" name="session" size="50" value=""/></div>
+<div>employee_tel: <input id="employee_tel_45" name="employee_tel" size="50" value=""/></div>
+<div>action: <input id="action_45" name="action" size="50" value=""/></div>
+<div>sign: <input id="sign_45" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('45', ['#private_key','#app_id_45','#dev_id_45','#ver_code_45','#tick_45',
+        '#session_45', '#employee_tel_45', '#action_45'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>

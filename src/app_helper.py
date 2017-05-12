@@ -4,7 +4,7 @@
 
 # 前端代码 公用变量及函数
 
-import time, os, hashlib
+import time, os, hashlib, base64
 import urllib, urllib3, json
 import functools
 import re
@@ -136,7 +136,7 @@ def generate_sign(c): # c时列表，c[0]一定是app_id
     else:
         #验证签名
         sign_str = '%s%s' % (db_dev['private_key'], ''.join(i for i in c))
-        print sign_str
+        print sign_str.encode('utf-8')
         return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()
 
 
@@ -322,19 +322,57 @@ def image_url(image_name):
 # 获取用户信息
 def get_user_detail(userid):
     ret_data = {
-        'mobile'      : '',
-        'nickname'   : '手机用户',
+        'mobile'     : '',
+        'nickname'   : '',
         'img_url'    : '',
+        'nickname2'  : '',
+        'img_url2'   : '',
+        'nickname4'  : '',
+        'img_url4'   : '',
     }
     r5 = db.app_user.find({'userid':userid})
     for i in r5:
         if i['type']==1:
             ret_data['mobile'] = i['uname']
+            ret_data['nickname1'] = i.get('nickname','')
+            ret_data['img_url1'] = i.get('img_url','')
+            #店员信息
+            ret_data['real_name'] = i.get('vip_realname', '')
+            ret_data['shop_nickname'] = i.get('vip_nickname', '')
+            ret_data['shop_name'] = i.get('vip_shopname', '')
+            ret_data['contact_info'] = i.get('vip_contact', '')
+            #店主信息
+            ret_data['licence_pic'] = i.get('upload_licence', '')
+            ret_data['shop_pic'] = i.get('upload_pic', '')
         elif i['type']==4:
-            ret_data['nickname'] = i.get('nickname','QQ昵称')
-            ret_data['img_url'] = i.get('img_url','')
+            ret_data['nickname4'] = i.get('nickname','')
+            ret_data['img_url4'] = i.get('img_url','')
         else:
-            ret_data['nickname'] = i.get('nickname','微信昵称')
-            ret_data['img_url'] = i.get('img_url','')
+            ret_data['nickname2'] = i.get('nickname','')
+            ret_data['img_url2'] = i.get('img_url','')
+
+    if ret_data['nickname1']!='' or ret_data['img_url1']!='': # 优先使用用户自定义的
+        ret_data['nickname'] = ret_data['nickname1']
+        ret_data['img_url'] = ret_data['img_url1']
+    elif ret_data['nickname2']!='' or ret_data['img_url2']!='': # 其次是用微信的
+        ret_data['nickname'] = ret_data['nickname2']
+        ret_data['img_url'] = ret_data['img_url2']
+    else:
+        ret_data['nickname'] = ret_data['nickname4'] # 最后使用QQ的
+        ret_data['img_url'] = ret_data['img_url4']
 
     return ret_data
+
+
+# 保存图片, 用于接口上传的图片, 图片数据是base64格式
+def write_image(image_type, img_data): # 图片按随机文件名散列存放
+    image_name = my_rand(12) + '.' + image_type.lower()
+    data = base64.decodestring(img_data)
+    to_path='%s/%s' % (setting.image_store_path, image_name[:2])
+    if not os.path.exists(to_path):
+        os.makedirs(to_path)
+        os.chmod(to_path, 0777)
+    h=open('%s/%s' % (to_path, image_name), 'wb')
+    h.write(data)
+    h.close()
+    return image_name

@@ -47,9 +47,17 @@ app_user    线上用户
     userid      用户id
     uname       电话号码／openid ／ QQid
     unionid     微信使用unionid
-    nickname    微信昵称
-    img_url     微信头像
+    nickname    昵称 微信／QQ／用户自定义（看type的类型）
+    img_url     头像 微信／QQ／用户自定义（看type的类型）
     type        用户类型 1 手机 2 微信app登录 3 微信公众号 4 QQ用户 
+
+    upload_licence  上传的营业执照
+    upload_pic      上传的店铺图片（列表）
+
+    vip_shopname    店铺信息
+    vip_realname   真实姓名
+    vip_nickname    店内昵称
+    vip_contact     联系方式
 
 cash_info   用户充值帐户
     userid      用户id
@@ -147,6 +155,11 @@ order_recharge  充值订单
     order_trade_id  交易订单号
     recharge_sum    充值金额，单位 分
     pay_sum         付款金额，单位 分
+
+employee_auth 店员授权
+    owner_userid      店主用户id
+    employee_userid     店员用户id
+    object_list     店员被授权的课程id列表
 
 
 用户注册／登录过程：
