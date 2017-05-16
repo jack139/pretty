@@ -101,7 +101,7 @@ class handler:
 
         return json.dumps({'ret': 0, 'data': {
             #'userid'    : userid,
-            'sessionid' : param.session,
+            'session'   : param.session,
             'bound_tel' : number,
         }})
 

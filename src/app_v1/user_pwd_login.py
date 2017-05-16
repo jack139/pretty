@@ -85,8 +85,10 @@ class handler:
 
         return json.dumps({'ret': 0, 'data': {
             'session_id' : session_id,
+            'session'    : session_id,
             'alert'      : alert,
             'message'    : message,
+            'user_role'  : db_user.get('user_role',0),
         }})
 
 

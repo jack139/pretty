@@ -8,7 +8,7 @@ import app_helper
 
 db = setting.db_web
 
-# 授权课程给店员
+# 授权课程给店员,
 url = ('/app/v1/employee_auth_to')
 
 class handler: 
@@ -34,22 +34,25 @@ class handler:
         if r4 is None:
             return json.dumps({'ret' : -6, 'msg' : '无效的object_id'})
 
-        r3 = db.employee_auth.find_one({'owner_userid':uname['userid'],'employee_userid':param['userid']})
-        if r3 is None:
-            return json.dumps({'ret' : -5, 'msg' : '此userid不是当前店主的店员'})
+        # userid 支持多个，用英文逗号分隔
+        userid_list = param['userid'].split(',')
+        r4 = db.employee_auth.find({'owner_userid':uname['userid'],
+            'employee_userid': {'$in' : userid_list}})
+        #if r3 is None:
+        #    return json.dumps({'ret' : -5, 'msg' : '此userid不是当前店主的店员'})
 
-        if param['action'].upper()=='AUTH': # 添加
-            if param['object_id'] not in r3['object_list']:
-                db.employee_auth.update_one({'owner_userid':uname['userid'],'employee_userid':param.userid},
-                    {'$push' : {'object_list' : param['object_id']}}
-                )
-        else: # 删除
-            if param['object_id'] in r3['object_list']:
-                r3['object_list'].remove(param['object_id'])
-                db.employee_auth.update_one({'owner_userid':uname['userid'],'employee_userid':param.userid},
-                    {'$set' : {'object_list' : r3['object_list']}}
-                )
-
+        for r3 in r4: # 操作多个店员
+            if param['action'].upper()=='AUTH': # 添加
+                if param['object_id'] not in r3['object_list']:
+                    db.employee_auth.update_one({'_id':r3['_id']},
+                        {'$push' : {'object_list' : param['object_id']}}
+                    )
+            else: # 删除
+                if param['object_id'] in r3['object_list']:
+                    r3['object_list'].remove(param['object_id'])
+                    db.employee_auth.update_one({'_id':r3['_id']},
+                        {'$set' : {'object_list' : r3['object_list']}}
+                    )
 
         # 返回
         return json.dumps({

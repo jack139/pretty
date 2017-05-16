@@ -37,6 +37,12 @@ class handler:
                 progress = 0
             else:
                 progress = r4['progress']
+
+            if len(r3['image'])>0: # 取第1张图
+                image_url = app_helper.image_url(r3['image'][0])
+            else:
+                image_url = ''
+
             heart_data.append({
                 "object_id"   : i['obj_id'],
                 "title"       : r3['title'],
@@ -44,6 +50,7 @@ class handler:
                 "object_type" : 1 if r3['media']=='video' else 2,  # 1- 视频   2 － 音频  
                 "length"      : r3['length'], # 长度，单位 分钟 
                 "progress"    : progress, # 进度百分比，如果是未购买课程，此字段为-1
+                "image"       : image_url,
             })
 
         ret_data = {

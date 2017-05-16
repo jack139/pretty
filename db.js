@@ -59,6 +59,10 @@ app_user    线上用户
     vip_nickname    店内昵称
     vip_contact     联系方式
 
+    user_role   身份  0 普通会员 1 店员  2 店主  3 店主审核中
+    user_role_status  WAIT 等待审核 PASS 审核通过  NOGO 审核被拒
+    shop_owner  所属店主userid，如果是店主，就是自己的userid
+
 cash_info   用户充值帐户
     userid      用户id
     balance     余额金额, 单位 分

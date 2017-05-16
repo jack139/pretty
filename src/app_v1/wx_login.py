@@ -74,10 +74,12 @@ class handler:
                     }})
 
         # 绑定的电话号码
+        user_role = 0  # 店员身份， 如果没绑定就不会有
         if if_bind:
             r3 = db.app_user.find_one({'userid':userid, 'type':1})
             if r3:
                 bound_tel = r3['uname']
+                user_role = r3.get('user_role',0)
 
         # 生成session
         import os
@@ -103,12 +105,13 @@ class handler:
         message = ''
 
         return json.dumps({'ret': 0, 'data': {
-            'session_id' : session_id,
+            'session'    : session_id,
             'bound_tel'  : bound_tel,
             'if_bind'    : if_bind,   # True表示已绑定手机号（和bind_enable的用处不一样）
             'alert'      : alert,
             'message'    : message,
             'user_new'   : register, #是否为新用户
+            'user_role'  : user_role,
         }})
 
 

@@ -712,11 +712,9 @@ function generate_sign(num, list){
 <div>category: <input id="category_44" name="category" size="50" value=""/></div>
 <div>pic1: <input id="pic1_44" name="pic1" size="50" value=""/></div>
 <div>pic1_type: <input id="pic1_type_44" name="pic1_type" size="50" value=""/></div>
-<div>pic2: <input id="pic2_44" name="pic2" size="50" value=""/></div>
-<div>pic2_type: <input id="pic2_type_44" name="pic2_type" size="50" value=""/></div>
 <div>sign: <input id="sign_44" name="sign" size="50" value=""/><input type="button" value="生成签名"
     onclick="generate_sign('44', ['#private_key','#app_id_44','#dev_id_44','#ver_code_44','#tick_44',
-        '#session_44', '#category_44', '#pic1_44', '#pic1_type_44', '#pic2_44', '#pic2_type_44'])"></div>
+        '#session_44', '#category_44', '#pic1_44', '#pic1_type_44'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>
@@ -733,6 +731,37 @@ function generate_sign(num, list){
 <div>sign: <input id="sign_45" name="sign" size="50" value=""/><input type="button" value="生成签名"
     onclick="generate_sign('45', ['#private_key','#app_id_45','#dev_id_45','#ver_code_45','#tick_45',
         '#session_45', '#employee_tel_45', '#action_45'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>46.课程已授权的店员列表 object_auth_list</h2>
+<form name="46" method="post" action="/app/v1/object_auth_list">
+<div>app_id: <input id="app_id_46" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_46" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_46" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_46" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_46" name="session" size="50" value=""/></div>
+<div>object_id: <input id="object_id_46" name="object_id" size="50" value=""/></div>
+<div>sign: <input id="sign_46" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('46', ['#private_key','#app_id_46','#dev_id_46','#ver_code_46','#tick_46',
+        '#session_46', '#object_id_46'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>47.提交认证店主 register_shop</h2>
+<form name="47" method="post" action="/app/v1/register_shop">
+<div>app_id: <input id="app_id_47" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_47" name="dev_id" value="12375"/></div>
+<div>ver_code: <input id="ver_code_47" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_47" name="tick" value="" readonly="readonly"/></div>
+<div>session: <input id="session_47" name="session" size="50" value=""/></div>
+<div>sign: <input id="sign_47" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('47', ['#private_key','#app_id_47','#dev_id_47','#ver_code_47','#tick_47',
+        '#session_47'])"></div>
 <div><input type="submit" value="提交" /></div>
 </form>
 <br/>

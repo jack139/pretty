@@ -22,6 +22,11 @@ class handler:
         if '' in (param.app_id, param.dev_id, param.ver_code, param.session, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
+        # 4个信息字段必须填写
+        if '' in (param.shop_name.strip(), param.real_name.strip(), 
+            param.shop_nickname.strip(), param.contact_info.strip()):
+            return json.dumps({'ret' : -3, 'msg' : '必填参数不能为空'})
+
         # 检查session登录
         uname = app_helper.app_logged(param.session) 
         if uname is None:
@@ -35,6 +40,7 @@ class handler:
             'vip_realname' : param['real_name'], 
             'vip_nickname' : param['shop_nickname'],
             'vip_contact'  : param['contact_info'],
+            'user_role'    : 1, # 店员身份
         }})
 
         # 返回

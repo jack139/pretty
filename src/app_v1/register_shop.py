@@ -8,8 +8,8 @@ import app_helper
 
 db = setting.db_web
 
-# 已授权店员清单
-url = ('/app/v1/employee_list')
+# 提交认证店主
+url = ('/app/v1/register_shop')
 
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session'])
@@ -25,21 +25,17 @@ class handler:
         if uname is None:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
-        # 生成数据
-        employee = []
-        r3 = db.employee_auth.find({'owner_userid':uname['userid']})
-        for i in r3:
-            r4 = app_helper.get_user_detail(uname['userid'])
-            employee.append({
-                'userid'    : i['employee_userid'],
-                'real_name' : r4.get('real_name',''),
-                'auth_num'  : len(i['object_list']),
-                'complete_num' : 0, # 完成课程数,, ---------------- 待实现
-                'employee_tel' : r4.get('mobile',''), # 注册的号码
-            })
+        r2 = db.app_user.find_one({'userid':uname['userid'], 'type':1})
+        if r2 and r2.get('upload_licence','')=='':
+            return json.dumps({'ret' : -5, 'msg' : '未上传营业执照照片'})
+
+        # 设置店主审核状态
+        db.app_user.update_one({'userid':uname['userid'], 'type':1},{'$set':{
+            'user_role' : 3,
+            'user_role_status' : 'WAIT',
+        }})
 
         # 返回
         return json.dumps({
             'ret'  : 0,
-            'data' : { 'employee': employee },
         })
