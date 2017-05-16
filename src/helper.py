@@ -57,6 +57,7 @@ MENU_LEVEL = {
     'CATEGORY'    : 5,  # 类目管理
     'BANNER'      : 6,  # 轮播图管理
     'CHECK_OBJ'   : 7,  # 课程／专辑审核
+    'CHECK_EMPLOYER' : 8,  # 审核店主
 }
 
 user_level = {

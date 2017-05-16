@@ -52,7 +52,7 @@ app_user    线上用户
     type        用户类型 1 手机 2 微信app登录 3 微信公众号 4 QQ用户 
 
     upload_licence  上传的营业执照
-    upload_pic      上传的店铺图片（列表）
+    shop_pic      上传的店铺图片（列表）
 
     vip_shopname    店铺信息
     vip_realname   真实姓名
@@ -61,7 +61,6 @@ app_user    线上用户
 
     user_role   身份  0 普通会员 1 店员  2 店主  3 店主审核中
     user_role_status  WAIT 等待审核 PASS 审核通过  NOGO 审核被拒
-    shop_owner  所属店主userid，如果是店主，就是自己的userid
 
 cash_info   用户充值帐户
     userid      用户id

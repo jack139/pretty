@@ -1,0 +1,55 @@
+$def with (name, str1, skus, pages)
+
+$var title: 审核店主
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load:
+$var menu: #plat7
+
+<div class="caption"><h2>审核店主</h2></div>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th width="10%">注册号码</th>
+    <th>昵称</th>
+    <th>营业执照</th>
+    <th>店铺照片</th>
+    <th>状态</th>
+    <th>操作</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td>$u['uname']</td>
+  <td>$u['nickname']</td>
+  <td>
+        $if u['licence']!='':
+            <a href="$u['licence']" target="_blank"><img src="$u['licence']" height=20/></a>
+  </td>
+  <td>
+        $if u['shop_pic']!=[]:
+            $for x in u['shop_pic']:
+                <a href="$x" target="_blank"><img src="$x" height=20/></a>
+  </td>
+  <td>$u['status']</td>
+  <td>
+    $if u['status'] == 'WAIT':
+        <a class="abtn" href="/plat/check_employer_action?userid=$u['userid']&action=PASS">通过</a>
+        <a class="abtn" href="/plat/check_employer_action?userid=$u['userid']&action=NOGO">拒绝</a>
+    $else:
+        <a class="abtn" href="/plat/check_employer_action?userid=$u['userid']&action=WAIT">重新审核</a>
+
+  </td></tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/plat/check_obj?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

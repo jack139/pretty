@@ -77,6 +77,10 @@ $else:
     $if 'CHECK_OBJ' in level:
         checked="checked"
     /> 课程／专辑审核
+    <input type="checkbox" name="priv" value="CHECK_EMPLOYER"
+    $if 'CHECK_EMPLOYER' in level:
+        checked="checked"
+    /> 审核店主
     <input type="checkbox" name="priv" value="CRM"
     $if 'CRM' in level:
         checked="checked"
