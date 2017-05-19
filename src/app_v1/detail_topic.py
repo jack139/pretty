@@ -58,7 +58,7 @@ class handler:
                 "image"     : image_url,  # 课程主图 
                 "length"    : i['length'],  # 长度，单位：秒 
                 "price"     : i['price'],  # 价格，整数，单位：分 
-                "volume"    : i['volume'],  # 销量，整数 
+                "volume"    : r2.get('volume',0), #i['volume'],  # 销量，整数 (专辑课程销量与专辑销量相同？)
             })
 
         # 取专辑图片
@@ -74,7 +74,7 @@ class handler:
             "title2"      : r2['title2'],
             "abstract"    : r2['description'],
             "topic_image" : image_url,     # 专辑图片url 
-            "booked_num"  : 29999,  # 订阅人数， -------------------- 待实现
+            "booked_num"  : r2.get('volume',0),  # 订阅人数， 销量
             "course"      : course_data,
         }
 

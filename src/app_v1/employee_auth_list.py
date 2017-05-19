@@ -33,10 +33,14 @@ class handler:
                 r4 = db.obj_store.find_one({'obj_id':i})
                 if r4 is None:
                     continue
+
+                # 已授权店员数，只统计本店主的店员数
+                auth_num = db.employee_auth.find({'owner_userid':uname['userid'],'object_list':r4['obj_id']}).count()
+                  
                 object_list.append({
-                    'object_id' : r4['obj_id'],
+                    'object_id'   : r4['obj_id'],
                     'course_name' : r4.get('title'),
-                    'auth_num' : 0, # 已授权店员数 ,, ---------------- 待实现
+                    'auth_num'    : auth_num, # 已授权店员数 ,
                 })
 
         # 返回

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# new_sku_store.py
+#
 import web
 from config import setting
 from libs import object_helper

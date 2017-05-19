@@ -99,10 +99,10 @@ exam_info   课程测试
 
 test_info   测试答案信息
     userid      用户id
-    exam_id     题目id
     obj_id      对象id
-    user_anwser 用户答案
-    correct     是否正确
+    user_anwser 用户答案 [{ exam_id: '', answer: '', correct: true/false}]
+    score       测试成绩
+    time        测试时间
 
 banner_info 轮播图设置
     banner_id   轮播图id

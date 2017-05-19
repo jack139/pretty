@@ -47,6 +47,12 @@ class handler:
             'order_trade_id' : r2
         }}, upsert=True)
 
+        # 销量加1
+        if r['obj_type']=='topic':
+            db.topic_store.update_one({'tpc_id':param.object_id}, {'$inc': {'volume':1}})
+        else:
+            db.obj_store.update_one({'obj_id':param.object_id}, {'$inc': {'volume':1}})
+
         ret_data = {
             "pay_type"    : 0, # 支付类型 
             "order_trade_id" : r2, 

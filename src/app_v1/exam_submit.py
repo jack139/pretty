@@ -43,19 +43,34 @@ class handler:
 
         answer_data = []
         score_data = []
+        exam_ids = []
         for i in db_exam:
             answer_data.append(''.join(['ABCDEF'[int(x)] for x in i['correct']]))
             score_data.append(i.get('score',10)) # 默认一题10分
+            exam_ids.append(i['exam_id'])
 
         #print answer_data
 
         # 比对答案，计算成绩
         total_score = 0
+        answer_data = []
         for i in xrange(0, min(len(user_answer), len(answer_data))):
             one_user_a = sorted(user_answer[i])
             one_correct_a = sorted(answer_data[i])
             if one_user_a==one_correct_a:
                 total_score += score_data[i]
+            answer_data.append({ # 用于存储到db
+                'exam_id' : exam_ids[i],
+                'answer'  : one_user_a,
+                'correct' : (one_user_a==one_correct_a),
+            })
+
+        # 答案保存到db
+        db.test_info.update_one({'userid':uname['userid'], 'obj_id':param['object_id']},{'$set':{
+            'user_anwser' : answer_data, 
+            'score'       : total_score,
+            'time'        : app_helper.time_str(),
+        }}, upsert=True)
 
         ret_data = {
             "exam_score" : total_score, # 测试成绩

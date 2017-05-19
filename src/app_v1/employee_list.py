@@ -29,12 +29,21 @@ class handler:
         employee = []
         r3 = db.employee_auth.find({'owner_userid':uname['userid']})
         for i in r3:
-            r4 = app_helper.get_user_detail(uname['userid'])
+            # 统计此店员完成课程输量
+            complete_num = 0
+            for j in i['object_list']:
+                r5 = db.progress_info.find_one({'userid':i['employee_userid'], 'obj_id':j})
+                if r5 and r5['progress']==100:
+                    complete_num += 1
+
+            # 获取店员信息
+            r4 = app_helper.get_user_detail(i['employee_userid'])
+
             employee.append({
-                'userid'    : i['employee_userid'],
-                'real_name' : r4.get('real_name',''),
-                'auth_num'  : len(i['object_list']),
-                'complete_num' : 0, # 完成课程数,, ---------------- 待实现
+                'userid'       : i['employee_userid'],
+                'real_name'    : r4.get('real_name',''),
+                'auth_num'     : len(i['object_list']),
+                'complete_num' : complete_num, # 完成课程数,
                 'employee_tel' : r4.get('mobile',''), # 注册的号码
             })
 

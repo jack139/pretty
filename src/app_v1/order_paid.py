@@ -25,7 +25,7 @@ class handler:
         if uname is None:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
-        #--------------------------------------------------
+        #-------------------------------------------------- 待实现
 
         ret_data = {
             "order_id" : param.order_id,

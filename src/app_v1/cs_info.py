@@ -29,7 +29,7 @@ class handler:
         #--------------------------------------------------
 
         ret_data = {
-            "service_tel" : "110",
+            "service_tel" : app_helper.CS_TEL,
         }
 
         # 返回

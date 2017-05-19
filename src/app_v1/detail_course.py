@@ -41,6 +41,13 @@ class handler:
         else:
             image_url = ''
 
+        # 评价条数
+        r4 = db.comment_info.find({'obj_id':param.object_id}).count()
+
+        # 测试成绩
+        r5 = db.test_info.find_one({'userid':uname['userid'], 'obj_id':param.object_id})
+        score = r5['score'] if r5 else -1
+
         ret_data = {
             "object_id"     : param.object_id,     # 唯一代码 
             "title"         : r3['title'],
@@ -53,9 +60,9 @@ class handler:
             "try_length"    : r3['try_time'],  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
             "volume"        : r3['volume'],         # 销量 
 
-            "comment_num" : 101,     # 学员评价总条数 -------------------- 待实现
-            "exam_score" : -1,    # 课后测试成绩，-1表示未测试 -------------------- 待实现
-            "service_tel" : "110",     # 客服电话 -------------------- 待实现
+            "comment_num" : r4,     # 学员评价总条数 
+            "exam_score"  : score,    # 课后测试成绩，-1表示未测试 
+            "service_tel" : app_helper.CS_TEL,
         }
 
         # 返回
