@@ -44,6 +44,26 @@ class handler:
         # 评价条数
         r4 = db.comment_info.find({'obj_id':param.object_id}).count()
 
+        # 是否已购买或已授权, 不需要试听
+        can_use = False
+        if uname is not None:
+            # 检查 是否是已购买
+            r6 = db.user_property.find_one({
+                'userid' : uname['userid'],
+                'obj_id' : param.object_id,
+                'status' : 'paid',
+            })
+            if r6:
+                can_use = True
+            else:
+                # 检查 是否是已授权
+                r7 = db.employee_auth.find_one({
+                    'employee_userid' : uname['userid'],
+                    'object_list'     : param.object_id,
+                })
+                if r7:
+                    can_use = True
+
         # 测试成绩
         r5 = db.test_info.find_one({'userid':uname['userid'], 'obj_id':param.object_id})
         score = r5['score'] if r5 else -1
@@ -57,7 +77,7 @@ class handler:
             "speaker_head"  : image_url,     # 讲师头像图片url 
             "speaker_audio" : '',     # 讲师音频介绍链接, -------------------- 待实现
             "course_video"  : '',     # 课程视频链接 -------------------- 待实现
-            "try_length"    : r3['try_time'],  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
+            "try_length"    : 0 if can_use else r3['try_time'],  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
             "volume"        : r3['volume'],         # 销量 
 
             "comment_num" : r4,     # 学员评价总条数 

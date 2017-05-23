@@ -70,7 +70,7 @@ BLOCK_LIST = [
 # 查询session
 def get_session(session_id):
     r = db.app_sessions.find_one({'session_id':session_id})
-    if r and r['attime']-time.time()>1800: # 半小时更新一次
+    if r and time.time()-r['attime']>1800: # 半小时更新一次, 减少更新session次数
         db.app_sessions.update_one({'session_id':session_id},{'$set':{'attime':time.time()}})
     return r
 
