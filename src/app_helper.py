@@ -61,8 +61,7 @@ INNER_NUM = {
 
 
 BLOCK_LIST = [
-    '15000623214',
-    #'13194084665',
+#    '15000623214',
 ]
 
 
@@ -208,71 +207,15 @@ def get_token(force=False, region_id=None): # force==True 强制刷新
             {'$set':{'token_tick':int(time.time()), 'access_token':''}},upsert=True)
         return ''
 
-def wx_reply_msg0(openid, text, force=False, region_id=None):
-    text0 = text.encode('utf-8') if type(text)==type(u'') else text
-    body_data = '{"touser":"%s","msgtype":"text","text":{"content":"%s"}}' % (str(openid), text0)
-    urllib3.disable_warnings()
-    http = urllib3.PoolManager(num_pools=2, timeout=180, retries=False)
-    url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=%s'%get_token(force, region_id)
-    try:
-        r = http.request('POST', url,
-            headers={'Content-Type': 'application/json'},
-            body=body_data)
-        if r.status==200:
-            return json.loads(r.data)
-        else:
-            print 'http fail: ', r.status
-            return None
-    except Exception,e:
-        print '%s: %s (%s)' % (type(e), e, url)
-        return None
 
 
-def wx_reply_msg(openid, text, region_id=None):
-    print 'openid: ', openid
-    if region_id.strip()=='':
-        print 'region_id is BLANK'
-        return None
-    r = wx_reply_msg0(openid, text, region_id=region_id)
-    if r==None or r.get('errcode', 0)!=0:
-        # 发送失败，强制刷新token后再发一次
-        print r
-        r = wx_reply_msg0(openid, text, force=True, region_id=region_id)
-    return r
-
-# 后台发送微信推送信息
-def event_send_wx_msg(openid, text, region_id, url=''):
-    db.event_queue.insert_one({
-        'type' : 'WX_MSG',
-        'status' : 'WAIT',
-        'data' : {
-            'region_id' : region_id,
-            'openid'    : openid,
-            'text'      : text,
-            'url'       : url
-        }
-    })
-
-# 推送订单到WMS
-def event_push_order(order_id):
-    if order_id.strip()=='':
-        return None
-    db.event_queue.insert_one({
-        'type' : 'PUSH_ORDER',
-        'status' : 'WAIT',
-        'data' : {
-            'order_id' : order_id,
-        }
-    })
-
-
-"""
-    用于请求签名验证的修饰器
-
-    @param sign_names 需要参与签名的参数名列表
-        需要按顺序, sign_names[0]为app_id
-    @param param_defaults 非必须的参数
-"""
+### ----------------------------------------------------------------------------------------------------
+###    用于请求签名验证的修饰器
+###
+###    @param sign_names 需要参与签名的参数名列表
+###        需要按顺序, sign_names[0]为app_id
+###    @param param_defaults 非必须的参数
+### ----------------------------------------------------------------------------------------------------
 def check_sign(param_names):
     def _wrap(func):
         @functools.wraps(func)
@@ -376,3 +319,21 @@ def write_image(image_type, img_data): # 图片按随机文件名散列存放
     h.write(data)
     h.close()
     return image_name
+
+
+# 通知放到队列，异步处理
+# type: alipay, wxpay, applepay
+def event_push_notify(notify_type, notify_data):
+    if notify_type not in ['alipay','wxpay','applepay']:
+        return None
+
+    db.event_queue.insert_one({
+        'type' : 'PAY_NOTIFY',
+        'status' : 'WAIT',
+        'data' : {
+            'type' : notify_type,
+            'data' : notify_data,
+        }
+    })
+
+    return True

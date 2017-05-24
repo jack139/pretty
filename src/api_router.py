@@ -21,8 +21,8 @@ db = setting.db_primary  # 默认db使用web本地
 urls = [
     '/app/v1/first_hand',  'FisrtHand_v2',
     '/app/v1/get_host',    'GetHost',
-    '/app/v1/alipay_notify',   'AlipayNotify',
-    '/app/v1/wxpay_notify',    'WxpayNotify',
+    '/app/alipay_notify',   'AlipayNotify',
+    '/app/wxpay_notify',    'WxpayNotify',
 ]
 
 app = web.application(urls, globals())
@@ -171,6 +171,11 @@ class GetHost:
             'url_host' : 'https://%s:17213'%host,
         }})
 
+
+### ----------------------------------------------------------------------------------------------------
+
+
+
 # 阿里云异步通知
 # { 'seller_email': u'pay@urfresh.cn', 
 #   'refund_status': u'REFUND_SUCCESS', 
@@ -198,6 +203,7 @@ class AlipayNotify:
         #print "=================="
         order_id = param.get('out_trade_no','')
 
+        app_helper.event_push_notify('alipay', param)
 
         return 'success'
 
@@ -248,6 +254,7 @@ class WxpayNotify:
                 '<return_msg><![CDATA[FAIL]]></return_msg>' \
                 '</xml>' 
 
+        app_helper.event_push_notify('wxpay', str_xml)
 
         return  '<xml>' \
             '<return_code><![CDATA[SUCCESS]]></return_code>' \

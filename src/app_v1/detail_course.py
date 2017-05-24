@@ -46,6 +46,7 @@ class handler:
 
         # 是否已购买或已授权, 不需要试听
         can_use = False
+        score = -1
         if uname is not None:
             # 检查 是否是已购买
             r6 = db.user_property.find_one({
@@ -64,9 +65,9 @@ class handler:
                 if r7:
                     can_use = True
 
-        # 测试成绩
-        r5 = db.test_info.find_one({'userid':uname['userid'], 'obj_id':param.object_id})
-        score = r5['score'] if r5 else -1
+            # 测试成绩
+            r5 = db.test_info.find_one({'userid':uname['userid'], 'obj_id':param.object_id})
+            score = r5['score'] if r5 else -1
 
         ret_data = {
             "object_id"     : param.object_id,     # 唯一代码 

@@ -25,19 +25,18 @@ def update_event_status(event_id, status, msg=''):
 # ---------------------------------------
 
 def send_wx_msg(r):
-    r0 = app_helper.wx_reply_msg(
-        r['data']['openid'],
-        r['data']['text'],
-        r['data']['region_id']
-    )
-    if r0==None or r.get('errcode', 0)!=0:
-        print '推送失败：', str(r['_id'])
-        status='FAIL'
-    else:
-        status='DONE'
+    #r0 = app_helper.wx_reply_msg(
+    #    r['data']['openid'],
+    #    r['data']['text'],
+    #    r['data']['region_id']
+    #)
+    #if r0==None or r.get('errcode', 0)!=0:
+    #    print '推送失败：', str(r['_id'])
+    #    status='FAIL'
+    #else:
+    #    status='DONE'
 
     return status, ''
-
 
 
 
