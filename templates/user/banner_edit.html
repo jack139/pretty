@@ -3,8 +3,8 @@ $def with (name, str1, sku)
 $var title: 轮播图管理
 $var css: /static/css/jquery.datetimepicker.css
 $var name: $'|'.join(str1) $name
-$var js: /static/js/upload.js?v=1.011 /static/js/jquery.datetimepicker.js
-$var load: doFirst();date_init();
+$var js: /static/js/jquery.datetimepicker.js /static/js/resumable.js /static/js/upload_pic.js?v=1.3
+$var load: doFirst_pic();date_init();
 $var menu: #plat3
 
 <script type="text/javascript">
@@ -41,6 +41,7 @@ $else:
     </td><td>内部使用</td></tr>
 
 <tr><td>图片</td><td>
+    <a class="abtn" href="javascript:void(0);" id="picBrowseButton">上传图片</a>
     <ul id="image-list">
         $if sku.has_key('image') and len(sku['image'])>0:
             $for i in [sku['image']]:
@@ -50,7 +51,7 @@ $else:
                     <button onclick="remove_image('$(i.replace('.','_'))');return false;">删除</button>
                   </li>
     </ul>
-    </td><td>在页面下方上传图片，<br/>只会保存第1张</td></tr>
+    </td><td>只会保存第1张</td></tr>
 
 <tr><td>点击跳转的url</td><td>
     <input type="text" name="click_url" id="click_url" value="$sku.get('click_url', '')" size="50"/>
@@ -85,18 +86,6 @@ $else:
 <p><input type="submit" name="submit" id="submit" value="保存"/>
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
 </form>
-
-
-<div class="article_box">
-  <div id="image-main">
-    <form method="post" enctype="multipart/form-data"  action="">
-      <input type="file" name="images" id="images" />
-      <button type="submit" id="btn">上传图片</button>
-    </form>
-    <div id="response"></div>
-  </div>
-</div>
-</br></br>
 
 
 <div class="article_box">

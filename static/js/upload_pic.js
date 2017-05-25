@@ -4,6 +4,10 @@ var rand_id_list = [];
 var g_params = {'new_image_name':''};
 var r = null;
 
+function get_params(){
+    return g_params;
+}
+
 function doFirst_pic()
 {
     var input = $("#images")[0], formdata = false;
@@ -105,4 +109,15 @@ function remove_image(image_id){
     $("#form_image").val(image_list);
 
     $('#'+image_id).hide();
+}
+
+function randomid()
+{
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz";
+
+    for( var i=0; i < 10; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
 }

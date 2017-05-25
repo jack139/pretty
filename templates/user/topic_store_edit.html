@@ -3,8 +3,8 @@ $def with (name, str1, sku, obj_list)
 $var title: 专辑管理
 $var css:
 $var name: $'|'.join(str1) $name
-$var js: /static/js/upload.js?v=1.010
-$var load: doFirst();
+$var js: /static/js/resumable.js /static/js/upload_pic.js?v=1.3
+$var load: doFirst_pic();
 $var menu: #mcht2
 
 $if sku['tpc_id']=='n/a':
@@ -33,6 +33,7 @@ $else:
     </td><td>内部使用</td></tr>
 
 <tr><td>标题图片</td><td>
+    <a class="abtn" href="javascript:void(0);" id="picBrowseButton">上传图片</a>
     <ul id="image-list">
         $if sku.has_key('image') and len(sku['image'])>0:
             $for i in sku['image']:
@@ -42,7 +43,7 @@ $else:
                     <button onclick="remove_image('$(i.replace('.','_'))');return false;">删除</button>
                   </li>
     </ul>
-    </td><td>在页面下方上传图片;</br>可以上传多图</td></tr>
+    </td><td>可以上传多图</td></tr>
 
 <tr><td>标题</td><td>
     <input type="text" name="title" id="title" value="$sku.get('title','')" />
@@ -75,17 +76,6 @@ $else:
 <p><input type="submit" name="submit" id="submit" value="保存"/>
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
 </form>
-
-<div class="article_box">
-  <div id="image-main">
-    <form method="post" enctype="multipart/form-data"  action="">
-      <input type="file" name="images" id="images" />
-      <button type="submit" id="btn">上传图片</button>
-    </form>
-    <div id="response"></div>
-  </div>
-</div>
-</br></br>
 
 <div class="article_box">
   <div>操作日志：</div>

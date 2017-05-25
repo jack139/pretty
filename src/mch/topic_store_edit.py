@@ -82,7 +82,7 @@ class handler:
             }  # 纪录操作历史
         }, upsert=True)
 
-        if r2 and r2['status']!='SAVED':
+        if r2 and r2.get('status')!='SAVED':
             object_helper.topic_change_status(tpc_id, 'SAVED', u'专辑修改')
 
         return render.info('成功保存！', '/mch/topic_store')
