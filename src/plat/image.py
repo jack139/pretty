@@ -9,7 +9,7 @@ import helper
 
 db = setting.db_web
 
-url = ('/plat/image')
+#url = ('/plat/image')
 
 # 图片上传 -------------------
 def write_image(image, data): # 图片按随机文件名散列存放

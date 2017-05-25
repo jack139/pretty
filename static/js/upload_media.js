@@ -1,5 +1,5 @@
 var g_params = {'new_image_name':''};
-var r = null, file_path;
+var r = null, r2 = null, file_path;
 
 function get_params(){
     return g_params;
