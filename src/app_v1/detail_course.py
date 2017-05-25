@@ -69,6 +69,21 @@ class handler:
             r5 = db.test_info.find_one({'userid':uname['userid'], 'obj_id':param.object_id})
             score = r5['score'] if r5 else -1
 
+        # 音频／视频下载链接
+        media_url = ''
+        if len(r3.get('media_file',''))>0:
+            if r3['media']=='audio': # 音频
+                media_url = app_helper.audio_url(r3['media_file'])
+            elif r3.has_key('transcoded_filename'):
+                media_url = app_helper.video_url(r3['transcoded_filename'])
+
+        # 讲师介绍音频
+        if len(r3.get('speaker_media',''))>0:
+            speaker_url = app_helper.audio_url(r3['speaker_media'])
+        else:
+            speaker_url = ''
+
+        # 返回的数据
         ret_data = {
             "object_id"     : param.object_id,     # 唯一代码 
             "title"         : r3['title'],
@@ -76,9 +91,9 @@ class handler:
             "abstract"      : r3['description'],
             "type"          : 1 if r3['media']=='video' else 2,
             "speaker_head"  : image_url,     # 讲师头像图片url 
-            "speaker_audio" : '',     # 讲师音频介绍链接, -------------------- 待实现
-            "course_video"  : '',     # 课程视频链接 -------------------- 待实现
-            "try_length"    : 0 if can_use else r3['try_time'],  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
+            "speaker_audio" : speaker_url,     # 讲师音频介绍链接
+            "course_video"  : media_url,     # 课程视频链接 
+            "try_length"    : 0 if can_use else max(r3['try_time'], 1),  # 0 - 已购买，不是试听，>0 - 可试听的长度，单位 秒
             "volume"        : r3['volume'],         # 销量 
 
             "comment_num" : r4,     # 学员评价总条数 

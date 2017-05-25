@@ -262,6 +262,14 @@ def api_error(ret, msg=''):
 def image_url(image_name):
     return 'https://%s/image/product/%s/%s'%(setting.image_host, image_name[:2], image_name)
 
+# 生成音频的url
+def audio_url(image_name):
+    return 'https://%s/image/media_upload/%s'%(setting.image_host, image_name)
+
+# 生成视频的url
+def video_url(image_name):
+    return 'https://%s/image/transcoded_files/%s'%(setting.image_host, image_name)
+
 # 获取用户信息
 def get_user_detail(userid):
     ret_data = {

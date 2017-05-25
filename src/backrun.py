@@ -7,7 +7,7 @@ import threading
 import  time, json, random
 import traceback
 import app_helper 
-from libs import log4u
+from libs import log4u, transcoding
 
 db = setting.db_primary
 
@@ -139,6 +139,9 @@ def check_event(tname, tid):
         tt1 = int(time.time())
         
         refresh_session_timeout()
+
+        # 处理转码队列
+        transcoding.check_transcoded_files()
 
         # 清理推送事件
         # 测试时注释！！！

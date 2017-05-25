@@ -5,7 +5,7 @@ import web
 import time
 from bson.objectid import ObjectId
 from config import setting
-from libs import object_helper
+from libs import object_helper, transcoding
 import helper
 
 db = setting.db_web
@@ -72,6 +72,7 @@ class handler:
                 'title'       : user_data['title'],
                 'title2'      : user_data['title2'],
                 'speaker'     : user_data['speaker'],
+                'speaker_media' : user_data['speaker_media'],
                 'description' : user_data['description'],
                 'price'       : int(float(user_data['price'])*100), # 单位： 分
                 'volume'      : int(user_data['volume']),
@@ -90,6 +91,10 @@ class handler:
         except ValueError:
             return render.info('请在相应字段输入数字！')
 
+        # 取当前数据，如果存在的，用于比较修改
+        r2 = db.obj_store.find_one({'obj_id':obj_id, 'mch_id':mch_id},{'media_file':1})
+
+        # 更新数据
         db.obj_store.update_one({'obj_id':obj_id, 'mch_id':mch_id}, {
             '$set'  : update_set,
             '$push' : {
@@ -100,5 +105,10 @@ class handler:
         if user_data['obj_type']=='topic':
             # 专辑课程，需要将专辑状态设置为已保存
             object_helper.topic_change_status(user_data['tpc_id'], 'SAVED',u'课程%s修改'%obj_id)
+
+        # 检查媒体文件是否有更改，如果视频有更改，需要转码
+        if r2 and update_set['media']=='video' and r2['media_file']!=update_set['media_file']:
+            print '视频转码', obj_id, update_set['media_file']
+            transcoding.psuh_to_transcoding(obj_id, update_set['media_file'])
 
         return render.info('成功保存！', '/mch/obj_store')
