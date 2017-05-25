@@ -79,6 +79,15 @@ $var menu: #plat5
         视频
     </td><td></td></tr>
 
+<tr><td>媒体文件</td><td>
+    $if sku.get('media')=='video' and sku.has_key('transcoded_filename'):
+        <a href="/static/image/transcoded_files/$sku['transcoded_filename']" target="_blank">点击查看已转码视频</a>
+    $elif sku.get('media')=='audio' and sku.has_key('media_file'):
+        <a href="/static/image/media_upload/$sku['media_file']" target="_blank">点击查看音频</a>
+    $else:
+        没有媒体文件
+    </td><td></td></tr>
+
 <tr><td>长度</td><td>
     $sku.get('length',1)
     </td><td>单位：秒</td></tr>
