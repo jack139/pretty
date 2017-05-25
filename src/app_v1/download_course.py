@@ -25,7 +25,7 @@ class handler:
         if uname is None:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
-        #-------------------------------------------------- 待实现
+        #-------------------------------------------------- 不实现了，废弃，使用detail_course
 
         ret_data = {
             "pass_to_download" : 1, # 是否可下载，0 不可下载, 1 可以下载 
