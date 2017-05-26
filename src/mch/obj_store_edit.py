@@ -107,7 +107,7 @@ class handler:
             object_helper.topic_change_status(user_data['tpc_id'], 'SAVED',u'课程%s修改'%obj_id)
 
         # 检查媒体文件是否有更改，如果视频有更改，需要转码
-        if r2 and update_set['media']=='video' and r2['media_file']!=update_set['media_file']:
+        if r2 and update_set['media']=='video' and r2.get('media_file')!=update_set['media_file']:
             print '视频转码', obj_id, update_set['media_file']
             transcoding.psuh_to_transcoding(obj_id, update_set['media_file'])
 
