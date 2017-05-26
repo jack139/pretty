@@ -36,6 +36,7 @@ tmp_path = '/usr/local/nginx/html/fair/static/tmp'
 logs_path = '/usr/local/nginx/logs'
 image_store_path = '/usr/local/nginx/html/pretty/static/image/product'
 media_store_path = '/usr/local/nginx/html/pretty/static/image/media_upload'
+transcode_store_path = '/usr/local/nginx/html/pretty/static/image/transcoded_files'
 
 app_host='pretty.f8cam.com'
 wx_host='pretty.f8cam.com'

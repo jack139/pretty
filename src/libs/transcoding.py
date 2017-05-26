@@ -37,7 +37,13 @@ def check_transcoded_files():
         one_key2 = json.loads(one_key)
         filename = u'/'.join(one_key2['filepath'].split('/')[-2:])
 
-        print '转码完成', one_key2['id'], filename
+        exist_path='%s/%s' % (setting.transcode_store_path, filename)
+        print exist_path
+        if not os.path.isfile(exist_path): # 文件不存在，说明转换出错
+            print '转码出错', one_key2['id'], filename
+            filename = 'FAIL'
+        else:
+            print '转码完成', one_key2['id'], filename
         db.obj_store.update_one({'obj_id':str(one_key2['id'])},{'$set':{
             'transcoded_filepath' : one_key2['filepath'],
             'transcoded_filename' : filename,

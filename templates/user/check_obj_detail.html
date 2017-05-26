@@ -81,7 +81,12 @@ $var menu: #plat5
 
 <tr><td>媒体文件</td><td>
     $if sku.get('media')=='video' and sku.has_key('transcoded_filename'):
-        <a href="/static/image/transcoded_files/$sku['transcoded_filename']" target="_blank">点击查看已转码视频</a>
+        $if sku['transcoded_filename']=='FAIL':
+            转码失败，请检查原始视频文件
+        $elif sku['transcoded_filename']=='CODING':
+            转码中，请稍候...
+        $else:
+            <a href="/static/image/transcoded_files/$sku['transcoded_filename']" target="_blank">点击查看已转码视频</a>
     $elif sku.get('media')=='audio' and sku.has_key('media_file'):
         <a href="/static/image/media_upload/$sku['media_file']" target="_blank">点击查看音频</a>
     $else:

@@ -109,6 +109,7 @@ class handler:
         # 检查媒体文件是否有更改，如果视频有更改，需要转码
         if r2 and update_set['media']=='video' and r2.get('media_file')!=update_set['media_file']:
             print '视频转码', obj_id, update_set['media_file']
+            db.obj_store.update_one({'obj_id':obj_id, 'mch_id':mch_id}, {'$set':{'transcoded_filename':'CODING'}})
             transcoding.psuh_to_transcoding(obj_id, update_set['media_file'])
 
         return render.info('成功保存！', '/mch/obj_store')
