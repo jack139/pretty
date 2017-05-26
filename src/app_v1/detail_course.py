@@ -74,7 +74,7 @@ class handler:
         if len(r3.get('media_file',''))>0:
             if r3['media']=='audio': # 音频
                 media_url = app_helper.audio_url(r3['media_file'])
-            elif r3.has_key('transcoded_filename'):
+            elif r3.has_key('transcoded_filename') and (r3['transcoded_filename'] not in ['FAIL','CODING']):
                 media_url = app_helper.video_url(r3['transcoded_filename'])
 
         # 讲师介绍音频
