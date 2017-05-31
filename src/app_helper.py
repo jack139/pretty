@@ -330,9 +330,9 @@ def write_image(image_type, img_data): # 图片按随机文件名散列存放
 
 
 # 通知放到队列，异步处理
-# type: alipay, wxpay, applepay
+# type: alipay, wxpay, iap
 def event_push_notify(notify_type, notify_data):
-    if notify_type not in ['alipay','wxpay','applepay']:
+    if notify_type not in ['alipay','wxpay','iap']:
         return None
 
     db.event_queue.insert_one({

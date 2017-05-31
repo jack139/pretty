@@ -41,6 +41,11 @@ class handler:
         else:
             image_url = ''
 
+        if len(r3['image'])>0: # 取第1张图
+            image_url_1 = app_helper.image_url(r3['image'][0])
+        else:
+            image_url_1 = ''
+
         # 评价条数
         r4 = db.comment_info.find({'obj_id':param.object_id}).count()
 
@@ -99,6 +104,10 @@ class handler:
             "comment_num" : r4,     # 学员评价总条数 
             "exam_score"  : score,    # 课后测试成绩，-1表示未测试 
             "service_tel" : app_helper.CS_TEL,
+
+            'speaker'     : r3['speaker'],
+            'price'       : r3['price'],  # 价格 单位：分
+            'image'       : image_url_1, # 课程主图
         }
 
         # 返回

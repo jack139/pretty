@@ -57,8 +57,8 @@ class handler:
             r5 = db.test_info.find_one({'userid':uname['userid'], 'obj_id':r3['obj_id']})
             score = r5['score'] if r5 else -1
 
-            # 测试成绩
-            r6 = db.progress_info.find_one({'userid':uname['userid'], 'obj_id':param.object_id})
+            # 完成进度
+            r6 = db.progress_info.find_one({'userid':uname['userid'], 'obj_id':r3['obj_id']})
             progress = r6['progress'] if r6 else 0
 
             course_data.append(

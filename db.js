@@ -144,7 +144,7 @@ order_trade   支付交易订单
     userid      用户id
     total_sum   发生总金额，单位：分
     type    交易类型： receipt 收款   refund 退款  consume 消费
-    pay_type    cash 余额 alipay 支付宝 wxpay 微信支付
+    pay_type    cash 余额 alipay 支付宝 wxpay 微信支付 iap 苹果支付
     pay_time    付款时间
     cash_sum    余额发生金额
     alipay_sum  支付宝发生金额
@@ -157,7 +157,10 @@ order_recharge  充值订单
     recharge_id     充值流水号
     order_trade_id  交易订单号
     recharge_sum    充值金额，单位 分
-    pay_sum         付款金额，单位 分
+    due             应付金额，单位 分
+    status   订单状态： DUE 未支付，PREPAID 等待支付确认，PAID 已支付，WAIT_REFUND 等待退款，REFUND 已退款
+    pay_type        alipay 支付宝 wxpay 微信支付 iap 苹果支付
+    wx_prepay_data  微信支付的prepay信息
 
 employee_auth 店员授权
     owner_userid      店主用户id
