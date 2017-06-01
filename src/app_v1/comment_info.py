@@ -49,6 +49,7 @@ class handler:
                 "image" : r4['img_url'], # 头像 
                 "star"  : i['star'],  # 评的星级 
                 "time"  : i['last_time'], 
+                "comment"  : i['comment'], 
             })
 
         ret_data = {
