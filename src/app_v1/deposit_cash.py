@@ -54,7 +54,7 @@ class handler:
         deposit_order_id = app_helper.get_new_order_id('v5','d').encode('utf-8')
         print 'new deposit_order_id', deposit_order_id
 
-        wx_total_fee = '%d'%int(pay_sum)
+        wx_total_fee = '%d'%int(param['pay_sum'])
         ali_total_fee = '%.2f'%float(wx_total_fee/100.0)
 
 

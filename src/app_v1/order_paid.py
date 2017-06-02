@@ -12,12 +12,12 @@ db = setting.db_web
 url = ('/app/v1/order_paid')
 
 class handler: 
-    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','order_id','data'])
+    @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','order_trade_id','data'])
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
-        param = web.input(app_id='', dev_id='', ver_code='', session='', order_id='', data='', tick='')
+        param = web.input(app_id='', dev_id='', ver_code='', session='', order_trade_id='', data='', tick='')
 
-        if '' in (param.app_id, param.dev_id, param.ver_code, param.order_id, param.session, param.tick):
+        if '' in (param.app_id, param.dev_id, param.ver_code, param.order_trade_id, param.session, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
         # 检查session登录
@@ -28,10 +28,10 @@ class handler:
         #-------------------------------------------------- 待实现
 
         ret_data = {
-            "order_id" : param.order_id,
+            "order_trade_id" : param.order_trade_id,
             "due"      : 1000,         # 应付金额，单位 分
             "paid"     : 1000,         # 实付金额 
-            "status"   : "已支付",     # 订单状态：已支付／未支付
+            "status"   : "PENDING",     # 订单状态：PAID/PENDING 已支付／未支付
         }
 
         # 返回
