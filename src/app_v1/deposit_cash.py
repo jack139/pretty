@@ -5,6 +5,7 @@ import web
 import time, json
 from config import setting
 import app_helper
+from libs import wxpay_helper
 
 db = setting.db_web
 
@@ -55,11 +56,16 @@ class handler:
         print 'new deposit_order_id', deposit_order_id
 
         wx_total_fee = '%d'%int(param['pay_sum'])
-        ali_total_fee = '%.2f'%float(wx_total_fee/100.0)
+        ali_total_fee = '%.2f'%float(int(wx_total_fee)/100.0)
 
 
         # 微信支付，获得prepay信息
         if pay_type=='wxpay':
+            if web.ctx.has_key('environ'):
+                client_ip = web.ctx.environ['REMOTE_ADDR']
+            else:
+                return json.dumps({'ret' : -7, 'msg' : '无法取得客户端ip地址'})
+
             r = wxpay_helper.get_prepay_id(wx_appid, mch_id, 
                     'APP', client_ip, deposit_order_id, wx_total_fee)
             if r.status==200:

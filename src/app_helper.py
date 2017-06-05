@@ -43,7 +43,7 @@ RAND_BASE=[
 ]
 
 def my_crypt(codestr):
-    return hashlib.sha1("sAlT139-"+codestr).hexdigest()
+    return hashlib.sha1("sAlT139-"+codestr.encode('utf-8')).hexdigest()
 
 def my_rand(n=4, base=0):
     import random
