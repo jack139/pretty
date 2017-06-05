@@ -140,7 +140,7 @@ user_property   用户已购商品
     order_trade_id    交易流水号
 
 order_trade   支付交易订单
-    order_trade_id   交易流水号
+    order_trade_flow_id   交易流水号
     userid      用户id
     total_sum   发生总金额，单位：分
     type    交易类型： receipt 收款   refund 退款  consume 消费
@@ -155,7 +155,7 @@ order_trade   支付交易订单
 order_recharge  充值订单
     userid          用户id
     recharge_id     充值流水号
-    order_trade_id  交易订单号
+    order_trade_flow_id  交易订单号
     recharge_sum    充值金额，单位 分
     due             应付金额，单位 分
     status   订单状态： DUE 未支付，PREPAID 等待支付确认，PAID 已支付，WAIT_REFUND 等待退款，REFUND 已退款

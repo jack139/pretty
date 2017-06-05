@@ -25,7 +25,16 @@ class handler:
         if uname is None:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
-        #-------------------------------------------------- 待实现
+        #--------------------------------------------------
+
+        # 修改充值订单状态
+        db.order_recharge.update_one(
+            {'recharge_id' : param.order_trade_id},  # 实充值订单号
+            {'$set' : {'status':'PREPAY'}},
+        )
+
+        # 如果是IAP订单，使用data数据检查支付情况，backrun异步检查
+        # －－－－－－ 待实现
 
         ret_data = {
             "order_trade_id" : param.order_trade_id,

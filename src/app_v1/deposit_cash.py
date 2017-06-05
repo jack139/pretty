@@ -80,7 +80,7 @@ class handler:
         new_deposit_order = {
             'userid'           : uname['userid'],
             'recharge_id'      : deposit_order_id,
-            'order_trade_id'   : '', # 交易记录的id，收到钱时候才填
+            'order_trade_flow_id'   : '', # 交易记录的id，收到钱时候才填
             'create_time'      : app_helper.time_str(),
             'recharge_sum'     : wx_total_fee,  # 实际充值金额， 如果有满送，在这里处理
             'due'              : wx_total_fee,  # 实际应付的金额，支付成功时会核对这个金额
@@ -96,8 +96,9 @@ class handler:
         )
 
         ret_data = {
-            'order_trade_id' : deposit_order_id,  
+            'order_trade_id' : deposit_order_id,  # 实际返回的是充值订单号
             'pay_type'       : int(param.pay_type), 
+            'notify_url'     : '', # 支付宝和微信的异步通知回调url
         }
 
         if wx_prepay_data!='':
