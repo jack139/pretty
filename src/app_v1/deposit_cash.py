@@ -15,9 +15,12 @@ url = ('/app/v1/deposit_cash')
 # app使用的微信支付设置
 wx_appid='wx619a0d7ff2899657'
 wx_appsecret='134d0625718b43a076829ff37d0d261c'
-mch_id=''
-api_key=''
-notify_url='http://%s:17211/app/wxpay_notify' % setting.notify_host
+mch_id='1481201352'
+api_key='0378881f16430cf597cc1617be53db37'
+notify_url_wx='http://%s:17211/app/wxpay_notify' % setting.notify_host
+
+# 支付宝回调地址
+notify_url_ali='http://%s:17211/app/alipay_notify' % setting.notify_host
 
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','pay_sum','pay_type'])
@@ -101,6 +104,12 @@ class handler:
             'notify_url'     : '', # 支付宝和微信的异步通知回调url
         }
 
+        # 回调地址
+        if pay_type=='alipay':
+            ret_data['notify_url'] = notify_url_ali
+        elif pay_type=='wxpay':
+            ret_data['notify_url'] = notify_url_wx
+
         if wx_prepay_data!='':
             try:
                 import xml.etree.cElementTree as ET
@@ -108,9 +117,9 @@ class handler:
                 import xml.etree.ElementTree as ET
 
             xml=ET.fromstring(wx_prepay_data)
-            ret_data['appid']  = xml.find('appid').text if xml.find('appid') is not None else '',
-            ret_data['mch_id']  = xml.find('mch_id').text if xml.find('mch_id') is not None else '',
-            ret_data['prepay_id']  = xml.find('prepay_id').text if xml.find('prepay_id') is not None else '',
+            ret_data['appid']  = xml.find('appid').text if xml.find('appid') is not None else ''
+            ret_data['mch_id']  = xml.find('mch_id').text if xml.find('mch_id') is not None else ''
+            ret_data['prepay_id']  = xml.find('prepay_id').text if xml.find('prepay_id') is not None else ''
 
 
         # 返回

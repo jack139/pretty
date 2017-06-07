@@ -27,10 +27,12 @@ class handler:
 
         #--------------------------------------------------
 
+        # 检查订单状态－－－－－－ 待实现
+
         # 修改充值订单状态
         db.order_recharge.update_one(
             {'recharge_id' : param.order_trade_id},  # 实充值订单号
-            {'$set' : {'status':'PREPAY'}},
+            {'$set' : {'status':'PREPAY', 'order_paid_data':param.data}},
         )
 
         # 如果是IAP订单，使用data数据检查支付情况，backrun异步检查
