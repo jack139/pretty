@@ -6,11 +6,8 @@ import os
 urls = [
     '/wx/',         'First',
 
-    '/wx/init_herb',    'InitHerb',
-    '/wx/herb_init',    'Herb',
-
-    '/wx/init_user_info',   'InitUserInfo',
-    '/wx/user_info_init',   'UserInfo',
+    '/wx/init_pretty',    'InitPretty',
+    '/wx/pretty_init',    'Pretty',
 
     '/wx/signature',    'WxSignature',
 ]

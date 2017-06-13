@@ -123,7 +123,13 @@ def wx_logged(session_id):
         #})
         if session['login']==1: # 登录后返回uname
             #return session['uname']
-            return {'uname' : session['uname'], 'openid': session['openid'], 'unionid': session.get('unionid','')}
+            return {
+                'openid' : session['openid'], 
+                'unionid': session.get('unionid',''),
+                'userid' : session.get('userid', ''),  
+                'type'   : session.get('type',3),
+                'mice'   : session.get('mice',0),
+            }
         else:
             return None
 

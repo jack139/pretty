@@ -8,7 +8,6 @@ from config.url_wx import urls
 from config import setting
 import app_helper
 from app_helper import time_str, get_token
-from libs import app_user_helper
 
 try:
     import xml.etree.cElementTree as ET
@@ -27,7 +26,7 @@ wx_appid=setting.wx_setting['wx_appid']
 wx_secret=setting.wx_setting['wx_appsecret']
 
 
-REFRESH_HEADIMG = 10 # 更用户头像的频次
+REFRESH_HEADIMG = 5 # 更用户头像的频次
   
 ##############################################
 
@@ -133,10 +132,9 @@ class PostMsg:
         content=self.xml.find("Content").text
         cmd0 = content.split()
         content_text = cmd0[0].lower()
-        print 'AAAAAAAAAAAAAAAAAAAA'
-        print setting.region_id
+        #print setting.region_id
 
-        if '0' == content_text and self.is_service_time() and setting.region_id in ['003','000']:
+        if '0' == content_text and self.is_service_time():
             #开启客服接口
             return self.start_mul_service()
             
@@ -187,65 +185,17 @@ class PostMsg:
             self.key=self.xml.find("EventKey").text
             self.ticket=self.xml.find("Ticket")
             #print '%r, %r'%(self.key, self.ticket)
-            if self.ticket!=None:
-                ticket = self.ticket.text
-                openid = self.fromUser
-
-                print 'ticket ====>', ticket
-                print {'QR_info.ticket':ticket}
-
-                r9 = db.fx_root.find_one({'QR_info.ticket':ticket},{'root':1})
-                if r9: # 存在ticket
-
-                    parent_u = r9['root']
-
-                    #db_user = db.app_user .find_one({'openid':openid})
-                    db_user = app_user_helper.get_user_info(openid, q_type='openid')
-                    if db_user == None: # 新用户才建立分销关系
-
-                        # 用户基本信息
-                        info = get_info(openid)
-                        if info.has_key('errcode'):
-                            get_ticket(True)
-                            info = get_info(openid)
-                        print info
-
-                        unionid = info.get('unionid','')
-
-                        #db.app_user .insert_one({
-                        new_set = {
-                            'openid'   : openid,
-                            'unionid'  : unionid,
-                            'region_id': setting.region_id, # 增加 region_id
-                            'type'     : 'wx_pub', # 用户类型
-                            'address'  : [],
-                            'coupon'   : [], # 送优惠券
-                            'app_id'   : '', # 微信先注册，没有app_id
-                            'reg_time' : app_helper.time_str(),
-                            'wx_nickname'   : info.get('nickname','游客'),
-                            'wx_headimgurl' : info.get('headimgurl', ''),
-                            'wx_info'       : info,
-                            'refresh_headimg' : REFRESH_HEADIMG, 
-                            'last_status' : int(time.time()),
-                        }
-
-                        # 用户中心注册用户接口
-                        app_user_helper.new_user_info(openid, 'openid', new_set)
-
-                        # 添加用户关系 2016-03-31
-                        # 只有新注册用户添加
-                        from libs import user_tree
-                        print 'parent_u', parent_u, unionid
-                        if parent_u!=None and unionid!=parent_u:
-                            user_tree.add_parent(unionid, parent_u)
-                            print '======> TREE:', unionid, parent_u
+            #if self.ticket!=None:
+            #    ticket = self.ticket.text
+            #    openid = self.fromUser
+            #    print 'ticket ====>', ticket
+            #    print {'QR_info.ticket':ticket}
 
             #return self.reply_text(u"欢迎使用微信服务号！")
 
             text_res = self.get_text_reply('main_reply')
             if text_res != None:
                 return self.reply_text(text_res)
-            
 
         elif event=='unsubscribe':
             #print "LEFT: %s" % self.fromUser
@@ -359,8 +309,7 @@ def get_info(openid):
 
 # 微信入口
 def get_redirect_loc(redirect_uri):
-    #redirect_uri = 'http://wx-test.urfresh.cn/wx/fair'
-    loc =   'https://open.weixin.qq.com/connect/oauth2/authorize?' \
+    loc = 'https://open.weixin.qq.com/connect/oauth2/authorize?' \
         'appid=%s&' \
         'redirect_uri=%s&' \
         'response_type=code&' \
@@ -368,7 +317,7 @@ def get_redirect_loc(redirect_uri):
         'state=1#wechat_redirect' % (wx_appid, urllib.quote_plus(redirect_uri))
     return loc
 
-# 店铺入口， 测试 http://wx-test.urfresh.cn/wx/fair?code=test
+# 店铺入口， 测试 http://.../wx/fair?code=test
 def init_job(code, need_more_data=False, parent=None):
     if code=='':
         #return render.info('参数错误',goto='/') # info页面要做微信端优化
@@ -422,10 +371,11 @@ def init_job(code, need_more_data=False, parent=None):
         ticket = get_ticket(True)
 
     uname = ''
+    userid = ''
+    if_bind = False
 
     # 检查用户是否已注册
-    #db_user = db.app_user .find_one({'openid':openid})
-    db_user = app_user_helper.get_user_info(openid, q_type='openid')
+    db_user = db.app_user.find_one({'openid':openid})
     is_new_user = 0
     is_our_fan = True
     if db_user==None:
@@ -440,30 +390,23 @@ def init_job(code, need_more_data=False, parent=None):
 
         unionid = info.get('unionid','')
 
-        coupon = []
-        #valid = app_helper.time_str(time.time()+3600*24*10, 1) # 有效期10天 2015-11-22
-        # 注册发抵用券 v3 ----- 不发了 2015-11-28
-        #for i in app_helper.reginster_coupon:
-        #   coupon.append((app_helper.my_rand(), valid, '%.2f' % float(i[0]), 1, i[1], i[2]))
-        #db.app_user .insert_one({
         new_set = {
+            'userid'   : '', # 用户id，未绑定为空
             'openid'   : openid,
             'unionid'  : unionid,
-            'region_id': setting.region_id, # 增加 region_id
-            'type'     : 'wx_pub', # 用户类型
-            'address'  : [],
-            'coupon'   : coupon, # 送优惠券
+            'type'     : 3, # 1 电话号码用户, 2 微信app登录用户, 3 微信公众号用户, 4 QQ 用户
+            'bind'     : 0, # 1 已绑定,  0 未绑定
+            'mice'     : 0, # 1 正常用户, 0 黑名单用户
             'app_id'   : '', # 微信先注册，没有app_id
             'reg_time' : app_helper.time_str(),
-            'wx_nickname'   : info.get('nickname','游客'),
-            'wx_headimgurl' : info.get('headimgurl', ''),
-            'wx_info'       : info,
-            'refresh_headimg' : REFRESH_HEADIMG, 
             'last_status' : int(time.time()),
-            'app_order_num': 0  # 20160927 lf 未下单
+            'nickname' : info.get('nickname','游客'),
+            'img_url'  : info.get('headimgurl', ''),
+            'wx_info'  : info,
+            'refresh_headimg' : REFRESH_HEADIMG, 
         }
         # 用户中心注册用户接口
-        app_user_helper.new_user_info(openid, 'openid', new_set)
+        db.app_user.update_one({'openid':openid},{'$set':new_set},upsert=True)
 
         is_our_fan = not (info.get('nickname',u'游客')==u'游客') # 是否是公众号粉丝，通过是否是游客判断
 
@@ -492,12 +435,8 @@ def init_job(code, need_more_data=False, parent=None):
                 'today_visit_count' : db_user.get('today_visit_count',0) + 1,
             }
 
-        # 更新 region_id
-        if db_user.get('region_id')!=setting.region_id:
-            update_set['region_id'] = setting.region_id
-
         if not openid_is_fun(openid) \
-            or db_user.get('wx_nickname', '')=='' \
+            or db_user.get('nickname', '')=='' \
             or db_user.get('refresh_headimg',0)<=0: # 没有关注
 
             # 用户基本信息
@@ -512,13 +451,12 @@ def init_job(code, need_more_data=False, parent=None):
             # 补充微信用户信息
             
             update_set['unionid']         = unionid
-            update_set['wx_nickname']     = info.get('nickname','游客')
-            update_set['wx_headimgurl']   = info.get('headimgurl', '')
+            update_set['nickname']        = info.get('nickname','游客')
+            update_set['img_url']         = info.get('headimgurl', '')
             update_set['wx_info']         = info
             update_set['refresh_headimg'] = REFRESH_HEADIMG
 
-            #db.app_user .update_one({'openid':openid}, {'$set': update_set})
-            app_user_helper.update_user_info(openid, q_type='openid', update_set=update_set)
+            db.app_user.update_one({'openid':openid}, {'$set': update_set})
             is_our_fan = not (info.get('nickname',u'游客')==u'游客')
         else:
             unionid = db_user.get('unionid','')
@@ -532,21 +470,12 @@ def init_job(code, need_more_data=False, parent=None):
             )
 
         uname = db_user.get('uname','')
+        userid = db_user.get('userid','')
+        if_bind = (db_user['bind']==1)
 
-
-        # 添加用户关系 2016-03-31
-        # 已注册用户添加 ================================  仅测试用 ======
-        #if parent not in [None, '']:
-        #    from libs import user_tree
-        #    parent_u = user_tree.owner2unionid(parent)
-        #    if parent_u!=None and unionid!=parent_u:
-        #        user_tree.add_parent(unionid, parent_u)
-        #        print '======> TREE:', unionid, parent_u
-        #==============================================================
 
     # 更新 unionid_index, 2016-03-01 , gt
-    #db.unionid_index .update_one({'openid':openid}, {'$set':{'unionid':unionid}}, upsert=True)
-    app_user_helper.update_unionid_info(openid, 'openid', {'unionid':unionid})
+    #db.unionid_index.update_one({'openid':openid}, {'$set':{'unionid':unionid}}, upsert=True)
 
     # 生成 session ------------------
 
@@ -555,30 +484,36 @@ def init_job(code, need_more_data=False, parent=None):
     secret_key = 'f6102bff8451236b8ca1'
     session_id = hashlib.sha1("%s%s%s%s" %(rand2, now, web.ctx.ip.encode('utf-8'), secret_key))
     session_id = session_id.hexdigest()
+    once_code = hashlib.md5(session_id).hexdigest() # 用于第一次获取session_id
 
     db.app_sessions.insert_one({
         'session_id' : session_id,
+        'userid'     : userid,
         'openid'     : openid,
         'unionid'    : unionid,
         'ticket'     : ticket,
-        'uname'      : uname,
+        #'uname'      : uname,
         'login'      : 1,
         'rand'       : rand2,
         'ip'         : web.ctx.ip,
         'attime'     : now,
-        'type'       : 'wx',
+        'type'       : 3, # session 类型  1 手机 2 微信app登录 3 微信公众号 4 QQ用户 
+        'once_code'  : once_code, 
+        'bind'       : 1 if if_bind else 0,
     })
 
-    print session_id, openid, uname
+    print session_id, openid, uname, once_code, userid
     print "qqffdd session_id >>>>>>>>>> %r" %session_id
     if need_more_data: # 返回是否是粉丝
-        return session_id, is_our_fan, is_new_user, openid
+        #return session_id, is_our_fan, is_new_user, openid
+        return once_code, is_our_fan, is_new_user, openid
     else:
-        return session_id
+        #return session_id
+        return once_code
 
 #------------------------------------------------
 '''
-herb.html       /wx/init_fair 
+pretty.html       /wx/init_pretty
 user_info.html       /wx/init_user_info
 '''
 
@@ -600,12 +535,12 @@ def get_param(url_param): # 保持所有的参数，除了code和state
 
 #------------------------------------------------
 # 下单入口
-class InitHerb: # fair.html
+class InitPretty: # 
     def GET(self):
         param = get_param(web.input())
-        raise web.redirect(get_redirect_loc('http://%s/wx/herb_init?%s' % (setting.wx_host, param)))
+        raise web.redirect(get_redirect_loc('http://%s/wx/pretty_init?%s' % (setting.wx_host, param)))
 
-class Herb: 
+class Pretty: 
     def GET(self):
         return self.POST()
 
@@ -613,41 +548,16 @@ class Herb:
         user_data=web.input(code='')
         param = get_param(user_data)
         if user_data.get('session_id','')=='':
-            session_id = init_job(user_data.code)
-            if session_id==None:
-                raise web.seeother('/wx/init_herb?%s' % param)
+            once_code = init_job(user_data.code) 
+            if once_code==None:
+                raise web.seeother('/wx/init_pretty?%s' % param)
         else:
-            session_id = user_data['session_id']
-        #render = create_render(plain=True)
-        #return render.fair(session_id, HTML_SETTING[setting.region_id], param)
-        print '/static/wx/index.html?session_id=%s&%s' % (session_id, param)
-        raise web.seeother('/static/wx/index.html?session_id=%s&%s' % (session_id, param))
+            # 应该只有调试时会用到
+            once_code = hashlib.md5(user_data['session_id']).hexdigest()
+            db.app_sessions.update_one({'session_id':user_data['session_id']},{'$set':{'once_code':once_code}})
+        #print '/static/wx/index.html?session_id=%s&%s' % (session_id, param)
+        raise web.seeother('/static/wx/index.html?once_code=%s&%s' % (once_code, param))
 
-#------------------------------------------------
-# 我的用户信息
-class InitUserInfo: # userInfo.html
-    def GET(self):
-        param = get_param(web.input())
-        raise web.redirect(get_redirect_loc('http://%s/wx/user_info_init?%s' % (setting.wx_host, param)))
-
-class UserInfo:
-    def GET(self):
-        return self.POST()
-
-    def POST(self):
-        user_data=web.input(code='', owner='')
-        param = get_param(user_data)
-        if user_data.get('session_id','')=='':
-            session_id = init_job(user_data.code, parent=user_data['owner'])
-            if session_id==None:
-                raise web.seeother('/wx/init_user_info?%s' % param)
-        else:
-            session_id = user_data['session_id']
-        #render = create_render(plain=True)
-        #return render.userInfo(session_id, HTML_SETTING[setting.region_id], param)
-        #raise web.seeother('/static/wx/user_info.html?session_id=%s&%s' % (session_id, param))
-        print '/static/wx/index.html?session_id=%s&%s#/base/center' % (session_id, param)
-        raise web.seeother('/static/wx/index.html?session_id=%s&%s#/base/center' % (session_id, param))
 
 #------------------------------------------------
 
@@ -665,7 +575,6 @@ class WxSignature:
 
         noncestr = app_helper.my_rand()
         timestamp = str(int(time.time()))
-        #url = 'http://test.urfresh.cn/static/hb/001.html'
         url = param.currUrl
         string1 = 'jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s' % (ticket, noncestr, timestamp, url)
 
@@ -689,6 +598,26 @@ class WxSignature:
     def GET(self):
         return self.POST()
 
+
+class GetSessionId:
+    def POST(self):
+        web.header('Content-Type', 'application/json')
+        param = web.input(once_code='')
+
+        session_id = ''
+
+        if param['once_code']!='':
+            db_session = db.app_sessions.find_one({'once_code':param['once_code']})
+            if db_session:
+                session_id = db_session['session_id']
+                # 只返回一次
+                db.app_sessions.update_one({'session_id':session_id},{'$set':{'once_code':''}})
+
+            print 'once_code=', param['once_code'], 'session_id=', session_id
+        return json.dumps({'session_id' : session_id})
+
+    def GET(self):
+        return self.POST()
 
 #if __name__ == "__main__":
 #    web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
