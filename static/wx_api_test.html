@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+<head>
+<meta charset="UTF-8">
+<title>wx api test</title>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+</head>
+
+<body>
+
+<h2>1.获取轮播图列表 list_banner</h2>
+<form name="3" method="post" action="/wx/list_banner">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>2.获取试听课程列表 list_try</h2>
+<form name="4" method="post" action="/wx/list_try">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>category: <input id="category_4" name="category" value=""/></div>
+<div>page_size: <input id="page_size_4" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_4" name="page_index" value="0"/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>3.获取精品课程列表 list_course</h2>
+<form name="5" method="post" action="/wx/list_course">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>category: <input id="category_5" name="category" value=""/></div>
+<div>page_size: <input id="page_size_5" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_5" name="page_index" value="0"/></div>
+<div>sort_by: <input id="sort_by_5" name="sort_by" value="1"/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>4.获取精品专辑列表 list_topic</h2>
+<form name="6" method="post" action="/wx/list_topic">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>page_size: <input id="page_size_6" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_6" name="page_index" value="0"/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>5.获取课程详情 detail_course</h2>
+<form name="7" method="post" action="/wx/detail_course">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>object_id: <input id="object_id_7" name="object_id" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>6.获取专辑详情 detail_topic</h2>
+<form name="8" method="post" action="/wx/detail_topic">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>object_id: <input id="object_id_8" name="object_id" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>7.获取课程/专辑分享页面链接 share_object</h2>
+<form name="10" method="post" action="/wx/share_object">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>object_id: <input id="object_id_10" name="object_id" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+
+<h2>8.订单支付完成 order_paid</h2>
+<form name="13" method="post" action="/wx/order_paid">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>order_trade_id: <input id="order_trade_id_13" name="order_trade_id" value=""/></div>
+<div>data: <input id="data_13" name="data" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>9.获取我的课程列表 list_my_course</h2>
+<form name="14" method="post" action="/wx/list_my_course">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>page_size: <input id="page_size_14" name="page_size" value="10"/></div>
+<div>page_index: <input id="page_index_14" name="page_index" value="0"/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>10.修改个人信息 personal_save</h2>
+<form name="26" method="post" action="/wx/personal_save">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>nickname: <input id="nickname_26" name="nickname" size="50" value=""/></div>
+<div>headimage: <input id="headimage_26" name="headimage" size="50" value=""/></div>
+<div>image_type: <input id="image_type_26" name="image_type" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>11.获取个人信息 personal_info</h2>
+<form name="27" method="post" action="/wx/personal_info">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+
+<h2>12.获取购买记录 cash_log</h2>
+<form name="29" method="post" action="/wx/cash_log">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>13.获取余额信息 cash_info</h2>
+<form name="30" method="post" action="/wx/cash_info">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+
+<h2>14.绑定手机号发送验证码 bind_tel_number</h2>
+<form name="34" method="post" action="/wx/bind_tel_number">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>mobile: <input id="mobile_34" name="mobile" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+<h2>15.绑定手机号码 bind_check_rand</h2>
+<form name="35" method="post" action="/wx/bind_check_rand">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>mobile: <input id="mobile_35" name="mobile" size="50" value=""/></div>
+<div>rand: <input id="rand_35" name="rand" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>16.获取课程分类 list_category</h2>
+<form name="39" method="post" action="/wx/list_category">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+<h2>17.发起充值操作 deposit_cash</h2>
+<form name="40" method="post" action="/wx/deposit_cash">
+<div>session_id: <input id="session_id" name="session_id" size="50" value=""/></div>
+<div>pay_sum: <input id="pay_sum_40" name="pay_sum" size="50" value=""/></div>
+<div>pay_type: <input id="pay_type_40" name="pay_type" size="50" value=""/></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
+
+
+</html>

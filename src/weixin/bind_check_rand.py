@@ -29,7 +29,7 @@ class handler:
         if number in app_helper.BLOCK_LIST:
             return json.dumps({'ret' : -10, 'msg' : '手机号码错误'})
 
-        session = app_helper.get_session(param.session)
+        session = app_helper.get_session(param.session_id)
         if session is None:
             return json.dumps({'ret': -4, 'msg': '无效的sessionid'})
 
@@ -89,7 +89,7 @@ class handler:
             }})
 
         # 更新session
-        db.app_sessions.update_many({'uname': session['uname']}, {'$set': {
+        db.app_sessions.update_many({'openid': session['openid']}, {'$set': {
             'userid' : userid,
             'attime' : time.time(),
             'bind'   : 1,
@@ -97,7 +97,7 @@ class handler:
 
         return json.dumps({'ret': 0, 'data': {
             #'userid'    : userid,
-            'session'   : param.session,
+            'session'   : param.session_id,
             'bound_tel' : number,
         }})
 

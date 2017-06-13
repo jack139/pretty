@@ -13,14 +13,11 @@ db = setting.db_web
 url = ('/wx/deposit_cash')
 
 # app使用的微信支付设置
-wx_appid='wx619a0d7ff2899657'
-wx_appsecret='134d0625718b43a076829ff37d0d261c'
-mch_id='1481201352'
+wx_appid='wxebf6ce7906d3648b'
+wx_appsecret='2653f845640f06a797c395f5b69b686a'
+mch_id='1472056402'
 api_key='0378881f16430cf597cc1617be53db37'
 notify_url_wx='http://%s:17211/app/wxpay_notify' % setting.notify_host
-
-# 支付宝回调地址
-notify_url_ali='http://%s:17211/app/alipay_notify' % setting.notify_host
 
 class handler: 
     def POST(self):
@@ -40,14 +37,7 @@ class handler:
         if not param['pay_sum'].isdigit():
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
 
-        if not param['pay_type'].isdigit():
-            return json.dumps({'ret' : -2, 'msg' : '参数错误'})
-
-        if int(param.pay_type)==1:
-            pay_type='iap'
-        elif int(param.pay_type)==2:
-            pay_type='alipay'
-        elif int(param.pay_type)==3:
+        if int(param.pay_type)==3:
             pay_type='wxpay'
         else:
             return json.dumps({'ret' : -5, 'msg' : '错误的pay_type'})
@@ -70,7 +60,8 @@ class handler:
                 return json.dumps({'ret' : -7, 'msg' : '无法取得客户端ip地址'})
 
             r = wxpay_helper.get_prepay_id(wx_appid, mch_id, 
-                    'WX', client_ip, deposit_order_id, wx_total_fee)
+                    'JSAPI', client_ip, deposit_order_id, wx_total_fee,
+                    uname['openid'].encode('utf-8'))
             if r.status==200:
                 wx_prepay_data = r.data
             else:
@@ -78,6 +69,7 @@ class handler:
         else:
             wx_prepay_data = ''
 
+        print wx_prepay_data
 
         # 生成充值订单
         new_deposit_order = {
@@ -105,10 +97,8 @@ class handler:
         }
 
         # 回调地址
-        if pay_type=='alipay':
-            ret_data['notify_url'] = notify_url_ali
-        elif pay_type=='wxpay':
-            ret_data['notify_url'] = notify_url_wx
+        ret_data['notify_url'] = notify_url_wx
+        print notify_url_wx
 
         if wx_prepay_data!='':
             try:

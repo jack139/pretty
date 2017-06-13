@@ -10,6 +10,7 @@ urls = [
     '/wx/pretty_init',    'Pretty',
 
     '/wx/signature',    'WxSignature',
+    '/wx/get_session',   'GetSessionId',
 ]
 
 ## ---- 分布式部署---------------------------------

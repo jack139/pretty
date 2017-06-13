@@ -282,6 +282,10 @@ def get_user_detail(userid):
         'mobile'     : '',
         'nickname'   : '',
         'img_url'    : '',
+        'nickname1'  : '',
+        'img_url1'   : '',
+        'nickname2'  : '',
+        'img_url2'   : '',
         'nickname2'  : '',
         'img_url2'   : '',
         'nickname4'  : '',
@@ -304,6 +308,9 @@ def get_user_detail(userid):
         elif i['type']==4:
             ret_data['nickname4'] = i.get('nickname','')
             ret_data['img_url4'] = i.get('img_url','')
+        elif i['type']==3:
+            ret_data['nickname3'] = i.get('nickname','')
+            ret_data['img_url3'] = i.get('img_url','')
         else:
             ret_data['nickname2'] = i.get('nickname','')
             ret_data['img_url2'] = i.get('img_url','')
@@ -314,6 +321,9 @@ def get_user_detail(userid):
     elif ret_data['nickname2']!='' or ret_data['img_url2']!='': # 其次是用微信的
         ret_data['nickname'] = ret_data['nickname2']
         ret_data['img_url'] = ret_data['img_url2']
+    elif ret_data['nickname3']!='' or ret_data['img_url3']!='': # 其次是用公众号的
+        ret_data['nickname'] = ret_data['nickname3']
+        ret_data['img_url'] = ret_data['img_url3']
     else:
         ret_data['nickname'] = ret_data['nickname4'] # 最后使用QQ的
         ret_data['img_url'] = ret_data['img_url4']

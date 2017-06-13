@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+<head>
+<meta charset="UTF-8">
+<title>wx test</title>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+</head>
+<script language="javascript">
+var session_id = null;
+
+$(function() {
+    (function ($) {
+        $.getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    })(jQuery);
+
+    once_code = $.getUrlParam('once_code');
+    get_session(once_code);
+    
+
+});
+
+/* 换取session */
+function get_session(once_code)
+{
+    $.ajax({
+        type: "POST",
+        url: "/wx/get_session",
+        async: true,
+        timeout: 15000,
+        data: {once_code:once_code},
+        dataType: "json",
+        complete: function(xhr, textStatus)
+        {
+            if(xhr.status == 403)
+            {
+                addLog("网络异常！(403) "+once_code);
+            }
+            else if(xhr.status==200)
+            {
+                var retJson = JSON.parse(xhr.responseText);
+                session_id = retJson["session_id"]
+                $("#session_id").text('once_code='+once_code+'; session_id='+session_id);
+            }
+            else
+            {
+                addLog("网络异常！("+xhr.status+") "+once_code);
+            }
+        }
+    });
+    
+    return false;
+}
+
+
+
+</script>
+<body>
+    <div id="session_id"></div>
+</body>
+</html>

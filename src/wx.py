@@ -137,13 +137,7 @@ class PostMsg:
         if '0' == content_text and self.is_service_time():
             #开启客服接口
             return self.start_mul_service()
-            
-        #if u'分销商' in content_text: # 分销商
-        #    return self.reply_media([
-        #        (u'分销中心入口',u'',u'',
-        #        u'http://%s/wx/init_distribution'%setting.wx_host)
-        #    ])
-            
+
         text_res = self.get_text_reply(content_text)
         if text_res != None:
             return self.reply_text(text_res)

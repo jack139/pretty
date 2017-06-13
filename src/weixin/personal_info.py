@@ -33,13 +33,13 @@ class handler:
             "tel"       : r4['mobile'], # 用户注册手机号 
             "user_type" : uname['type'], # 用户类型
             # 店员信息
-            "shop_name"     : r4['shop_name'],
-            "real_name"     : r4['real_name'],
-            "shop_nickname" : r4['shop_nickname'],
-            "contact_info"  : r4['contact_info'],
+            "shop_name"     : r4.get('shop_name',''),
+            "real_name"     : r4.get('real_name',''),
+            "shop_nickname" : r4.get('shop_nickname',''),
+            "contact_info"  : r4.get('contact_info',''),
             # 店主信息
-            "licence_pic"  : app_helper.image_url(r4['licence_pic']) if r4['licence_pic']!='' else r4['licence_pic'],
-            "shop_pic"  : [app_helper.image_url(x) for x in r4['shop_pic']],
+            "licence_pic"  : app_helper.image_url(r4['licence_pic']) if r4.get('licence_pic','')!='' else '',
+            "shop_pic"  : [app_helper.image_url(x) for x in r4.get('shop_pic',[])],
         }
 
         # 返回
