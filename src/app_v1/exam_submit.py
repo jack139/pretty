@@ -49,11 +49,10 @@ class handler:
             score_data.append(i.get('score',10)) # 默认一题10分
             exam_ids.append(i['exam_id'])
 
-        #print answer_data
+        print answer_data, user_answer
 
         # 比对答案，计算成绩
         total_score = 0
-        answer_data = []
         for i in xrange(0, min(len(user_answer), len(answer_data))):
             one_user_a = sorted(user_answer[i])
             one_correct_a = sorted(answer_data[i])

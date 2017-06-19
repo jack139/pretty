@@ -35,8 +35,8 @@ $else:
     <input type="text" name="score" value="$sku.get('score',10)" pattern="[0-9]+" title="必须是数字" />
     </td><td></td></tr>
 
-<tr><td rowspan="6">试题选项</td>
-    <td>A. <input type="text" name="option" value="$(sku.get('option',['']*6)[0])" />&nbsp;&nbsp;
+<tr><td rowspan="4">试题选项</td>
+    <td>A. <input type="text" name="option" value="$(sku.get('option',['']*4)[0])" />&nbsp;&nbsp;
         <input type="checkbox" name="correct" value="0"
         $if '0' in sku.get('correct',[]):
             checked="checked"
@@ -45,9 +45,9 @@ $else:
     <td>选项内容为空则此项不展示<br/>“是答案”打勾表示是正确答案之一</td>
 </tr>
 
-$for x in [1,2,3,4,5]:
+$for x in [1,2,3]:
     <tr>
-        <td>$('ABCDEF'[x]). <input type="text" name="option" value="$(sku.get('option',['']*6)[x])" />&nbsp;&nbsp;
+        <td>$('ABCDEF'[x]). <input type="text" name="option" value="$(sku.get('option',['']*4)[x])" />&nbsp;&nbsp;
             <input type="checkbox" name="correct" value="$x"
             $if (u'%d'%x) in sku.get('correct',[]):
                 checked="checked"

@@ -38,13 +38,13 @@ class handler:
         exam_data = []
         for i in db_exam:
             option = []
-            for j in i['option']:
+            for j in i['option'][:4]: #只返回4个选项， 2017-06-19，gt
                 if len(j.strip())==0:
                     break
                 option.append(j)
             exam_data.append({
                 "problem" : i['question'],
-                "option" : option,
+                "option"  : option,
             })
 
         ret_data = {
