@@ -766,5 +766,16 @@ function generate_sign(num, list){
 </form>
 <br/>
 
+<h2>48.获取充值价格列表 deposit_price_list</h2>
+<form name="48" method="post" action="/app/v1/deposit_price_list">
+<div>app_id: <input id="app_id_48" name="app_id" value=""/></div>
+<div>dev_id: <input id="dev_id_48" name="dev_id" value="124845"/></div>
+<div>ver_code: <input id="ver_code_48" name="ver_code" value="1"/></div>
+<div>tick: <input id="tick_48" name="tick" value="" readonly="readonly"/></div>
+<div>sign: <input id="sign_48" name="sign" size="50" value=""/><input type="button" value="生成签名"
+    onclick="generate_sign('48', ['#private_key','#app_id_48','#dev_id_48','#ver_code_48','#tick_48'])"></div>
+<div><input type="submit" value="提交" /></div>
+</form>
+<br/>
 
 </html>

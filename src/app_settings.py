@@ -59,3 +59,31 @@ NOTE_LABEL = [
 # 客服电话
 CS_TEL = '13800000000'
 
+# 充值价格列表
+DEPOSIT_PRICE_LIST = [
+    {
+        'product_id' : 'com.006.pay',
+        'price'      : 600,
+        'title'      : '6元充值',
+    },
+    {
+        'product_id' : 'com.068.pay',
+        'price'      : 6800,
+        'title'      : '68元充值',
+    },
+    {
+        'product_id' : 'com.128.pay',
+        'price'      : 12800,
+        'title'      : '128元充值',
+    },
+    {
+        'product_id' : 'com.208.pay',
+        'price'      : 20800,
+        'title'      : '208元充值',
+    },
+    {
+        'product_id' : 'com.698.pay',
+        'price'      : 69800,
+        'title'      : '698元充值',
+    },
+]

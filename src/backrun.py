@@ -86,7 +86,7 @@ def refresh_session_timeout():
 #
 #event_queue
 #{
-#    'type' : 'WX_MSG', # 'WX_MSG', 'SMS_MSG', 'JPUSH_MSG'
+#    'type' : 'PAY_NOTIFY', # 'PAY_NOTIFY'
 #    'data' : {
 #        'text'     : '',
 #        'orgion'   : '',
@@ -107,7 +107,6 @@ def check_event(tname, tid):
             {'$and': [
                     {'lock'   : {'$ne':1}},
                     {'status' : 'WAIT'},
-                    #{'type'   : {'$nin':['REFUND_CRE', 'REFUND_WX','REFUND_CRE2','WX_MSG','WX_AFT_46H_MSG','WX_MIX_MSG','PUSH_LOG']}}
                 ]
             },
             {'$set': {'lock':1}}, # 用于多线程互斥
@@ -123,8 +122,8 @@ def check_event(tname, tid):
             status = 'FAIL'
             msg = '多次重复'
 
-        elif r['type']=='WX_MSG': # 微信推送通知
-            status, msg = send_wx_msg(r)
+        elif r['type']=='PAY_NOTIFY': # 处理付款通知
+            status, msg = deposit_check.process_pay_notify(r)
 
         else:
             status = 'FAIL'

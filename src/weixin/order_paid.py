@@ -31,18 +31,18 @@ class handler:
         # 检查订单状态－－－－－－ 待实现
 
         # 修改充值订单状态
-        db.order_recharge.update_one(
+        r2 = db.order_recharge.find_one_and_update(
             {'recharge_id' : param.order_trade_id},  # 实充值订单号
-            {'$set' : {'status':'PREPAY', 'order_paid_data':param.data}},
+            {
+                '$set' : {'status':'PREPAY'},
+                '$push' : {'order_paid_data':param.data},
+            },
         )
-
-        # 如果是IAP订单，使用data数据检查支付情况，backrun异步检查
-        # －－－－－－ 待实现
 
         ret_data = {
             "order_trade_id" : param.order_trade_id,
-            "due"      : 1000,         # 应付金额，单位 分
-            "paid"     : 1000,         # 实付金额 
+            "due"      : r2['due'],         # 应付金额，单位 分
+            "paid"     : r2['due'],         # 实付金额 
             "status"   : "PENDING",     # 订单状态：PAID/PENDING 已支付／未支付
         }
 
