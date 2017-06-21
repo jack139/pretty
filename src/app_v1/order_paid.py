@@ -43,7 +43,10 @@ class handler:
 
         # 如果是IAP订单，使用data数据检查支付情况，backrun异步检查
         if r2['pay_type']=='iap':
-            app_helper.event_push_notify('iap', param.data, param.order_trade_id)
+            if r2['status']=='DUE': # 只有DUE才推，防止重复支付 2017-06-21, gt
+                app_helper.event_push_notify('iap', param.data, param.order_trade_id)
+            else:
+                print 'Error: 可疑重复支付', param.order_trade_id
 
         ret_data = {
             "order_trade_id" : param.order_trade_id,
