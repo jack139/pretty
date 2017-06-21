@@ -17,7 +17,7 @@ wx_appid='wxebf6ce7906d3648b'
 wx_appsecret='2653f845640f06a797c395f5b69b686a'
 mch_id='1472056402'
 api_key='0378881f16430cf597cc1617be53db37'
-notify_url_wx='http://%s:17211/app/wxpay_notify' % setting.notify_host
+notify_url_wx='http://%s:8888/app/wxpay_notify' % setting.notify_host
 
 class handler: 
     def POST(self):

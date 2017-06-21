@@ -52,7 +52,6 @@ class handler: # Login2:
 
         # 随机码
         rand = app_helper.my_rand(base=1)
-        register = False
 
         # 检查用户是否已注册
         db_user = db.app_user.find_one({'uname':number})
@@ -68,12 +67,11 @@ class handler: # Login2:
                 'app_id'   : param.app_id,
                 'reg_time' : app_helper.time_str(),
                 'last_status' : int(time.time()),
+                'reg_ok'   : 0,
             }
 
             # 用户中心注册用户接口
             db.app_user.update_one({'userid':userid},{'$set':new_set},upsert=True)
-
-            register = True
 
         else:
             # 更新app_id
@@ -82,7 +80,10 @@ class handler: # Login2:
             #    'app_id'      : param.app_id,
             #    'last_status' : int(time.time()),
             #}})
-            return json.dumps({'ret' : -6, 'msg' : '手机号码已注册'})
+            if db_user.get('reg_ok')==1:
+                return json.dumps({'ret' : -6, 'msg' : '手机号码已注册'})
+
+            userid = db_user['userid']
 
 
         # 生成 session ------------------
@@ -110,7 +111,7 @@ class handler: # Login2:
 
         #发送短信验证码
         if number not in app_helper.INNER_NUM.keys(): # 内部号码不发短信，2015-12-22, gt
-            #sms.send_rand(number, rand, register) # 测试不发校验码
+            #sms.send_rand(number, rand, True) # 测试不发校验码
             pass
 
         # 返回
@@ -118,6 +119,5 @@ class handler: # Login2:
             'ret'  : 0,
             'data' : {
                 'session'  : session_id,
-                'user_new' : register,
             }
         })

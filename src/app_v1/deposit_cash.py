@@ -17,10 +17,10 @@ wx_appid='wx619a0d7ff2899657'
 wx_appsecret='134d0625718b43a076829ff37d0d261c'
 mch_id='1481201352'
 api_key='0378881f16430cf597cc1617be53db37'
-notify_url_wx='http://%s:17211/app/wxpay_notify' % setting.notify_host
+notify_url_wx='http://%s:8888/app/wxpay_notify' % setting.notify_host
 
 # 支付宝回调地址
-notify_url_ali='http://%s:17211/app/alipay_notify' % setting.notify_host
+notify_url_ali='http://%s:8888/app/alipay_notify' % setting.notify_host
 
 class handler: 
     @app_helper.check_sign(['app_id','dev_id','ver_code','tick','session','pay_sum','pay_type'])

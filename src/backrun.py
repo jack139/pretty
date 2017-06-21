@@ -7,7 +7,7 @@ import threading
 import  time, json, random
 import traceback
 import app_helper 
-from libs import log4u, transcoding
+from libs import log4u, transcoding, deposit_helper
 
 db = setting.db_primary
 
@@ -123,7 +123,7 @@ def check_event(tname, tid):
             msg = '多次重复'
 
         elif r['type']=='PAY_NOTIFY': # 处理付款通知
-            status, msg = deposit_check.process_pay_notify(r)
+            status, msg = deposit_helper.process_pay_notify(r)
 
         else:
             status = 'FAIL'
@@ -167,13 +167,11 @@ class MainLoop(threading.Thread):
         print 'Thread - started', self._tname, self._tid
 
         while 1:
-            #main_loop(self._tname)
             try:
                 check_event(self._tname, self._tid)
             except Exception, e:
                 print 'Error: thread fail', self._tid, app_helper.time_str()
                 traceback.print_exc()
-
 
             # 周期性打印日志
             sys.stdout.flush()
@@ -186,7 +184,7 @@ if __name__=='__main__':
 
     gc.set_threshold(300,5,5)
 
-    THREAD_NUM = 1 # 线程数量
+    THREAD_NUM = 8 # 线程数量
 
     #线程池
     threads = []

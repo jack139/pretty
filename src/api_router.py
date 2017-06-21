@@ -203,7 +203,7 @@ class AlipayNotify:
         #print "=================="
         order_id = param.get('out_trade_no','')
 
-        app_helper.event_push_notify('alipay', param)
+        app_helper.event_push_notify('alipay', param, order_id)
 
         return 'success'
 
@@ -254,7 +254,13 @@ class WxpayNotify:
                 '<return_msg><![CDATA[FAIL]]></return_msg>' \
                 '</xml>' 
 
-        app_helper.event_push_notify('wxpay', str_xml)
+        order_id = ''
+        
+        if result_code=='SUCCESS': # 有付款
+            order_id0 = xml.find('out_trade_no').text
+            order_id = order_id0.split('_')[0]
+
+        app_helper.event_push_notify('wxpay', str_xml, order_id)
 
         return  '<xml>' \
             '<return_code><![CDATA[SUCCESS]]></return_code>' \

@@ -41,7 +41,7 @@ transcode_store_path = '/usr/local/nginx/html/pretty/static/image/transcoded_fil
 app_host='pretty.f8cam.com'
 wx_host='pretty.f8cam.com'
 image_host='pretty.f8cam.com/static'
-notify_host='pretty.f8cam.com'
+notify_host='notify-pretty.f8cam.com'
 app_pool=['pretty.f8cam.com']
 
 WX_store = {

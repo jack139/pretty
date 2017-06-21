@@ -67,22 +67,22 @@ DEPOSIT_PRICE_LIST = [
         'title'      : '6元充值',
     },
     {
-        'product_id' : 'com.068.pay',
+        'product_id' : 'com.068.app',
         'price'      : 6800,
         'title'      : '68元充值',
     },
     {
-        'product_id' : 'com.128.pay',
+        'product_id' : 'com.128.app',
         'price'      : 12800,
         'title'      : '128元充值',
     },
     {
-        'product_id' : 'com.208.pay',
+        'product_id' : 'com.208.app',
         'price'      : 20800,
         'title'      : '208元充值',
     },
     {
-        'product_id' : 'com.698.pay',
+        'product_id' : 'com.698.app',
         'price'      : 69800,
         'title'      : '698元充值',
     },

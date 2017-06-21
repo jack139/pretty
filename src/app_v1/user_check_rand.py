@@ -53,6 +53,7 @@ class handler: # CheckRand:
         db.app_user.update_one({'uname' : session['uname']}, {'$set' : {
             'last_time' : app_helper.time_str(),
             'passwd'    : app_helper.my_crypt(param.passwd),
+            'reg_ok'    : 1, # 标记已注册成功，reg_ok==0属于注册过程中的 2016-06-21
         }})
 
 
