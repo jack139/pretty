@@ -45,7 +45,7 @@ def send_wx_msg(r):
 def refresh_session_timeout():
     now = int(time.time())
     # 修改为付款的过期订单
-    r6 = db.order_app.find({
+    r6 = db.order_recharge.find({
         #'uname'    : {'$in':unionid_helper.all_ids(uname)},
         'status'   : 'DUE',
         'deadline' : {'$lt':now}
@@ -54,7 +54,7 @@ def refresh_session_timeout():
     for yy in r6:
         log4u.log('backrun', log4u.TIMEOUT , '过期未付款', yy['order_id'])
 
-    r5 = db.order_app.update_many({
+    r5 = db.order_recharge.update_many({
         #'uname'    : {'$in':unionid_helper.all_ids(uname)},
         'status'   : 'DUE',
         'deadline' : {'$lt':now}
@@ -68,7 +68,7 @@ def refresh_session_timeout():
     #if r5.modified_count>0: print 'TIMEOUT: ', r5.raw_result
 
     #清理 TIMEOUT 订单, 30天前的
-    #r5=db.order_app.delete_many({'status':'TIMEOUT','deadline' : {'$lt':now-3600*24*30}})
+    #r5=db.order_recharge.delete_many({'status':'TIMEOUT','deadline' : {'$lt':now-3600*24*30}})
     # 清理 session, 24小时前的微信session
     r5=db.app_sessions.delete_many({'type':'wx','attime':{'$lt':(now-3600*24)}})
     #if r5.deleted_count>0: print 'wx session: ', r5.raw_result

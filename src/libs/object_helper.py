@@ -24,7 +24,7 @@ def topic_change_status(tpc_id, status, comment='审核状态修改', check_comm
     })
 
     # 专辑下商品同时更新状态
-    db.obj_store.update_many({'tpc_id':tpc_id, 'obj_type':'topic'}, {
+    db.obj_store.update_many({'obj_type':'topic', 'tpc_id':tpc_id}, {
         '$set':{'status':status},
     })
 

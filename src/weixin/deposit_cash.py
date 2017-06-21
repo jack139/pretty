@@ -82,6 +82,7 @@ class handler:
             'pay_type'         : pay_type, 
             'status'           : 'DUE',
             'wx_prepay_data'   : wx_prepay_data,
+            'deadline'         : int(time.time())+60*15,
         }
 
         db.order_recharge.update_one(
