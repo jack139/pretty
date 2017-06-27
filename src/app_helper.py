@@ -315,18 +315,25 @@ def get_user_detail(userid):
             ret_data['nickname2'] = i.get('nickname','')
             ret_data['img_url2'] = i.get('img_url','')
 
-    if ret_data['nickname1']!='' or ret_data['img_url1']!='': # 优先使用用户自定义的
+    # 昵称
+    if ret_data['nickname1']!='': # 优先使用用户自定义的
         ret_data['nickname'] = ret_data['nickname1']
-        ret_data['img_url'] = ret_data['img_url1']
-    elif ret_data['nickname2']!='' or ret_data['img_url2']!='': # 其次是用微信的
+    elif ret_data['nickname2']!='': # 其次是用微信的
         ret_data['nickname'] = ret_data['nickname2']
-        ret_data['img_url'] = ret_data['img_url2']
-    elif ret_data['nickname3']!='' or ret_data['img_url3']!='': # 其次是用公众号的
+    elif ret_data['nickname3']!='': # 其次是用公众号的
         ret_data['nickname'] = ret_data['nickname3']
-        ret_data['img_url'] = ret_data['img_url3']
     else:
         ret_data['nickname'] = ret_data['nickname4'] # 最后使用QQ的
-        ret_data['img_url'] = ret_data['img_url4']
+
+    # 头像
+    if ret_data['img_url1']!='': # 优先使用用户自定义的
+        ret_data['img_url'] = ret_data['img_url1']
+    elif ret_data['img_url2']!='': # 其次是用微信的
+        ret_data['img_url'] = ret_data['img_url2']
+    elif ret_data['img_url3']!='': # 其次是用公众号的
+        ret_data['img_url'] = ret_data['img_url3']
+    else:
+        ret_data['img_url'] = ret_data['img_url4'] # 最后使用QQ的
 
     ret_data['img_url'] = urllib.unquote_plus(ret_data['img_url'])
 
