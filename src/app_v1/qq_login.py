@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import web, json, time, traceback, hashlib
+import web, json, time, traceback, hashlib, urllib
 from config import setting
 import app_helper
 
@@ -37,7 +37,7 @@ class handler:
                 'reg_time' : app_helper.time_str(),
                 'last_status' : int(time.time()),
                 'nickname' : param.nickname,
-                'img_url'  : param.img_url,
+                'img_url'  : urllib.unquote_plus(param.img_url),
             }
 
             # 用户中心注册用户接口
@@ -49,7 +49,7 @@ class handler:
             db.app_user.update_one({'qqid':param['qqid']},{'$set':{
                 'app_id'      : param['app_id'],
                 'nickname'    : param.nickname,
-                'img_url'     : param.img_url,
+                'img_url'     : urllib.unquote_plus(param.img_url),
                 'last_status' : int(time.time()),
             }})
 

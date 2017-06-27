@@ -286,8 +286,8 @@ def get_user_detail(userid):
         'img_url1'   : '',
         'nickname2'  : '',
         'img_url2'   : '',
-        'nickname2'  : '',
-        'img_url2'   : '',
+        'nickname3'  : '',
+        'img_url3'   : '',
         'nickname4'  : '',
         'img_url4'   : '',
     }
@@ -328,6 +328,9 @@ def get_user_detail(userid):
         ret_data['nickname'] = ret_data['nickname4'] # 最后使用QQ的
         ret_data['img_url'] = ret_data['img_url4']
 
+    ret_data['img_url'] = urllib.unquote_plus(ret_data['img_url'])
+
+    print '昵称头像', ret_data
     return ret_data
 
 

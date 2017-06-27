@@ -51,8 +51,8 @@ def refresh_session_timeout():
         'deadline' : {'$lt':now}
     }, {'order_id':1})
     # logging
-    for yy in r6:
-        log4u.log('backrun', log4u.TIMEOUT , '过期未付款', yy['order_id'])
+    #for yy in r6:
+    #    log4u.log('backrun', log4u.TIMEOUT , '过期未付款', yy['order_id'])
 
     r5 = db.order_recharge.update_many({
         #'uname'    : {'$in':unionid_helper.all_ids(uname)},

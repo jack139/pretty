@@ -17,7 +17,7 @@ class handler:
     def POST(self, version='v1'):
         web.header('Content-Type', 'application/json')
         param = web.input(app_id='', dev_id='', ver_code='', session='', category='', 
-            page_size='', page_index='', sort_by='', tick='')
+            page_size='', page_index='', sort_by='1', tick='')
 
         if '' in (param.app_id, param.dev_id, param.ver_code, param.page_size, param.page_index, param.tick):
             return json.dumps({'ret' : -2, 'msg' : '参数错误'})
@@ -40,17 +40,33 @@ class handler:
 
         obj_list = [i['obj_id'] for i in r2]
 
-        # 取指定区间的
-        start_pos = int(param.page_size)*int(param.page_index)
-        end_pos = start_pos + int(param.page_size)
-        obj_list_page = obj_list[start_pos:end_pos]
+        if param.sort_by=='2': # 按销量排序
+            r3 = db.obj_store.find({'obj_id' : {'$in' : obj_list}})            
 
+            obj_data = {}
+            for i in r3:
+                obj_data[i['obj_id']]=i
 
-        r3 = db.obj_store.find({'obj_id' : {'$in' : obj_list_page}})
+            print obj_list
+            obj_list = sorted(obj_list, key=lambda x:obj_data[x].get('volume',0), reverse=True)
+            print obj_list
 
-        obj_data = {}
-        for i in r3:
-            obj_data[i['obj_id']]=i
+            # 取指定区间的
+            start_pos = int(param.page_size)*int(param.page_index)
+            end_pos = start_pos + int(param.page_size)
+            obj_list_page = obj_list[start_pos:end_pos]
+
+        else: # 按sort weight排序，性能比按销量高
+            # 取指定区间的
+            start_pos = int(param.page_size)*int(param.page_index)
+            end_pos = start_pos + int(param.page_size)
+            obj_list_page = obj_list[start_pos:end_pos]
+
+            r3 = db.obj_store.find({'obj_id' : {'$in' : obj_list_page}})
+
+            obj_data = {}
+            for i in r3:
+                obj_data[i['obj_id']]=i
 
         # 准备返回数据
         ret_obj_list = []

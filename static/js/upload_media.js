@@ -19,9 +19,9 @@ function doFirst_media()
     r.assignBrowse($('#browseButton')[0], false);
 
     r.on('fileAdded', function(file, event){
-        if (file.size>1024*1024*100){
+        if (file.size>1024*1024*400){
             r.cancel();
-            alertify.error("文件大小不能超过100M");
+            alertify.error("文件大小不能超过400M");
         }else if (!!file.file.type.match(/audio.*|video.*/)){
             g_params['new_image_name'] = randomid();
             r.upload();
