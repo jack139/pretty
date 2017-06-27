@@ -8,7 +8,8 @@ import app_helper
 urllib3.disable_warnings()
 
 api_key='0378881f16430cf597cc1617be53db37'
-notify_url='http://%s:12048/app/wxpay_notify' % setting.app_host
+#notify_url='http://%s:12048/app/wxpay_notify' % setting.app_host
+notify_url='http://%s:8888/app/wxpay_notify' % setting.notify_host
 
 def get_prepay_id(wx_appid, mch_id, trade_type, client_ip, order_id, total_fee, openid=None):
     nonce_str = app_helper.my_rand(30)

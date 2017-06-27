@@ -256,7 +256,7 @@ class WxpayNotify:
 
         order_id = ''
         
-        if result_code=='SUCCESS': # 有付款
+        if return_code=='SUCCESS': # 有付款
             order_id0 = xml.find('out_trade_no').text
             order_id = order_id0.split('_')[0]
 

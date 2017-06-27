@@ -5,6 +5,10 @@ import urllib3, urllib, json
 from config import setting
 import app_helper
 from libs import credit_helper
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
+    import xml.etree.ElementTree as ET
 
 urllib3.disable_warnings()
 
@@ -250,7 +254,7 @@ def process_wxpay_notify(order_id, pay_data):
         print 'process_iap_notify: 此单已充值'
         return 'DONE', '此单已充值'
 
-    xml=ET.fromstring(str_xml)
+    xml=ET.fromstring(pay_data)
     result_code = xml.find('result_code').text
     if result_code=='SUCCESS': # 有付款
         wxpay_total = xml.find('total_fee').text # 微信支付实际支付，单位：分

@@ -122,6 +122,7 @@ class handler:
             ret_data['mch_id']  = xml.find('mch_id').text if xml.find('mch_id') is not None else ''
             ret_data['prepay_id']  = xml.find('prepay_id').text if xml.find('prepay_id') is not None else ''
 
+        print ret_data
 
         # 返回
         return json.dumps({

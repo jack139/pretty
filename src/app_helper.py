@@ -154,12 +154,20 @@ def get_new_order_id(version='v1', prefix=''):
     else:
         surfix = ''
 
+    # 检查订单号唯一性
     cc=1
     while cc!=None:
         # order_trade_id 城市(1位)+日期时间(6+4位)+随机数(6位)+版本
         order_trade_id = '%s20%s%s%s%s' % (prefix,time_str(format=2)[2:],my_rand(6,1),version[-1],surfix)
-        cc = db.order_trade.find_one({'order_trade_id' : order_trade_id},{'_id':1})
-    db.order_trade.insert_one({'order_trade_id':order_trade_id}) # 先占位 2016-03-17,gt
+        if prefix=='d': # 充值订单
+            cc = db.order_recharge.find_one({'recharge_id' : order_trade_id},{'_id':1})
+        else: # 交易流水
+            cc = db.order_trade.find_one({'order_trade_id' : order_trade_id},{'_id':1})
+
+    if prefix=='d': # 充值订单, 先占位 2016-06-27,gt
+        db.order_recharge.insert_one({'recharge_id':order_trade_id}) # 
+    else:
+        db.order_trade.insert_one({'order_trade_id':order_trade_id}) # 先占位 2016-03-17,gt
     return order_trade_id
 
 
