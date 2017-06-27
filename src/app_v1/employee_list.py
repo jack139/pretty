@@ -25,6 +25,8 @@ class handler:
         if uname is None:
             return json.dumps({'ret' : -4, 'msg' : '无效的session'})
 
+        print uname['userid']
+        
         # 生成数据
         employee = []
         r3 = db.employee_auth.find({'owner_userid':uname['userid']})
@@ -41,7 +43,8 @@ class handler:
 
             employee.append({
                 'userid'       : i['employee_userid'],
-                'real_name'    : r4.get('real_name',''),
+                'real_name'    : r4.get('real_name',''), # 店员真实名称
+                'nickname'     : r4.get('nickname',''), # 昵称
                 'auth_num'     : len(i['object_list']),
                 'complete_num' : complete_num, # 完成课程数,
                 'employee_tel' : r4.get('mobile',''), # 注册的号码
