@@ -72,11 +72,21 @@ def check_sign_wx(str_xml):
     sign = hashlib.md5(stringSignTemp).hexdigest().upper()
     return (sign0==sign)
 
-RSA_PUBLIC = "-----BEGIN PUBLIC KEY-----\n" \
+RSA_PUBLIC_old = "-----BEGIN PUBLIC KEY-----\n" \
     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRA\n" \
     "FljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQE\n" \
     "B/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5Ksi\n" \
     "NG9zpgmLCUYuLkxpLQIDAQAB\n" \
+    "-----END PUBLIC KEY-----"
+
+RSA_PUBLIC = "-----BEGIN PUBLIC KEY-----\n" \
+    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjtrUEnXN8DgePrjZlie5\n" \
+    "rnfbs1ygsExe63zgMjZaghKfmTmg3C7nTRkrA4dIMLTNOItgp4+/qZpWcWOxHOwY\n" \
+    "Uu+Ob2DH4e0fEApe//oWagXUuBobMOHgUKA3mNtTZfBBj4uAqXYAwEOJLiFoFMAL\n" \
+    "mZiEHMook0m8Pz8o+Prflv+57H7vJ1wNuGdq7a/g83EBx5Z9mpYa1aEue70r7CGV\n" \
+    "Oaa5e+upTN73NSGtZRuMQwnAcMbpQpr6qokUVaz4G7+LWCFzEVos7dyA5D1A4hND\n" \
+    "9k1lOrUI1A66ZrfrP9bFJbfot8maRbl9FSGk25/dWDh2fj+GBho9e60nnTNlDEca\n" \
+    "9wIDAQAB\n" \
     "-----END PUBLIC KEY-----"
 
 def check_sign_alipay(ret):
@@ -200,7 +210,7 @@ class AlipayNotify:
         else:
             print "ALIPAY SIGNATURE CHECK FAIL ......!"
             return 'fail'
-        #print "=================="
+
         order_id = param.get('out_trade_no','')
 
         app_helper.event_push_notify('alipay', param, order_id)

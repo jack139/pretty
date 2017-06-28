@@ -34,8 +34,7 @@ class handler: # CheckRand:
             print '========> 请重新获取验证码', session.get('pwd_fail',0)
             return json.dumps({'ret' : -5, 'msg' : '请重新获取验证码'})
 
-        #if param.rand.strip()!=session['rand']: # 测试，不检查校验码
-        if param.rand.strip()!='9998':
+        if param.rand.strip()!=session['rand']: #
             #2015-12-22,gt
             if session['uname'] in app_helper.INNER_NUM.keys() and param.rand.strip()==app_helper.INNER_NUM[session['uname']]:
                 pass

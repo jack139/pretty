@@ -111,8 +111,9 @@ class handler: # Login2:
 
         #发送短信验证码
         if number not in app_helper.INNER_NUM.keys(): # 内部号码不发短信，2015-12-22, gt
-            #sms.send_rand(number, rand, True) # 测试不发校验码
-            pass
+            rr = sms.send_rand(number, rand, True) # 测试不发校验码
+            if rr is None:
+                return json.dumps({'ret': -11, 'msg': '发送太频繁，稍后再试'}) 
 
         # 返回
         return json.dumps({

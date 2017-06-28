@@ -34,8 +34,7 @@ class handler:
             return json.dumps({'ret': -4, 'msg': '无效的sessionid'})
 
         print '>>>>>> session rand', session.get('rand'), param.rand
-        #if param.rand.strip()!=session['rand']: # 测试，不检查校验码
-        if param.rand.strip()!='9998':
+        if param.rand.strip()!=session['rand']: #
             return json.dumps({'ret': -8, 'msg': '验证码错误'})
 
         if session.get('userid')!='':

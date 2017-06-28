@@ -48,8 +48,9 @@ class handler:
         }})
 
         if number not in app_helper.INNER_NUM.keys(): # 内部号码不发短信，2015-12-22, gt
-            #sms.send_rand(param.mobile, rand, False) # 测试不发校验码
-            pass
+            rr = sms.send_rand(param.mobile, rand, False) # 测试不发校验码
+            if rr is None:
+                return json.dumps({'ret': -11, 'msg': '发送太频繁，稍后再试'}) 
 
         return json.dumps({'ret': 0, 'data': {
             'session'     : session['session_id'],

@@ -1,48 +1,30 @@
 #!/usr/local/bin/python
 #-*- coding:utf-8 -*-
 
-import httplib, urllib, json, time, random
+import httplib, urllib, time
 from config import setting
-#import sms_mwkj
+import app_helper
 
 db = setting.db_web
 
-#version = "v1"
-#通用短信接口的URI
-#sms_send_uri = "/" + version + "/sms/send.json"
-#api_key
-apikey = "e105ead8467f1d4c99ff15225c820668"
 
-# 通用接口发短信   
-def send_sms(text, mobile): # 云片网
-    params = urllib.urlencode({'apikey': apikey, 'text': text, 'mobile':mobile})
+#服务地址
+host = "www.jianzhou.sh.cn"
+#端口号
+port = 80
+#短信接口的URI
+send_uri = "/JianzhouSMSWSServer/http/sendBatchMessage" 
+#账号
+account  = "jzyy901"
+#密码
+psw = "123456"
+
+# 建周科技
+def send_sms(text, phone):
+    params = urllib.urlencode({'account': account, 'password' : psw, 'msgText': text, 'destmobile':phone})
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
-    conn = httplib.HTTPConnection('yunpian.com', port=80, timeout=60)
-    conn.request("POST", '/v1/sms/send.json', params, headers)
-    response = conn.getresponse()
-    response_str = response.read()
-    conn.close()
-    return response_str
-
-def send_sms2(text, mobile): # 企信通
-    url = '/smspost_utf8/sendbyid.aspx?username=jack139&password=wobuzhidaomima&mobile=%s&content=%s' % \
-        (mobile.encode('utf-8'), text)
-    #print url
-    conn = httplib.HTTPConnection('www.gysoft.cn', port=80, timeout=60)
-    conn.request("GET", url)
-    response = conn.getresponse()
-    response_str = response.read()
-    conn.close()
-    return response_str
-
-def send_sms3(text, mobile): # 云信留客
-    # http://h.1069106.com:1210/services/msgsend.asmx/SendMsg
-    # http://120.55.197.77:1210/Services/MsgSend.asmx/SendMsg
-    url = '/Services/MsgSend.asmx/SendMsg?userCode=JLXX&userPass=JLXX789&DesNo=%s&Msg=%s&Channel=' % \
-        (mobile.encode('utf-8'), text)
-    #print url
-    conn = httplib.HTTPConnection('120.55.197.77', port=1210, timeout=60)
-    conn.request('GET', url)
+    conn = httplib.HTTPConnection(host, port=port, timeout=30)
+    conn.request("POST", send_uri, params, headers)
     response = conn.getresponse()
     response_str = response.read()
     conn.close()
@@ -58,6 +40,7 @@ def check_send_freq(mobile):
         db.sms_sent_log.insert_one({
             'mobile'    : mobile,
             'last_t'    : tick, # 最近一次 tick
+            'history' : [app_helper.time_str()],
             'in_hour'   : tick, # 1小时计数 tick
             'n_in_hour' : 1,  # 1小时计数
         })
@@ -69,11 +52,16 @@ def check_send_freq(mobile):
             print '短信 -------> ', mobile, '------> 1小时内超过10次！'
             return False
         # 更新时间记录
-        db.sms_sent_log.update_one({'mobile' : mobile},{'$set':{
-            'last_t' : tick,
-            'in_hour' : tick if tick-r['in_hour']>3600 else r['in_hour'],
-            'n_in_hour' : 1 if tick-r['in_hour']>3600 else (r['n_in_hour']+1),
-        }})
+        db.sms_sent_log.update_one({'mobile' : mobile},{
+            '$set'  : {
+                'last_t'    : tick,
+                'in_hour'   : tick if tick-r['in_hour']>3600 else r['in_hour'],
+                'n_in_hour' : 1 if tick-r['in_hour']>3600 else (r['n_in_hour']+1),
+            },
+            '$push' : {
+                'history' : app_helper.time_str(), # 记录发送历史, 2017-06-28, gt
+            },
+        })
     return True
 
 # 发验证码
@@ -84,61 +72,13 @@ def send_rand(mobile, rand, register=False):
 
     # 移动号码 ('134','135','136','137','138','139','150','151','152','157','158','159','187','188')
 
-    #who_send = random.randint(0,1)
-    who_send = 0
+    print '短信 -------> ', mobile, '------>', rand
 
-    if True: #mobile[:3] in ('130', '131'):
-        who_send = 1 # 云信留客
+    if register:
+        text = "感谢您注册预知来，您的验证码是%s【建周科技】" % rand
     else:
-        who_send = 0 # 梦网科技
+        text = "您的验证码是%s。如非本人操作，请忽略本短信【建周科技】" % rand
+    r = send_sms(text, mobile) # 建周
+    print r
+    return r
 
-    print '短信 -------> ', mobile, '------>', rand, ' by ', who_send
-
-    if who_send==0: #mobile[:3] in ('134','135','136','137','138','139','187','188'):
-        if register:
-            text = "感谢您注册U掌柜，您的验证码是%s" % rand
-        else:
-            text = "您的验证码是%s。如非本人操作，请忽略本短信" % rand
-        sms_mwkj.send_mutil_message(mobile, text) # 梦网科技
-        return True     
-    else:
-        if register:
-            text = "感谢您注册U掌柜，您的验证码是%s【U掌柜】" % rand
-        else:
-            text = "您的验证码是%s。如非本人操作，请忽略本短信【U掌柜】" % rand
-        r = send_sms3(text, mobile) # 云信
-        print r
-        return r
-
-    '''
-    if mobile[:3] in ('135','136'):
-        if register:
-            text = "感谢您注册U掌柜，您的验证码是%s【U掌柜】" % rand
-        else:
-            text = "您的验证码是%s。如非本人操作，请忽略本短信【U掌柜】" % rand
-        r = send_sms3(text, mobile) # 云信
-        print r
-        return r
-    elif mobile[:3] in ('185','134','137','138','139','150','151','152','157','158','159','187','188'):
-        if register:
-            text = "感谢您注册U掌柜，您的验证码是%s【U掌柜】" % rand
-        else:
-            text = "您的验证码是%s。如非本人操作，请忽略本短信【U掌柜】" % rand
-        r = send_sms3(text, mobile) # 云信
-        print r
-        return r
-    else:
-        if register:
-            text = "【U掌柜】感谢您注册U掌柜，您的验证码是%s" % rand
-        else:
-            text = "【U掌柜】您的验证码是%s。如非本人操作，请忽略本短信" % rand
-        #调用通用接口发短信
-        r = send_sms(text, mobile) # 云片
-        print r
-
-        r2 = json.loads(r)
-        if r2['code']==0:
-            return r2['result']
-        else:
-            return None
-    '''
