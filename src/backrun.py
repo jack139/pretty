@@ -71,12 +71,12 @@ def refresh_session_timeout():
     #r5=db.order_recharge.delete_many({'status':'TIMEOUT','deadline' : {'$lt':now-3600*24*30}})
     # 清理 session, 24小时前的微信session
     r5=db.app_sessions.delete_many({'type':'wx','attime':{'$lt':(now-3600*24)}})
-    #if r5.deleted_count>0: print 'wx session: ', r5.raw_result
     # 清理 session, 12小时前的未登录的session
     r5=db.app_sessions.delete_many({'login':0,'attime':{'$lt':(now-3600*12)}})
-    #if r5.deleted_count>0: print 'unlogin session: ', r5.raw_result
-    # 清理 session, 30天前的未使用的session
-    r5=db.app_sessions.delete_many({'attime':{'$lt':(now-3600*24*30)}})
+    # 清理 session, 24小时的未使用的session， app每次都登陆，不需要保存太久 2017-06-28, gt
+    #r5=db.app_sessions.delete_many({'attime':{'$lt':(now-3600*24*1)}})
+    r5=db.app_sessions.delete_many({'attime':{'$lt':(now-3600*24*30)}}) # 测试时使用
+
     #if r5.deleted_count>0: print '10days old: ',r5.raw_result
 
 
