@@ -28,9 +28,10 @@ class handler:
 
         #--------------------------------------------------
 
-        r3 = db.obj_store.find_one({
-            'obj_id' : param.object_id, 
-        })
+        if param.object_id[0]=='1': # 课程
+            r3 = db.obj_store.find_one({'obj_id' : param.object_id})
+        else: # 专辑
+            r3 = db.topic_store.find_one({'tpc_id' : param.object_id})
         if r3 is None:
             return json.dumps({'ret' : -5, 'msg' : '错误的object_id'})
 
@@ -39,12 +40,28 @@ class handler:
         else:
             image_url = ''
 
+        #专辑里面的视频音频分享
+        #   http://wxpretty.f8cam.com/static/wx/test2/albumMedia.html?object_id=10000053&object_id_album=20000054
+        #专辑分享
+        #   http://wxpretty.f8cam.com/static/wx/test2/testAlbum.html?object_id=20000037
+        #视频分享：
+        #   http://wxpretty.f8cam.com/static/wx/test2/test.html?object_id=10000036
+        #if param.object_id[0]=='1': # 课程
+        #    if r3['obj_type']=='topic':  # 专辑课程
+        #        share_url = 'http://%s/static/wx/test2/albumMedia.html?'\
+        #            'object_id=%s&object_id_album=%s'%(setting.wx_host,r3['obj_id'],r3['tpc_id'])
+        #    else:
+        #        share_url = 'http://%s/static/wx/test2/test.html?object_id=%s'%(setting.wx_host,r3['obj_id'])
+        #else: # 专辑
+        #    share_url = 'http://%s/static/wx/test2/testAlbum.html?object_id=%s'%(setting.wx_host,r3['tpc_id'])
+
         ret_data = {
             "object_id"     : param.object_id,     # 唯一代码 
-            "type"          : 1 if r3['media']=='video' else 2,  # 类型： 1 课程, 2 专辑 
+            "type"          : 1 if param.object_id[0]=='1' else 2,  # 类型： 1 课程, 2 专辑 
             "share_title"   : r3['title'],
             "share_content" : r3['description'],
             "share_img"     : image_url,  # 分享图片 
+            #"share_url"     : share_url,  # 分享的链接
         }
 
         # 返回

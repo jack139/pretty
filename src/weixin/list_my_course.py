@@ -28,20 +28,33 @@ class handler:
 
         #--------------------------------------------------
 
+        course_list = []
+
+        # 用户自己买的课程
+        r2 = db.user_property.find({'userid':uname['userid'], 'status':'paid', 'obj_type':'course'},
+            sort=[('_id',1)], # 按时间倒序
+            #skip=int(param.page_size)*int(param.page_index),
+            #limit=int(param.page_size)
+        )
+
+        course_list = [x['obj_id'] for x in r2]
+
+        # 被授权的课程
+        r4 = db.employee_auth.find({'employee_userid':uname['userid']})
+        for x in r4:
+            for y in x['object_list']:
+                if y not in course_list:
+                    course_list.append(y)
+
         # 取指定区间的
         start_pos = int(param.page_size)*int(param.page_index)
         end_pos = start_pos + int(param.page_size)
-
-        r2 = db.user_property.find({'userid':uname['userid'], 'status':'paid', 'obj_type':'course'},
-            sort=[('_id',1)], # 按时间倒序
-            skip=int(param.page_size)*int(param.page_index),
-            limit=int(param.page_size)
-        )
+        course_list = course_list[start_pos:end_pos]
 
         course_data = []
 
-        for i in r2:
-            r3 = db.obj_store.find_one({'obj_id':i['obj_id']})
+        for i in course_list:
+            r3 = db.obj_store.find_one({'obj_id':i})
             if r3 is None:
                 continue
 

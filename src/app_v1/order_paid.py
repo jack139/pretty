@@ -27,8 +27,6 @@ class handler:
 
         #--------------------------------------------------
 
-        # 检查订单状态－－－－－－ 待实现
-
         # 修改充值订单状态
         r2 = db.order_recharge.find_one_and_update(
             {'recharge_id' : param.order_trade_id},  # 实充值订单号
