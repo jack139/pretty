@@ -116,3 +116,4 @@ db.user.insert({uname:"admin",login:1,privilege:8,passwd:'ecb918249fb79775ce1b33
 
 
 db.changeUserPassword("ipcam", "zjjL_3026")
+
